@@ -1,0 +1,50 @@
+$main: #7B2CBF;
+$black: #000000;
+$white: #FFFFFF;
+$montserrat : 'Montserrat', sans-serif;
+$poppins : 'Poppins', sans-serif;
+
+$breakpoints : (
+        "phone" : 480px,
+        "tablet" : 720px,
+        "large-tablet" : 1220px
+);
+
+@mixin flexColumn($align , $justify) {
+  display: flex;
+  flex-direction: column;
+  align-items: $align;
+  justify-content: $justify;
+}
+@mixin flexRow($align , $justify) {
+  display: flex;
+  flex-direction: row;
+  align-items: $align;
+  justify-content: $justify;
+}
+@mixin  phone{
+  @media(max-width : map-get($breakpoints, "phone")){
+
+    @content;
+  }
+}
+@mixin  tablet{
+  @media(max-width : map-get($breakpoints, "tablet")){
+    @content;
+  }
+}
+@mixin  large-tablet{
+  @media(max-width : map-get($breakpoints, "large-tablet")){
+    @content;
+  }
+}
+//@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $poppins
+}
+
