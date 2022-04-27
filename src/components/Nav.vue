@@ -7,14 +7,16 @@ import darkLogo from '../assets/icons/the-watch-party-logo-dark.png'
 
 const store = useStore()
 const logo = computed(() => store.getters.dark ? darkLogo : lightLogo)
-const isActive = ref(true)
+const isActive = ref(false)
 
 onMounted(() => {
+
   window.onresize = () => {
     if (window.innerWidth >= 480){
       isActive.value = false;
     }}
 })
+
 
 const handleNavToggle = () => {
   isActive.value = !isActive.value

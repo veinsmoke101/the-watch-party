@@ -1,5 +1,4 @@
 <script setup>
-import Nav from '../components/Nav.vue'
 import Footer from '../components/Footer.vue'
 import {useStore} from "vuex";
 import {computed} from "vue";
@@ -37,10 +36,9 @@ const logo      = computed(() => store.getters.dark ? darkLogo : lightLogo)
 
 
 <template>
-  <Nav />
-  <main class="container bg-gradient-to-t from-purple-700 via-purple-500 to-blue-gray-900 dark:from-purple-700 dark:to-blue-gray-900">
+  <main class="container bg-gradient-to-t from-purple-700 via-purple-500 to-purple dark:from-purple-700 dark:to-blue-gray-900">
     <div class="main">
-      <h1 class="main__title text-white">
+      <h1 class="main__title text-white drop-shadow-2xl">
         The easiest way to make a watch party
       </h1>
       <p class="main__description">
@@ -170,6 +168,7 @@ const logo      = computed(() => store.getters.dark ? darkLogo : lightLogo)
   @include base.flexColumn(center, center);
   gap: 20px;
   &__title {
+    text-shadow: 0 2px 12px rgba(103,77,77,0.45);
     font-size: 4rem;
     font-family: base.$montserrat;
     color:#ffffffee;

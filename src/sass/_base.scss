@@ -24,7 +24,6 @@ $breakpoints : (
 }
 @mixin  phone{
   @media(max-width : map-get($breakpoints, "phone")){
-
     @content;
   }
 }
