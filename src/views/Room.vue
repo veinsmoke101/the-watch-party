@@ -2,6 +2,7 @@
 
 import VideoPlayer from "../components/VideoPlayer.vue"
 import LinkModal from "../components/modals/LinkModal.vue"
+import UsersModal from "../components/modals/UsersModal.vue"
 import {useStore} from "vuex";
 import {computed, ref} from "vue"
 import illustrationLight from "../assets/images/new-room.svg"
@@ -26,16 +27,14 @@ const roomId = computed( () => store.getters.roomId )
 const isSettingOpen = ref(false)
 const isLinkOpen = ref(false)
 const isIdOpen = ref(false)
-
-
-
+const isUsersOpen = ref(false)
 
 
 </script>
 
 <template>
 
-  <div class="container">
+  <div class="containeer">
     <div class="newRoom">
       <div class="newRoom__inputs">
         <div class="newRoom__searchVid bg-neutral-300 dark:bg-gray-500">
@@ -91,6 +90,11 @@ const isIdOpen = ref(false)
         :link="roomId"
     />
 
+    <UsersModal
+        @close="isUsersOpen = false"
+      v-if="isUsersOpen"
+    />
+
     <div class="videoRoom">
       <div class="videoRoom__video">
         <VideoPlayer title="Video of Puppies"
@@ -106,7 +110,7 @@ const isIdOpen = ref(false)
           <div v-show="isSettingOpen" class="videoRoom__settingMenu">
             <div class="menuWrapper">
               <img src="../assets/icons/arrow-head.svg" alt="arrow">
-              <div class="element">manage users</div>
+              <div @click="isUsersOpen = true" class="element">manage users</div>
               <div class="element">leave the party</div>
             </div>
 
@@ -171,7 +175,7 @@ const isIdOpen = ref(false)
 
 @use '../sass/base';
 
-.container {
+.containeer {
   @include base.flexColumn(center, center);
 }
 
@@ -298,6 +302,7 @@ const isIdOpen = ref(false)
     @include base.flexRow(center, flex-start);
     img {
       margin-right: 0.5rem;
+      border-radius: 50%;
     }
   }
   &__messageInfo {
