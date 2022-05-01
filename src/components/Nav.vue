@@ -25,7 +25,7 @@ const handleNavToggle = () => {
 
 <template>
 
-  <nav class="nav bg-white shadow dark:bg-gray-900">
+  <nav class="nav bg-white shadow-sm dark:bg-gray-900">
     <div class="nav__container">
       <div class="nav__logo">
         <img :src="logo" alt="watch-party-logo">

@@ -21,7 +21,7 @@ const videoOptions = ref(
 </script>
 
 <template>
-  <div :class="dark ? 'dark' : 'light'">
+  <div class=".root" :class="dark ? 'dark' : 'light'">
     <div
         id="app"
         class="bg-white dark:bg-gray-900"
