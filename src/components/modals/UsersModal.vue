@@ -1,15 +1,15 @@
 <script setup>
-import {computed} from "vue";
+import { ref} from "vue";
 import { useStore } from "vuex";
 
 import Modal from "../layouts/Modal.vue"
-import viewMoreDark from "../../assets/icons/view-more.svg"
-import viewMoreLight from "../../assets/icons/view-more-dark.svg"
+
 
 
 const store = useStore()
 
-const viewMore = computed(() => store.getters.dark ? viewMoreDark : viewMoreLight )
+const isDeleteOpen = ref(false)
+
 
 defineEmits(["close"])
 
@@ -25,19 +25,27 @@ defineEmits(["close"])
         <div class="userModal__userInfo">
           <img class="profile" src="../../assets/images/profile-image.svg" alt="user-profile">
           <p class="userModal__username text-black dark:text-white">Taha Lechgar</p>
-          <img class="manage" :src="viewMore" alt="manage">
+          <img @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
         </div>
 
         <div class="userModal__userInfo">
           <img class="profile" src="../../assets/images/profile-image.svg" alt="user-profile">
           <p class="userModal__username text-black dark:text-white">Taha Lechgar</p>
-          <img class="manage" :src="viewMore" alt="manage">
+          <img @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
         </div>
 
         <div class="userModal__userInfo">
           <img class="profile" src="../../assets/images/profile-image.svg" alt="user-profile">
           <p class="userModal__username text-black dark:text-white">Taha Lechgar</p>
-          <img class="manage" :src="viewMore" alt="manage">
+          <img @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
+        </div>
+
+        <div v-if="isDeleteOpen" class="userModal__deleteConfirm shadow-2xl bg-slate-200 dark:bg-gray-700">
+          <p class="text-black dark:text-white">You sure want to kick this user from the party ??</p>
+          <div class="buttons">
+            <button @click="isDeleteOpen = false" class="button button--confirm">Delete</button>
+            <button @click="isDeleteOpen = false" class="button button--cancel">Cancel</button>
+          </div>
         </div>
 
         <button @click="$emit('close')"  class="userModal__button bg-red-700">close</button>
@@ -64,7 +72,7 @@ defineEmits(["close"])
 
 .userModal {
   @include base.flexColumn(flex-start, center);
-
+  position: relative;
 
   div:first-of-type {
     border-top: none;
@@ -76,9 +84,10 @@ defineEmits(["close"])
     width: 100%;
     @include base.flexRow(center, flex-start);
     font-size: 0.8rem;
+    position: relative;
     .manage {
       margin-left: auto;
-      width: 35px;
+      width: 20px;
       cursor:pointer;
     }
     .profile {
@@ -87,6 +96,34 @@ defineEmits(["close"])
       border-radius: 50%;
     }
   }
+
+  &__deleteConfirm {
+    position: absolute;
+    right: 0;
+    width: 300px;
+    height: 120px;
+    z-index: 12;
+    padding: 1rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    @include base.flexColumn(center, space-between);
+    .buttons {
+      width: 80%;
+      @include base.flexRow(center, space-around);
+      .button {
+        padding: 0.3rem 1rem;
+        border-radius: 5px;
+        &--confirm {
+          background-color: red;
+          color: white;
+        }
+        &--cancel {
+          background-color: #c4c4c4;
+        }
+      }
+    }
+  }
+
   &__button {
     color: white;
     padding: 0.3rem 1rem;

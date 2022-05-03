@@ -1,33 +1,59 @@
 <script setup>
 
+// components
 import VideoPlayer from "../components/VideoPlayer.vue"
 import LinkModal from "../components/modals/LinkModal.vue"
 import UsersModal from "../components/modals/UsersModal.vue"
+
+// utilities
 import {useStore} from "vuex";
 import {computed, ref} from "vue"
-import illustrationLight from "../assets/images/new-room.svg"
-import illustrationDark from "../assets/images/new-room-dark.svg"
+import { VuemojiPicker } from 'vuemoji-picker'
+import insertText from 'https://cdn.jsdelivr.net/npm/insert-text-at-cursor@0.3.0/index.js'
+
+// icons
 import uploadLight from "../assets/icons/upload.svg"
 import uploadDark from "../assets/icons/upload-dark.svg"
-import linkLight from "../assets/icons/link.svg"
-import linkDark from "../assets/icons/link-dark.svg"
-import keyLight from "../assets/icons/key.svg"
-import keyDark from "../assets/icons/key-dark.svg"
 
+
+// add emoji to message input
+const messageInput = ref(null)
+
+const handleEmojiClick = (detail) => {
+  insertText(messageInput.value, detail.unicode)
+  // messageInput.value.value += detail.unicode
+  window.console.log(detail)
+}
+
+// setting up store
 const store = useStore()
 
 const dark = computed(() => store.getters.dark)
-const illustration = computed( () => store.getters.dark ? illustrationDark : illustrationLight )
 const uploadIcon = computed( () => store.getters.dark ? uploadDark : uploadLight )
-const linkIcon = computed( () => store.getters.dark ? linkDark : linkLight )
-const keyIcon = computed( () => store.getters.dark ? keyDark : keyLight )
 const roomId = computed( () => store.getters.roomId )
 
-
+// modals state
 const isSettingOpen = ref(false)
 const isLinkOpen = ref(false)
 const isIdOpen = ref(false)
 const isUsersOpen = ref(false)
+const isEmojiOpen = ref(false)
+
+const ytbUrl = computed(() => store.getters.dark ? 'https://www.youtube.com/watch?v=drdHIbbBnA0' : 'https://www.youtube.com/watch?v=a5uQMwRMHcs')
+const reRender = ref(0)
+
+// const mapMutations = () => {
+//   const store = useStore()
+//   return Object.fromEntries(
+//       Object.keys(store._mutations).map(
+//           mutation => [mutation, value => store.commit(mutation, value)]
+//       )
+//   )
+// }
+// const { setDark } = mapMutations()
+
+const setDark = (value) => store.commit('setDark', value)
+
 
 
 </script>
@@ -98,14 +124,15 @@ const isUsersOpen = ref(false)
     <div class="videoRoom">
       <div class="videoRoom__video">
         <VideoPlayer title="Video of Puppies"
-                     src="https://www.youtube.com/watch?v=drdHIbbBnA0"
+                     :src="ytbUrl"
+                     :key="reRender"
                      type="video/youtube"/>
       </div>
 
 
       <div class="videoRoom__chatPanel">
         <div class="videoRoom__settings">
-          <p class="text-white">13 users watching</p>
+          <p  class="text-white">13 users watching</p>
           <img @click="isSettingOpen = !isSettingOpen" src="../assets/icons/view-more.svg" alt="settings-icon">
           <div v-show="isSettingOpen" class="videoRoom__settingMenu">
             <div class="menuWrapper">
@@ -156,9 +183,16 @@ const isUsersOpen = ref(false)
               </div>
             </div>
           </div>
-
-
-          <input type="text" class="videoRoom__sendMessage" placeholder="Type a message ">
+          <div class="videoRoom__sendMessage">
+            <input ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">
+            <img @click="isEmojiOpen = !isEmojiOpen" src="../assets/icons/emoji.svg" alt="emoji">
+          </div>
+          <div class="emojiWrapper">
+            <VuemojiPicker
+                v-if="isEmojiOpen"
+                :isDark="dark"
+                @emojiClick="handleEmojiClick" />
+          </div>
         </div>
       </div>
 
@@ -171,12 +205,16 @@ const isUsersOpen = ref(false)
 
 
 
-<style lang="scss" scoped>
+<style lang="scss" >
 
 @use '../sass/base';
 
 .containeer {
   @include base.flexColumn(center, center);
+}
+
+.picker  {
+  position: absolute;
 }
 
 .newRoom {
@@ -324,13 +362,39 @@ const isUsersOpen = ref(false)
 
   &__sendMessage {
     width: 90%;
-    position: absolute;
+    position: relative;
+    margin-top: auto;
     bottom: 5px;
+    @include base.flexRow(center, flex-start);
+    img {
+      margin-left: auto;
+      position: absolute;
+      right: 10px;
+      width: 25px;
+      cursor: pointer;
+    }
+
+
+
+  }
+
+  .emojiWrapper{
+    position: absolute;
+    top: -13px;
+    //right: 100px;
+    width: 100%;
+
+
+  }
+
+
+  &__messageInput {
+    width: 100%;
+    height: 100%;
     padding: 0.5rem;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     font-size: 0.8rem;
-
   }
 
 
@@ -383,6 +447,12 @@ const isUsersOpen = ref(false)
 
 
 
+}
+emoji-picker.dark {
+  --background: rgb(15 23 42);
+}
+emoji-picker{
+  width: 100%;
 }
 
 </style>
