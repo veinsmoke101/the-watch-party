@@ -21,15 +21,12 @@ const isEmojiOpen = ref(false)
 // add emoji to message input
 const messageInput = ref(null)
 
-
-
 const handleEmojiClick = (detail) => {
   insertText(messageInput.value, detail.unicode)
   window.console.log(detail)
 }
 
 const reRender = ref(0)
-const setDark = (value) => store.commit('setDark', value)
 
 
 

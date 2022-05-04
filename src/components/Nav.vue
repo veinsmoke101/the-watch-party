@@ -5,7 +5,11 @@ import { useStore } from "vuex";
 import lightLogo from '../assets/icons/the-watch-party-logo-light.png'
 import darkLogo from '../assets/icons/the-watch-party-logo-dark.png'
 
+// vuex states
 const store = useStore()
+
+// states
+const navColor = computed(() => store.getters.navBg ? 'bg-white dark:bg-gray-900' : 'bg-transparent')
 const logo = computed(() => store.getters.dark ? darkLogo : lightLogo)
 const isActive = ref(false)
 
@@ -25,7 +29,7 @@ const handleNavToggle = () => {
 
 <template>
 
-  <nav class="nav bg-white shadow-sm dark:bg-gray-900">
+  <nav class="nav" :class="navColor">
     <div class="nav__container">
       <div class="nav__logo">
         <img :src="logo" alt="watch-party-logo">

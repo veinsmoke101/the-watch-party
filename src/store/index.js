@@ -6,12 +6,14 @@ export default createStore({
     roomId : null,
     vidUrl: null,
     reRenderVideo: 0,
+    navBg: true,
   },
   getters: {
     dark: state => state.dark,
     roomId: state => state.roomId,
     vidUrl: state => state.vidUrl,
-    reRenderVideo: state => state.reRenderVideo
+    reRenderVideo: state => state.reRenderVideo,
+    navBg: state => state.navBg,
   },
   mutations: {
     setDark: (state, bool) => {
@@ -25,6 +27,9 @@ export default createStore({
     },
     setReRenderVideo: (state, reRenderVideo) => {
       state.reRenderVideo = reRenderVideo
+    },
+    setNavBg: (state, bool) => {
+      state.navBg = bool
     }
   },
   actions: {

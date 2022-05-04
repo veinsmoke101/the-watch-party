@@ -27,10 +27,12 @@ const setVidUrl = (reRender) => store.commit('setVidUrl', reRender)
 
 let ytbUrl = ref('')
 let search = ref(null)
+const setNavBg = (bool) => store.commit('setNavBg', bool)
 
 
 
 onMounted(() => {
+  setNavBg(true)
   Pusher.logToConsole = true;
 
   let pusher = new Pusher("ee67aad443c2735b4c8f", {

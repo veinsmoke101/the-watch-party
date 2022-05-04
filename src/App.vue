@@ -4,7 +4,8 @@ import {computed, ref} from "vue"
 import Nav from "./components/Nav.vue"
 
 const store  = useStore()
-const dark = computed( () => store.getters.dark);
+const dark = computed( () => store.getters.dark)
+const margin = computed( () => store.getters.navBg ? '50px' : '0')
 const videoOptions = ref(
     {
       techOrder: ["youtube"],
@@ -18,6 +19,7 @@ const videoOptions = ref(
     }
 )
 
+
 </script>
 
 <template>
@@ -25,6 +27,7 @@ const videoOptions = ref(
     <div
         id="app"
         class="bg-white dark:bg-gray-900"
+        :style="{marginTop: margin}"
     >
 <!--      <router-link to="/main">main</router-link>-->
 <!--      <router-link to="/">home</router-link>-->
@@ -41,7 +44,6 @@ const videoOptions = ref(
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  margin-top: 50px;
 }
 html{
   font-size: 16px;
