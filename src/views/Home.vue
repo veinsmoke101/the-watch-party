@@ -410,10 +410,5 @@ const logo      = computed(() => store.getters.dark ? darkLogo : lightLogo)
     width: calc(100% + 1.3px);
     height: 99px;
   }
-
-
 }
-
-
-
 </style>

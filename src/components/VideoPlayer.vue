@@ -1,51 +1,6 @@
-<!--<template>-->
-<!--  <div>-->
-<!--    <video id="videoPlayer" ref="videoPlayer" class="video-js vjs-default-skin"></video>-->
-<!--  </div>-->
-<!--</template>-->
-
-<!--<script>-->
-<!--import videojs from 'video.js';-->
-<!--// import "video.js/dist/video.min.js"-->
-
-<!--export default {-->
-<!--  name: 'VideoPlayer',-->
-<!--  props: {-->
-<!--    options: {-->
-<!--      type: Object,-->
-<!--      default() {-->
-<!--        return {};-->
-<!--      }-->
-<!--    }-->
-<!--  },-->
-<!--  data() {-->
-<!--    return {-->
-<!--      player: null-->
-<!--    }-->
-<!--  },-->
-<!--  mounted() {-->
-<!--    this.player = videojs(this.$refs.videoPlayer, this.options, () => {-->
-<!--      this.player.log('onPlayerReady', this);-->
-<!--    });-->
-<!--  },-->
-<!--  beforeDestroy() {-->
-<!--    if (this.player) {-->
-<!--      this.player.dispose();-->
-<!--    }-->
-<!--  }-->
-
-
-<!--}-->
-<!--import "videojs-youtube/dist/Youtube.min.js"-->
-
-<!--</script>-->
-
-<!--<style>-->
-<!--  @import "video.js/dist/video-js.min.css";-->
-<!--</style>-->
-
-
 <template>
+
+
 
   <div class="videojs">
 
@@ -53,6 +8,7 @@
 
       <video
           ref="videoPlayer"
+          id="videoPlayer"
           controls
           preload="auto"
           class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered"
@@ -66,40 +22,74 @@
   </div>
 
 
-
 </template>
 
-<script>
+<script setup>
 
 
 import 'videojs-youtube/dist/Youtube.min.js';
 import 'video.js/dist/video-js.min.css';
 import videojs from "video.js"
+import {onBeforeUnmount, onMounted, ref} from "vue";
 
 
-export default {
 
-  name:'VideoPlayer',
+const props = defineProps({
+  src: String,
+  type: String
+})
 
-  props: ['src', 'type'],
-  data(){
-    return {
-      player:null
-    }
-  },
-  mounted() {
-    this.player = videojs(this.$refs.videoPlayer, {}, () => {
-      this.player.log("onPlayerReady", this)
-     })
-  },
-  beforeUnmount() {
-    if(this.player){
-      this.player.dispose();
-    }
+
+let player = ref(null)
+const videoPlayer = ref(null)
+
+const handlePlay = () => player.value.play()
+
+onMounted(() => {
+  console.log(videoPlayer.value)
+  player.value = videojs(videoPlayer.value, {autoplay: true, muted: true}, () => {
+    videojs.log("ready")
+  })
+  let button = player.value.controlBar.addChild('button', {}, 1);
+  button.addClass("seekIcon")
+
+  console.log(button.el());
+
+})
+
+onBeforeUnmount(() => {
+  if(player.value){
+    player.value.dispose()
   }
+})
 
 
-}
+
+// export default {
+//
+//   name:'VideoPlayer',
+//
+//   props: ['src', 'type'],
+//   data(){
+//     return {
+//       player:null
+//     }
+//   },
+//   mounted() {
+//
+//     this.player = videojs(this.$refs.videoPlayer, {}, () => {
+//       this.player.log("onPlayerReady", this)
+//      })
+//
+//   },
+//   beforeUnmount() {
+//     if(this.player){
+//       this.player.dispose();
+//     }
+//   }
+//
+//
+// }
 
 
 </script>
@@ -119,6 +109,15 @@ export default {
 }
 .video-js .vjs-menu-button-inline:before {
   width: 1.5em;
+}
+.video-js .vjs-button.seekIcon {
+
+  width: 25px;
+  height: 25px;
+  background-image: url("../assets/icons/back-10-seconds.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position:bottom;
 }
 .vjs-menu-button-inline .vjs-menu {
   left: 3em;
@@ -173,9 +172,12 @@ export default {
 }
 .video-js .vjs-control-bar {
   background-color: rgba(0, 0, 0, 0.5) !important;
+  display: flex;
+  align-items: center;
   color: #fff;
   font-size: 14px;
 }
+
 .video-js .vjs-play-progress,
 .video-js .vjs-volume-level {
   background-color: #7b2cbf !important;
