@@ -1,51 +1,58 @@
 <template>
   <div class="wrapper" :class="theme">
-    <section class="greeting">
-      <h1 class="greeting__title" :style="{color: color}">Welcome Back !</h1>
-      <img class="greeting__illustration" :src="illustration" alt="login-ils">
-    </section>
-    <section class="sideForm bg-white dark:bg-gray-900">
 
+
+    <section class="sideForm bg-white dark:bg-gray-900" >
       <div class="sideForm__container">
         <div class="sideForm__heading">
-          <h3 class="sideForm__title dark:text-white" >Log in.</h3>
-          <p class="sideForm__subTitle dark:text-white">Log in your information that you entered during your registration</p>
+          <h3 class="sideForm__title dark:text-white">Sign up. </h3>
+          <p class="sideForm__subTitle dark:text-white">My mom will be happy to have you with us</p>
         </div>
         <form method="POST" action="" class="sideForm__form">
+          <label class="sideForm__label dark:text-white" for="name">
+            Enter your full name
+          </label>
+          <input name="name" id="name" required value="name"  type="text" class="sideForm__input sideForm__input--name " placeholder="name@example.com">
+          <span class="invalid-feedback" role="alert">
+                        <strong> message </strong>
+                    </span>
 
           <label class="sideForm__label dark:text-white" for="email">
             Enter your email address
           </label>
-          <input name="email" id="email" required value="" type="email"
-                 class="sideForm__input sideForm__input--email"
-                 placeholder="name@example.com">
+          <input name="email" id="email" required value=""  type="email" class="sideForm__input sideForm__input--email " placeholder="name@example.com">
 
           <span class="invalid-feedback" role="alert">
-                                        <strong>message</strong>
-                                    </span>
+                        <strong> message </strong>
+                    </span>
 
           <label class="sideForm__label dark:text-white" for="password">
             Enter your password
           </label>
-          <input name="password" id="password" required type="password"
-                 class="sideForm__input sideForm__input--password @error('password') is-invalid @enderror"
-                 placeholder="at least 8 characters">
+          <input name="password" id="password" required type="password" class="sideForm__input sideForm__input--password " placeholder="at least 8 characters">
+
           <span class="invalid-feedback" role="alert">
-                                        <strong> message </strong>
-                                    </span>
-          <a class="sideForm__forgotPassword" href="">
-            forgot your password ?
-          </a>
-          <input class="sideForm__submit" type="submit" name="submit" value="Sign in">
+                        <strong> message </strong>
+                    </span>
+
+          <label class="sideForm__label dark:text-white" for="password-confirm">
+            Confirm password
+          </label>
+          <input name="password_confirmation" id="password-confirm" required type="password" class="sideForm__input sideForm__input--password" placeholder="confirm password">
+
+          <input class="sideForm__submit" type="submit" name="submit" value="Register">
         </form>
         <hr>
-        <p class="sideForm__register dark:text-white"> You don’t have an account ? <a href=""> Sign up now </a></p>
+        <p class="sideForm__register dark:text-white"> You don’t have an account ? <a href=""> Sign up now </a> </p>
 
       </div>
 
     </section>
-
-
+    <section class="greeting">
+      <h1 class="greeting__title">Work <span class="greeting__span text-gray-700 dark:text-white">Hard !</span> </h1>
+      <h1 class="greeting__title"><span class="greeting__span text-gray-700 dark:text-white"> Play </span>Hard !</h1>
+      <img class="greeting__illustration" :src="illustration" alt="login-ils">
+    </section>
   </div>
 
 </template>
@@ -53,8 +60,8 @@
 <script setup>
 import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
-import illustrationDark from "../assets/icons/login-illustration-dark.svg"
-import illustrationLight from "../assets/icons/login-illustration.svg"
+import illustrationLight from "../assets/images/new-room.svg"
+import illustrationDark from "../assets/images/new-room-dark.svg"
 
 const store  = useStore()
 
@@ -102,8 +109,9 @@ onMounted(() => {
   @include base.flexColumn(center, center);
 
   .greeting__illustration {
-    width: 320px;
+    width: 500px;
     height: auto;
+
   }
 
   .greeting__title {
@@ -112,6 +120,9 @@ onMounted(() => {
     @include base.large-tablet {
       font-size: 52px;
     }
+  }
+  .greeting__span{
+    font-size: 72px;
   }
 
 }

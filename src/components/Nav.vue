@@ -64,7 +64,7 @@ const handleNavToggle = () => {
   height: 50px;
   @include base.flexRow(center,center);
   &__container{
-    width: 90%;
+    width: 95%;
     @include base.flexRow(center,space-between);
   }
   &__logo{
