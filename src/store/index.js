@@ -4,16 +4,18 @@ export default createStore({
   state: {
     dark: false,
     roomId : null,
+    roomRef : null,
     vidUrl: null,
     reRenderVideo: 0,
-    navBg: true,
+    nav: true,
   },
   getters: {
     dark: state => state.dark,
     roomId: state => state.roomId,
+    roomRef: state => state.roomRef,
     vidUrl: state => state.vidUrl,
     reRenderVideo: state => state.reRenderVideo,
-    navBg: state => state.navBg,
+    nav: state => state.nav,
   },
   mutations: {
     setDark: (state, bool) => {
@@ -22,14 +24,17 @@ export default createStore({
     setRoomId: (state, roomId) => {
       state.roomId = roomId
     },
+    setRoomRef: (state, roomRef) => {
+      state.roomRef = roomRef
+    },
     setVidUrl: (state, vidUrl) => {
       state.vidUrl = vidUrl
     },
     setReRenderVideo: (state, reRenderVideo) => {
       state.reRenderVideo = reRenderVideo
     },
-    setNavBg: (state, bool) => {
-      state.navBg = bool
+    setNav: (state, bool) => {
+      state.nav = bool
     }
   },
   actions: {

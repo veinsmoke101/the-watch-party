@@ -9,7 +9,7 @@ import darkLogo from '../assets/icons/the-watch-party-logo-dark.png'
 const store = useStore()
 
 // states
-const navColor = computed(() => store.getters.navBg ? 'bg-white dark:bg-gray-900' : 'bg-transparent')
+const nav = computed(() => store.getters.nav )
 const logo = computed(() => store.getters.dark ? darkLogo : lightLogo)
 const isActive = ref(false)
 
@@ -29,7 +29,7 @@ const handleNavToggle = () => {
 
 <template>
 
-  <nav class="nav" :class="navColor">
+  <nav v-if="nav" class="nav bg-white dark:bg-gray-900" >
     <div class="nav__container">
       <div class="nav__logo">
         <img :src="logo" alt="watch-party-logo">
@@ -38,8 +38,9 @@ const handleNavToggle = () => {
         <li class="nav__item">
           <DarkModeToggle />
         </li>
-        <li class="nav__item nav__item--link"><a class="text-black dark:text-white" href="#">Sign up</a></li>
-        <li class="nav__item "><a class="nav__item--button " href="#">Login</a></li>
+
+        <li class="nav__item "><router-link class="text-black dark:text-white" to="/register">Sign up</router-link></li>
+        <li class="nav__item "><router-link class="nav__item--button " to="/login">Login</router-link></li>
       </ul>
       <button class="hamburger" :class="{'is-active': isActive }" @click="handleNavToggle">
         <span class="bg-gray-900 dark:bg-white"></span>

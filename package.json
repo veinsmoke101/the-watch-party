@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@devmobiliza/videojs-vimeo": "^0.6.0",
     "pusher-js": "^7.1.0-beta",
     "videojs-youtube": "^2.6.1",
     "vue": "^3.2.25",

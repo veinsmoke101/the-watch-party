@@ -1,23 +1,12 @@
 <script setup>
 import { useStore } from "vuex"
-import {computed, ref} from "vue"
+import {computed} from "vue"
 import Nav from "./components/Nav.vue"
 
 const store  = useStore()
 const dark = computed( () => store.getters.dark)
-const margin = computed( () => store.getters.navBg ? '50px' : '0')
-const videoOptions = ref(
-    {
-      techOrder: ["youtube"],
-      sources: [
-        {
-          type: "video/youtube",
-          src: "https://www.youtube.com/watch?v=CB5ZoHGeRU8",
-        },
-      ],
-      youtube: { iv_load_policy: 1 },
-    }
-)
+const margin = computed( () => store.getters.nav ? '50px' : '0')
+
 
 
 </script>
@@ -29,12 +18,13 @@ const videoOptions = ref(
         class="bg-white dark:bg-gray-900"
         :style="{marginTop: margin}"
     >
-<!--      <router-link to="/main">main</router-link>-->
-<!--      <router-link to="/">home</router-link>-->
+
       <Nav />
       <router-view />
+
     </div>
   </div>
+
 </template>
 
 <style lang="scss">

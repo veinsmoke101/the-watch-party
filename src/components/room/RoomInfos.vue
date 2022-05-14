@@ -1,7 +1,7 @@
 <template>
   <div class="newRoom">
     <div class="newRoom__inputs">
-      <div class="newRoom__searchVid bg-neutral-300 dark:bg-gray-500">
+      <div class="newRoom__searchVid  ">
         <form  @submit.prevent="handleSearch" >
           <input type="text" v-model="search" placeholder="Enter a youtube video URL"
                  class="bg-white text-black dark:text-white dark:bg-gray-800 ">
@@ -67,6 +67,8 @@
 
 <script setup>
 
+
+
 // components
 import LinkModal from "../../components/modals/LinkModal.vue"
 
@@ -81,6 +83,7 @@ import {useStore} from "vuex";
 // vuex store
 const store = useStore()
 
+
 // modals states
 const isLinkOpen = ref(false)
 const isIdOpen = ref(false)
@@ -90,12 +93,16 @@ let search = ref(null)
 
 
 const handleSearch = () => {
-  let formData = new FormData();
-  console.log(formData)
-  formData.append("url", search.value);
-  fetch("http://localhost/peer-file-sharing/server.php", {
+  // let formData = new FormData();
+  // console.log(formData)
+  // formData.append("url", search.value);
+  let data = {
+    'roomRef': store.getters.roomRef,
+    'videoUrl': search.value
+  }
+  fetch("http://localhost:8080/new/vid", {
     method: "post",
-    body: formData,
+    body: JSON.stringify(data),
   })
       .then(response => response.json())
       .then((response) => console.log("response :" + response))
@@ -117,7 +124,7 @@ const handleSearch = () => {
 
 &__inputs {
    @include base.flexColumn(flex-start, center);
-   width: 70%;
+   width: 71%;
  }
 
 &__searchVid {
@@ -130,10 +137,16 @@ form {
   width: 100%;
   @include base.flexRow(center, flex-start);
   input {
-    width: 80%;
+    width: 100%;
     border-radius: 10px;
     padding: 0.6rem 1rem;
-    margin: 0.6rem 2rem;
+    margin: 0.6rem 0;
+    border: 2px solid #c4c4c4;
+    outline: none;
+    font-size: 0.9rem;
+    &:focus{
+      border-color: base.$main;
+    }
   }
 }
 
@@ -145,6 +158,7 @@ form {
    font-weight: bold;
    text-decoration: underline;
    cursor: pointer;
+  font-size: 0.9rem;
 
 img {
   width: 25px;
@@ -154,12 +168,15 @@ img {
 }
 
 &__generate {
-   width: 29%;
+   width: 28%;
+  margin-bottom: auto;
+  margin-top: 1%;
    @include base.flexRow(center, center)
  }
 
 &__generateContainer {
    width: 90%;
+  height: 100%;
    @include base.flexRow(center, space-around)
  }
 

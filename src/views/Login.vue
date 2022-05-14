@@ -61,10 +61,10 @@ const store  = useStore()
 const color = computed(() => store.getters.dark ? 'white' : '#7B2CBF')
 const illustration = computed(() => store.getters.dark ? illustrationDark : illustrationLight)
 const theme = computed(() => store.getters.dark ? 'dark' : 'light')
-const setNavBg = (bool) => store.commit('setNavBg', bool)
+const setNav = (bool) => store.commit('setNav', bool)
 
 onMounted(() => {
-  setNavBg(false)
+  setNav(false)
 })
 
 </script>
@@ -124,7 +124,6 @@ onMounted(() => {
   .sideForm__container {
     @include base.flexColumn(flex-start, center);
     width: 80%;
-    margin-top: 10%;
     height: 80%;
 
     .sideForm__form {

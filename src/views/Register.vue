@@ -48,9 +48,9 @@
       </div>
 
     </section>
-    <section class="greeting">
-      <h1 class="greeting__title">Work <span class="greeting__span text-gray-700 dark:text-white">Hard !</span> </h1>
-      <h1 class="greeting__title"><span class="greeting__span text-gray-700 dark:text-white"> Play </span>Hard !</h1>
+     <section class="greeting">
+      <h1 class="greeting__title" :style="{color: color}">Mom,  come meet our new friend</h1>
+<!--      <h1 class="greeting__title"><span class="greeting__span text-gray-700 dark:text-white"> Play </span>Hard !</h1>-->
       <img class="greeting__illustration" :src="illustration" alt="login-ils">
     </section>
   </div>
@@ -68,10 +68,10 @@ const store  = useStore()
 const color = computed(() => store.getters.dark ? 'white' : '#7B2CBF')
 const illustration = computed(() => store.getters.dark ? illustrationDark : illustrationLight)
 const theme = computed(() => store.getters.dark ? 'dark' : 'light')
-const setNavBg = (bool) => store.commit('setNavBg', bool)
+const setNav = (bool) => store.commit('setNav', bool)
 
 onMounted(() => {
-  setNavBg(false)
+  setNav(false)
 })
 
 </script>
@@ -116,7 +116,7 @@ onMounted(() => {
 
   .greeting__title {
     font-size: 72px;
-    color: base.$main;
+    //color: base.$main;
     @include base.large-tablet {
       font-size: 52px;
     }
@@ -135,7 +135,6 @@ onMounted(() => {
   .sideForm__container {
     @include base.flexColumn(flex-start, center);
     width: 80%;
-    margin-top: 10%;
     height: 80%;
 
     .sideForm__form {
@@ -161,6 +160,7 @@ onMounted(() => {
       }
 
       .sideForm__submit {
+        margin-top: 20px ;
         width: 100%;
         padding: 6px 20px;
         background-color: base.$main;
@@ -173,8 +173,7 @@ onMounted(() => {
 
     hr {
       width: 100%;
-      margin: 30px 0;
-
+      margin: 15px 0;
     }
 
     .sideForm__register a {
@@ -187,6 +186,7 @@ onMounted(() => {
       .sideForm__title {
         font-size: 28px;
         font-weight: bolder;
+        font-family: base.$montserrat;
       }
 
       .sideForm__subTitle {
