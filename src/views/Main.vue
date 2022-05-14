@@ -1,14 +1,45 @@
 <script setup>
  import Footer from "../components/Footer.vue"
  import {useStore} from "vuex";
- import { computed } from "vue"
+ import {computed, onMounted} from "vue"
  import illustrationLight from "../assets/images/new-room.svg"
  import illustrationDark from "../assets/images/new-room-dark.svg"
+ import router from "../router";
 
  const store = useStore()
 
  const illustration = computed( () => store.getters.dark ? illustrationDark : illustrationLight )
+ const setNav = (bool) => store.commit('setNav', bool)
+ const setRoomId = (roomId) => store.commit('setRoomId', roomId)
+ const setRoomRef = (roomRef) => store.commit('setRoomRef', roomRef)
 
+
+
+ onMounted(() => {
+   setNav(true)
+
+
+ })
+
+ const handleNewRoom = () => {
+
+  let data = new FormData()
+   data.append('title', 'beautiful room')
+   data.append('author', "1")
+
+   fetch("http://localhost:8080/new/room", {
+     method: "post",
+     body: data,
+   })
+       .then(response => response.json())
+       .then((response) => {
+             setRoomId(response.data.id)
+             setRoomRef(response.data.unique_reference)
+             router.push('/room')
+           }
+       )
+       .catch((error) => console.log("error :" + error))
+ }
 
 
 </script>
@@ -24,7 +55,7 @@
         <p class="newRoom__small text-black dark:text-white">
           create a room and get started
         </p>
-        <button class="newRoom__button">
+        <button @click="handleNewRoom" class="newRoom__button">
           New Room
           <img src="../assets/icons/new-icon.svg" alt="new-room">
         </button>
