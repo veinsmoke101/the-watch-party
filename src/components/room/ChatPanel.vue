@@ -47,15 +47,27 @@ const getCurrentTime = () => {
 
 onMounted(() => {
   let joinedMessage = {
-    id: 1,
+    id: userId,
+    src: profileImage,
+    author: userName,
+    added_at: getCurrentTime(),
+    body: 'Joined the party!'
+  }
+  addMessage(joinedMessage)
+})
+
+const handleMessageSubmit = (event) => {
+  event.preventDefault()
+  let newMessage = {
+    id: userId,
     src: profileImage,
     author: userName,
     added_at: getCurrentTime(),
     body: messageBody.value
   }
-  addMessage(joinedMessage)
-
-})
+  addMessage(newMessage)
+  messageBody.value = ''
+}
 
 </script>
 
@@ -91,7 +103,9 @@ onMounted(() => {
       />
 
       <div class="videoRoom__sendMessage">
-        <input ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">
+        <form action="" @submit="handleMessageSubmit" style="width: 100%">
+          <input v-model="messageBody" ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">
+        </form>
         <img @click="isEmojiOpen = !isEmojiOpen" src="../../assets/icons/emoji.svg" alt="emoji">
       </div>
       <div class="emojiWrapper">

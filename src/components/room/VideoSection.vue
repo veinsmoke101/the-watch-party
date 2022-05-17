@@ -53,7 +53,7 @@ const vidUrl = computed(() => store.getters.vidUrl)
 &__chatPanel {
    width: 100%;
    @include base.flexColumn(center, center);
-   height: 100%;
+  height: 100%;
  }
 
 &__settings {
@@ -74,7 +74,9 @@ img {
 
 &__chat {
    background-color: rgba(123, 44, 191, 0.2);
-   height: 100%;
+  max-height: 100%;
+  height: 100%;
+  overflow-y: scroll;
    margin: 1rem 0 0.2rem 0;
    width: 90%;
    border-top-left-radius: 10px;
@@ -149,6 +151,7 @@ img {
    border-top-left-radius: 10px;
    border-top-right-radius: 10px;
    font-size: 0.8rem;
+  outline: none;
  }
 
 
