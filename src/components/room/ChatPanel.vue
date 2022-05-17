@@ -7,12 +7,14 @@ import Message from "../Message.vue"
 // utilities
 import { VuemojiPicker } from 'vuemoji-picker'
 import insertText from 'https://cdn.jsdelivr.net/npm/insert-text-at-cursor@0.3.0/index.js'
-import { ref, computed } from "vue";
+import {ref, computed, onMounted} from "vue";
 import { useStore } from "vuex";
 
 
 const store = useStore()
 const dark = computed(() => store.getters.dark)
+const messages = computed(() => store.getters.messages)
+const addMessage = (message) => store.commit('addMessage', message)
 
 // modals states
 const isUsersOpen = ref(false)
@@ -29,7 +31,17 @@ const handleEmojiClick = (detail) => {
 
 const reRender = ref(0)
 
+onMounted(() => {
+  let joinedMessage = {
+    id: 1,
+    src: "profile-image.svg",
+    author: "Taha Lechgar",
+    added_at: "4:22:46 PM",
+    body: "Joined the party."
+  }
+  addMessage(joinedMessage)
 
+})
 
 </script>
 
@@ -56,17 +68,12 @@ const reRender = ref(0)
     <div class="videoRoom__chat">
 
       <Message
-          src = "profile-image.svg"
-          author = "Taha Lechgar"
-          added_at = "4:22:46 PM"
-          message = "Hello World!"
-      />
-
-      <Message
-          src = "profile-image.svg"
-          author = "Taha Lechgar"
-          added_at = "4:22:46 PM"
-          message = "Hello World!"
+          v-for = "message in messages"
+          key="message.id"
+          :src = "message.src"
+          :author = "message.author"
+          :added_at = "message.added_at"
+          :body = "message.body"
       />
 
       <div class="videoRoom__sendMessage">

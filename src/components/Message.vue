@@ -7,7 +7,7 @@
         <small class="text-black dark:text-white" style="color: #606060">{{ added_at }}</small>
       </div>
       <div class="videoRoom__messageBody text-black dark:text-white">
-        {{ message }}
+        {{ body }}
       </div>
     </div>
   </div>
@@ -20,7 +20,7 @@ import {ref} from "vue";
 const props = defineProps({
   author: String,
   added_at: String,
-  message: String,
+  body: String,
   src: String
 })
 

@@ -8,6 +8,7 @@ export default createStore({
     vidUrl: null,
     reRenderVideo: 0,
     nav: true,
+    messages: []
   },
   getters: {
     dark: state => state.dark,
@@ -16,7 +17,9 @@ export default createStore({
     vidUrl: state => state.vidUrl,
     reRenderVideo: state => state.reRenderVideo,
     nav: state => state.nav,
+    messages: state => state.messages
   },
+
   mutations: {
     setDark: (state, bool) => {
       state.dark = bool
@@ -35,6 +38,9 @@ export default createStore({
     },
     setNav: (state, bool) => {
       state.nav = bool
+    },
+    addMessage: (state, message) => {
+      state.messages.push(message)
     }
   },
   actions: {
