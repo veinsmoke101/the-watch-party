@@ -18,9 +18,10 @@ const routes = [
         component: Main
     },
     {
-        path: '/room',
+        path: '/room/:roomRef',
         name: 'Room',
-        component: Room
+        component: Room,
+        props: true
     },
     {
         path: '/login',

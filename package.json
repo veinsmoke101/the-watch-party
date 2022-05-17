@@ -12,6 +12,7 @@
     "pusher-js": "^7.1.0-beta",
     "videojs-youtube": "^2.6.1",
     "vue": "^3.2.25",
+    "vue-content-loader": "^2.0.1",
     "vue-router": "^4.0.14",
     "vuemoji-picker": "^0.1.4",
     "vuex": "^4.0.2"
