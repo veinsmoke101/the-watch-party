@@ -14,6 +14,9 @@ import { useStore } from "vuex";
 const store = useStore()
 const dark = computed(() => store.getters.dark)
 const messages = computed(() => store.getters.messages)
+const userId = computed(() => store.getters.userId)
+const userName = computed(() => store.getters.userName)
+const profileImage = computed(() => store.getters.profileImage)
 const addMessage = (message) => store.commit('addMessage', message)
 
 // modals states
@@ -30,14 +33,25 @@ const handleEmojiClick = (detail) => {
 }
 
 const reRender = ref(0)
+const messageBody = ref('')
+
+const getCurrentTime = () => {
+  let date = new Date()
+  let hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
+  let minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
+  let seconds = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+  return `${hours}:${minutes}:${seconds}`
+}
+
+
 
 onMounted(() => {
   let joinedMessage = {
     id: 1,
-    src: "profile-image.svg",
-    author: "Taha Lechgar",
-    added_at: "4:22:46 PM",
-    body: "Joined the party."
+    src: profileImage,
+    author: userName,
+    added_at: getCurrentTime(),
+    body: messageBody.value
   }
   addMessage(joinedMessage)
 

@@ -8,7 +8,12 @@ export default createStore({
     vidUrl: null,
     reRenderVideo: 0,
     nav: true,
-    messages: []
+    messages: [],
+
+    // current authenticated user
+    userId: 1,
+    userName: 'Taha Lechgar',
+    profileImage: 'profile-image.svg'
   },
   getters: {
     dark: state => state.dark,
@@ -17,7 +22,10 @@ export default createStore({
     vidUrl: state => state.vidUrl,
     reRenderVideo: state => state.reRenderVideo,
     nav: state => state.nav,
-    messages: state => state.messages
+    messages: state => state.messages,
+    userId: state => state.userId,
+    userName: state => state.userName,
+    profileImage: state => state.profileImage
   },
 
   mutations: {
