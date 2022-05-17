@@ -2,6 +2,7 @@
 
 // modals
 import UsersModal from "../../components/modals/UsersModal.vue"
+import Message from "../Message.vue"
 
 // utilities
 import { VuemojiPicker } from 'vuemoji-picker'
@@ -53,44 +54,21 @@ const reRender = ref(0)
     </div>
 
     <div class="videoRoom__chat">
-      <div class="videoRoom__message">
-        <img src="../../assets/images/profile-image.svg" alt="message-sender">
-        <div class="videoRoom__messageInfo">
-          <div class="videoRoom__sender">
-            <p class="text-black dark:text-white">Taha Lechgar</p>
-            <small class="text-black dark:text-white" style="color: #606060">4:22:46 PM</small>
-          </div>
-          <div class="videoRoom__messageBody text-black dark:text-white">
-            Has resumed the video.
-          </div>
-        </div>
-      </div>
 
-      <div class="videoRoom__message">
-        <img src="../../assets/images/profile-image.svg" alt="message-sender">
-        <div class="videoRoom__messageInfo">
-          <div class="videoRoom__sender">
-            <p class="text-black dark:text-white">Taha Lechgar</p>
-            <small class="text-black dark:text-white" style="color: #606060">4:22:46 PM</small>
-          </div>
-          <div class="videoRoom__messageBody text-black dark:text-white">
-            Has resumed the video.
-          </div>
-        </div>
-      </div>
+      <Message
+          src = "profile-image.svg"
+          author = "Taha Lechgar"
+          added_at = "4:22:46 PM"
+          message = "Hello World!"
+      />
 
-      <div class="videoRoom__message">
-        <img src="../../assets/images/profile-image.svg" alt="message-sender">
-        <div class="videoRoom__messageInfo">
-          <div class="videoRoom__sender">
-            <p class="text-black dark:text-white">Taha Lechgar</p>
-            <small class="text-black dark:text-white" style="color: #606060">4:22:46 PM</small>
-          </div>
-          <div class="videoRoom__messageBody text-black dark:text-white">
-            Has resumed the video.
-          </div>
-        </div>
-      </div>
+      <Message
+          src = "profile-image.svg"
+          author = "Taha Lechgar"
+          added_at = "4:22:46 PM"
+          message = "Hello World!"
+      />
+
       <div class="videoRoom__sendMessage">
         <input ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">
         <img @click="isEmojiOpen = !isEmojiOpen" src="../../assets/icons/emoji.svg" alt="emoji">
