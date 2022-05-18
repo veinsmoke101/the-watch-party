@@ -80,7 +80,8 @@ onMounted(() => {
     setVidUrl(data)
   })
   channel.bind('message', (data) => {
-    addMessage(data)
+    addMessage(JSON.parse(data))
+    console.log(data)
   })
 
 })

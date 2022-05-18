@@ -93,13 +93,12 @@ let search = ref(null)
 
 
 const handleSearch = () => {
-  // let formData = new FormData();
-  // console.log(formData)
-  // formData.append("url", search.value);
+
   let data = {
-    'roomRef': store.getters.roomRef,
-    'videoUrl': search.value
+    roomRef: store.getters.roomRef,
+    videoUrl: search.value
   }
+
   fetch("http://localhost:8080/new/vid", {
     method: "post",
     body: JSON.stringify(data),
@@ -107,6 +106,7 @@ const handleSearch = () => {
       .then(response => response.json())
       .then((response) => console.log("response :" + response))
       .catch((error) => console.log("error :" + error));
+
 }
 
 

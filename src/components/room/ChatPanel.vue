@@ -7,7 +7,7 @@ import Message from "../Message.vue"
 // utilities
 import { VuemojiPicker } from 'vuemoji-picker'
 import insertText from 'https://cdn.jsdelivr.net/npm/insert-text-at-cursor@0.3.0/index.js'
-import {ref, computed, onMounted, watch, onUpdated} from "vue";
+import {ref, computed, onMounted, onUpdated} from "vue";
 import { useStore } from "vuex";
 
 
@@ -61,21 +61,54 @@ onUpdated( () => {
   box.value.scrollTop = box.value.scrollHeight;
 })
 
-watch(store.getters.messages, () => {
-
-});
+// watch(store.getters.messages, () => {
+//   const handleSearch = () => {
+//
+//     let data = {
+//       'roomRef': store.getters.roomRef,
+//       'videoUrl': search.value
+//     }
+//
+//     fetch("http://localhost:8080/new/vid", {
+//       method: "post",
+//       body: JSON.stringify(data),
+//     })
+//         .then(response => response.json())
+//         .then((response) => console.log("response :" + response))
+//         .catch((error) => console.log("error :" + error));
+//
+//   }
+// });
 
 const handleMessageSubmit = (event) => {
   event.preventDefault()
+
   let newMessage = {
-    id: userId,
-    src: profileImage,
-    author: userName,
+    id: userId.value,
+    src: profileImage.value,
+    author: userName.value,
     added_at: getCurrentTime(),
     body: messageBody.value
   }
-  addMessage(newMessage)
+  // addMessage(newMessage)
   messageBody.value = ''
+
+  // send message to other users
+  let data = {
+    roomRef: store.getters.roomRef,
+    message: JSON.stringify(JSON.decycle(newMessage))
+  }
+
+  fetch("http://localhost:8080/new/message", {
+    method: "POST",
+    body: JSON.stringify(data),
+  })
+      .then(response => response.json())
+      .then((response) => console.log("response :" + response))
+      .catch((error) => console.log("error :" + error));
+
+
+
   // box.value.scrollTop = box.value.scrollHeight ;
   // messageInput.value.scrollIntoView({behavior: "smooth"})
 
@@ -109,7 +142,7 @@ const handleMessageSubmit = (event) => {
 
       <Message
           v-for = "message in messages"
-          key="message.id"
+          :key="message.id"
           :src = "message.src"
           :author = "message.author"
           :added_at = "message.added_at"
