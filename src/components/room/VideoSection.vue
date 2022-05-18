@@ -88,7 +88,7 @@ img {
 &__message {
    width: 90%;
    height: 50px;
-   margin-top: 1rem;
+   margin: 0.5rem 0;
    @include base.flexRow(center, flex-start);
 
 img {
@@ -119,9 +119,12 @@ p {
 &__sendMessage {
    width: 90%;
    position: relative;
-   margin-top: auto;
+   margin-top: 20px;
    bottom: 5px;
    @include base.flexRow(center, flex-start);
+  form{
+    position: relative;
+  }
 
 img {
   margin-left: auto;

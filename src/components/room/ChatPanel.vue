@@ -7,7 +7,7 @@ import Message from "../Message.vue"
 // utilities
 import { VuemojiPicker } from 'vuemoji-picker'
 import insertText from 'https://cdn.jsdelivr.net/npm/insert-text-at-cursor@0.3.0/index.js'
-import {ref, computed, onMounted} from "vue";
+import {ref, computed, onMounted, watch, onUpdated} from "vue";
 import { useStore } from "vuex";
 
 
@@ -23,6 +23,7 @@ const addMessage = (message) => store.commit('addMessage', message)
 const isUsersOpen = ref(false)
 const isSettingOpen = ref(false)
 const isEmojiOpen = ref(false)
+const box = ref(null)
 
 // add emoji to message input
 const messageInput = ref(null)
@@ -56,6 +57,10 @@ onMounted(() => {
   addMessage(joinedMessage)
 })
 
+onUpdated( () => {
+  box.value.scrollTop = box.value.scrollHeight;
+})
+
 const handleMessageSubmit = (event) => {
   event.preventDefault()
   let newMessage = {
@@ -67,7 +72,12 @@ const handleMessageSubmit = (event) => {
   }
   addMessage(newMessage)
   messageBody.value = ''
+  // box.value.scrollTop = box.value.scrollHeight ;
+  // messageInput.value.scrollIntoView({behavior: "smooth"})
+
 }
+
+
 
 </script>
 
@@ -80,10 +90,10 @@ const handleMessageSubmit = (event) => {
   <div class="videoRoom__chatPanel">
     <div class="videoRoom__settings">
       <p class="text-white">13 users watching</p>
-      <img @click="isSettingOpen = !isSettingOpen" src="../../assets/icons/view-more.svg" alt="settings-icon">
+      <img @click="isSettingOpen = !isSettingOpen" src="@/assets/icons/view-more.svg" alt="settings-icon">
       <div v-show="isSettingOpen" class="videoRoom__settingMenu">
         <div class="menuWrapper">
-          <img src="../../assets/icons/arrow-head.svg" alt="arrow">
+          <img src="@/assets/icons/arrow-head.svg" alt="arrow">
           <div @click="isUsersOpen = true" class="element">manage users</div>
           <div class="element">leave the party</div>
         </div>
@@ -91,7 +101,7 @@ const handleMessageSubmit = (event) => {
       </div>
     </div>
 
-    <div class="videoRoom__chat">
+    <div class="videoRoom__chat" ref="box" >
 
       <Message
           v-for = "message in messages"
@@ -102,18 +112,19 @@ const handleMessageSubmit = (event) => {
           :body = "message.body"
       />
 
-      <div class="videoRoom__sendMessage">
-        <form action="" @submit="handleMessageSubmit" style="width: 100%">
-          <input v-model="messageBody" ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">
-        </form>
-        <img @click="isEmojiOpen = !isEmojiOpen" src="../../assets/icons/emoji.svg" alt="emoji">
-      </div>
-      <div class="emojiWrapper">
-        <VuemojiPicker
-            v-if="isEmojiOpen"
-            :isDark="dark"
-            @emojiClick="handleEmojiClick"/>
-      </div>
+
+    </div>
+    <div  class="videoRoom__sendMessage">
+      <form action="" @submit="handleMessageSubmit" style="width: 100%">
+        <input v-model="messageBody" ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">
+      </form>
+      <img @click="isEmojiOpen = !isEmojiOpen" src="../../assets/icons/emoji.svg" alt="emoji">
+    </div>
+    <div class="emojiWrapper">
+      <VuemojiPicker
+          v-if="isEmojiOpen"
+          :isDark="dark"
+          @emojiClick="handleEmojiClick"/>
     </div>
 
   </div>
