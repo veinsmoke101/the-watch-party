@@ -34,6 +34,7 @@ const setVidUrl = (reRender) => store.commit('setVidUrl', reRender)
 const setNav = (bool) => store.commit('setNav', bool)
 const setRoomRef = (ref) => store.commit('setRoomRef', ref)
 const setRoomId = (id) => store.commit('setRoomId', id)
+const addMessage = (message) => store.commit('addMessage', message)
 
 
 const isLoading = ref(true)
@@ -77,6 +78,9 @@ onMounted(() => {
   channel.bind('videoUrl', (data) => {
     setReRenderVideo(store.getters.reRenderVideo+1)
     setVidUrl(data)
+  })
+  channel.bind('message', (data) => {
+    addMessage(data)
   })
 
 })

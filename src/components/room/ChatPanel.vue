@@ -61,6 +61,10 @@ onUpdated( () => {
   box.value.scrollTop = box.value.scrollHeight;
 })
 
+watch(store.getters.messages, () => {
+
+});
+
 const handleMessageSubmit = (event) => {
   event.preventDefault()
   let newMessage = {
@@ -111,21 +115,20 @@ const handleMessageSubmit = (event) => {
           :added_at = "message.added_at"
           :body = "message.body"
       />
+      <div  class="videoRoom__sendMessage">
+        <form action="" @submit="handleMessageSubmit" style="width: 100%">
+          <input v-model="messageBody" ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">
+        </form>
+        <img @click="isEmojiOpen = !isEmojiOpen" src="@/assets/icons/emoji.svg" alt="emoji">
+      </div>
+      <div class="emojiWrapper">
+        <VuemojiPicker
+            v-if="isEmojiOpen"
+            :isDark="dark"
+            @emojiClick="handleEmojiClick"/>
+      </div>
+    </div>
 
-
-    </div>
-    <div  class="videoRoom__sendMessage">
-      <form action="" @submit="handleMessageSubmit" style="width: 100%">
-        <input v-model="messageBody" ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">
-      </form>
-      <img @click="isEmojiOpen = !isEmojiOpen" src="../../assets/icons/emoji.svg" alt="emoji">
-    </div>
-    <div class="emojiWrapper">
-      <VuemojiPicker
-          v-if="isEmojiOpen"
-          :isDark="dark"
-          @emojiClick="handleEmojiClick"/>
-    </div>
 
   </div>
 
