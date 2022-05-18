@@ -19,6 +19,7 @@ const userName = computed(() => store.getters.userName)
 const profileImage = computed(() => store.getters.profileImage)
 const addMessage = (message) => store.commit('addMessage', message)
 
+
 // modals states
 const isUsersOpen = ref(false)
 const isSettingOpen = ref(false)
@@ -48,37 +49,31 @@ const getCurrentTime = () => {
 
 onMounted(() => {
   let joinedMessage = {
-    id: userId,
-    src: profileImage,
-    author: userName,
+    id: userId.value,
+    src: profileImage.value,
+    author: userName.value,
     added_at: getCurrentTime(),
     body: 'Joined the party!'
   }
-  addMessage(joinedMessage)
+
+  let data = {
+    roomRef: store.getters.roomRef,
+    message: JSON.stringify(joinedMessage)
+  }
+
+  fetch("http://localhost:8080/new/message", {
+    method: "POST",
+    body: JSON.stringify(data),
+  })
+      .then(response => response.json())
+      .then((response) => console.log("response :" + response))
+      .catch((error) => console.log("error :" + error));
 })
 
 onUpdated( () => {
   box.value.scrollTop = box.value.scrollHeight;
 })
 
-// watch(store.getters.messages, () => {
-//   const handleSearch = () => {
-//
-//     let data = {
-//       'roomRef': store.getters.roomRef,
-//       'videoUrl': search.value
-//     }
-//
-//     fetch("http://localhost:8080/new/vid", {
-//       method: "post",
-//       body: JSON.stringify(data),
-//     })
-//         .then(response => response.json())
-//         .then((response) => console.log("response :" + response))
-//         .catch((error) => console.log("error :" + error));
-//
-//   }
-// });
 
 const handleMessageSubmit = (event) => {
   event.preventDefault()
@@ -90,15 +85,16 @@ const handleMessageSubmit = (event) => {
     added_at: getCurrentTime(),
     body: messageBody.value
   }
-  // addMessage(newMessage)
   messageBody.value = ''
 
   // send message to other users
   let data = {
     roomRef: store.getters.roomRef,
-    message: JSON.stringify(JSON.decycle(newMessage))
+    message: JSON.stringify(newMessage)
   }
 
+  // addMessage(data)
+  
   fetch("http://localhost:8080/new/message", {
     method: "POST",
     body: JSON.stringify(data),
@@ -134,9 +130,9 @@ const handleMessageSubmit = (event) => {
           <div @click="isUsersOpen = true" class="element">manage users</div>
           <div class="element">leave the party</div>
         </div>
-
       </div>
     </div>
+
 
     <div class="videoRoom__chat" ref="box" >
 
@@ -148,6 +144,7 @@ const handleMessageSubmit = (event) => {
           :added_at = "message.added_at"
           :body = "message.body"
       />
+
       <div  class="videoRoom__sendMessage">
         <form action="" @submit="handleMessageSubmit" style="width: 100%">
           <input v-model="messageBody" ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">

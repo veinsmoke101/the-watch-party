@@ -52,6 +52,21 @@ export default createStore({
     }
   },
   actions: {
+    addMessage : ({commit, getters}, payload) => {
+
+      let data = {
+        roomRef: getters.roomRef,
+        message: JSON.stringify(payload)
+      }
+      fetch("http://localhost:8080/new/message", {
+        method: "POST",
+        body: JSON.stringify(data),
+      })
+          .then(response => response.json())
+          .then((response) => console.log("response :" + response))
+          .catch((error) => console.log("error :" + error));
+
+    }
   },
   modules: {
   }
