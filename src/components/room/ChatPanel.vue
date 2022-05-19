@@ -78,6 +78,8 @@ onUpdated( () => {
 const handleMessageSubmit = (event) => {
   event.preventDefault()
 
+  if(messageBody.value === '') return
+
   let newMessage = {
     id: userId.value,
     src: profileImage.value,
