@@ -8,10 +8,10 @@
         </form>
 
       </div>
-      <div class="newRoom__upload text-gray-500 dark:text-white">
-        <img :src="uploadIcon" alt="upload">
-        Upload a video
-      </div>
+<!--      <div class="newRoom__upload text-gray-500 dark:text-white">-->
+<!--        <img :src="uploadIcon" alt="upload">-->
+<!--        Upload a video-->
+<!--      </div>-->
     </div>
     <div class="newRoom__generate">
       <div class="newRoom__generateContainer">
@@ -52,7 +52,7 @@
       v-if="isLinkOpen"
       title="Get Room URL"
       description="lorem ipqum lorem ipqum lorem ipqum lorem ipqum lorem ipqum lorem ipqum lorem ipqum lorem ipqum lorem ipqum "
-      link="baf9f6f1-1677-4d84"
+      :link="link"
   />
 
 
@@ -61,7 +61,7 @@
       v-if="isIdOpen"
       title="Get Room Identifier"
       description="lorem ipqum lorem ipqum lorem ipqum lorem ipqum lorem ipqum lorem ipqum lorem ipqum lorem ipqum lorem ipqum "
-      link="baf9f6f1-1677-4d84"
+      :link="id"
   />
 </template>
 
@@ -80,6 +80,7 @@ import uploadDark from "../../assets/icons/upload-dark.svg"
 import { ref, computed } from "vue";
 import {useStore} from "vuex";
 
+
 // vuex store
 const store = useStore()
 
@@ -87,6 +88,8 @@ const store = useStore()
 // modals states
 const isLinkOpen = ref(false)
 const isIdOpen = ref(false)
+const id = computed(() => store.getters.roomRef)
+const link = computed(() =>`http://localhost:3000/room/${store.getters.roomRef}`)
 
 const uploadIcon = computed(() => store.getters.dark ? uploadDark : uploadLight)
 let search = ref(null)
@@ -121,6 +124,9 @@ const handleSearch = () => {
   @include base.flexRow(center, space-between);
   width: 100%;
   padding: 0 1rem;
+  @include base.tablet{
+    //flex-direction: column;
+  }
 
 &__inputs {
    @include base.flexColumn(flex-start, center);
@@ -185,6 +191,17 @@ img {
    @include base.flexColumn(center, center);
    cursor: pointer;
    font-size: 12px;
+    @include base.tablet{
+      margin-top: 10px;
+      font-size: 9px;
+    }
+  svg{
+    @include base.tablet{
+      width: 15px;
+      height: 15px;
+    }
+  }
+
 
 &:hover {
 p {

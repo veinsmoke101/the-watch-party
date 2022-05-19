@@ -6,7 +6,6 @@
                    :key="reRenderVideo"
                    type="video/youtube"/>
     </div>
-
   <ChatPanel />
 
   </div>
@@ -43,17 +42,27 @@ const vidUrl = computed(() => store.getters.vidUrl)
   padding-left: 1rem;
   height: 500px;
   @include base.flexRow(center, space-between);
-
+  @include base.tablet{
+    flex-direction: column;
+    height: auto;
+  }
 &__video {
- //background-color: black;
    min-width: 70% !important;
- //padding: 1rem 2rem;
+  @include base.tablet{
+    width: 80%;
+    margin: 2rem 0
+  }
  }
 
 &__chatPanel {
    width: 100%;
    @include base.flexColumn(center, center);
   height: 100%;
+  @include base.tablet{
+    width: 89%;
+    height: 400px;
+    max-height: 400px;
+  }
  }
 
 &__settings {
@@ -82,7 +91,10 @@ img {
    border-top-left-radius: 10px;
    border-top-right-radius: 10px;
    position: relative;
-   @include base.flexColumn(center, flex-start)
+   @include base.flexColumn(center, flex-start);
+  //@include base.tablet{
+  //  max-height: 600px;
+  //}
  }
 
 &__message {

@@ -6,7 +6,7 @@
             <p class="linkModal__description dark:text-white">{{ description }}</p>
             <div class="linkModal__linkWrapper">
               <input type="text" class="linkModal__link text-gray-700 dark:text-white bg-white dark:bg-slate-700 border-2 border-gray-400 dark:border-slate-600" name="link" :value="link">
-              <button class="linkModal__button linkModal__button--copy">Copy</button>
+              <button class="linkModal__button linkModal__button--copy" @click="handleClick">Copy</button>
 
             </div>
             <div class="linkModal__note bg-purple-100 bg-opacity-70 dark:text-white dark:bg-purple-800 dark:bg-opacity-20">
@@ -23,6 +23,9 @@
 
 <script setup>
   import Modal from "../layouts/Modal.vue"
+  import copyTextToClipboard from "../../js/copyToClipboard"
+
+
   const props = defineProps({
     title: String,
     link: String,
@@ -30,6 +33,10 @@
   })
 
   defineEmits(["close"])
+
+  const handleClick = () => {
+    copyTextToClipboard(props.link)
+  }
 
 </script>
 
