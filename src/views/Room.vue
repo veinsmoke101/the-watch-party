@@ -102,18 +102,27 @@ onMounted(() => {
 
 <template>
 <div v-if="isLoading" class="loading">
+<!--  <content-loader-->
+<!--      viewBox="0 0 400 460"-->
+<!--      :speed="0"-->
+<!--      primaryColor="rgba(123, 44, 191, 0.05)"-->
+<!--  >-->
+<!--    <rect x="-1" y="19" rx="2" ry="2" width="402" height="22" />-->
+<!--    <rect x="1" y="61" rx="2" ry="2" width="400" height="216" />-->
+<!--  </content-loader>-->
+
   <content-loader
-      v-if="isLoading"
-      viewBox="0 0 400 230"
-      :speed="2"
-      primaryColor="#f3f3f3"
-      secondaryColor="#ecebeb"
+      viewBox="0 0 400 600"
+      class="loader-taha"
+      :speed="0"
+      primaryColor="rgba(123, 44, 191, 0.05)"
   >
-    <circle cx="31" cy="31" r="15" />
-    <rect x="58" y="18" rx="2" ry="2" width="140" height="10" />
-    <rect x="58" y="34" rx="2" ry="2" width="140" height="10" />
-    <rect x="0" y="60" rx="2" ry="2" width="400" height="400" />
+    <rect x="2" y="32" rx="2" ry="2" width="310" height="18" />
+    <rect x="0" y="58" rx="2" ry="2" width="310" height="152" />
+    <rect x="320" y="80" rx="0" ry="0" width="150" height="128" />
+    <rect x="320" y="58" rx="0" ry="0" width="150" height="18" />
   </content-loader>
+
 </div>
 
 
@@ -127,6 +136,12 @@ onMounted(() => {
 
 <style lang="scss">
 @use '../sass/base';
+
+
+.loader-taha{
+  width: 95vw;
+  height: auto;
+}
 
 .containeer {
   @include base.flexColumn(center, center);
