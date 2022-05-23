@@ -49,7 +49,7 @@ const vidUrl = computed(() => store.getters.vidUrl)
 &__video {
    min-width: 70% !important;
   @include base.tablet{
-    width: 80%;
+    width: 95%;
     margin: 2rem 0
   }
  }
@@ -59,9 +59,9 @@ const vidUrl = computed(() => store.getters.vidUrl)
    @include base.flexColumn(center, center);
   height: 100%;
   @include base.tablet{
-    width: 89%;
-    height: 400px;
-    max-height: 400px;
+    width: 100%;
+    height: 300px;
+    max-height: 300px;
   }
  }
 

@@ -9,6 +9,7 @@ import { VuemojiPicker } from 'vuemoji-picker'
 import insertText from 'https://cdn.jsdelivr.net/npm/insert-text-at-cursor@0.3.0/index.js'
 import {ref, computed, onMounted, onUpdated} from "vue";
 import { useStore } from "vuex";
+import { getCurrentTime } from "../../js/getCurrentTime";
 
 
 const store = useStore()
@@ -37,13 +38,7 @@ const handleEmojiClick = (detail) => {
 const reRender = ref(0)
 const messageBody = ref('')
 
-const getCurrentTime = () => {
-  let date = new Date()
-  let hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
-  let minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
-  let seconds = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
-  return `${hours}:${minutes}:${seconds}`
-}
+
 
 
 
@@ -68,6 +63,9 @@ onMounted(() => {
       .then(response => response.json())
       .then((response) => console.log("response :" + response))
       .catch((error) => console.log("error :" + error));
+
+
+
 })
 
 onUpdated( () => {

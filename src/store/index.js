@@ -9,6 +9,7 @@ export default createStore({
     reRenderVideo: 0,
     nav: true,
     messages: [],
+    channel: null,
 
     // current authenticated user
     userId: 1,
@@ -25,7 +26,8 @@ export default createStore({
     messages: state => state.messages,
     userId: state => state.userId,
     userName: state => state.userName,
-    profileImage: state => state.profileImage
+    profileImage: state => state.profileImage,
+    channel: state => state.channel,
   },
 
   mutations: {
@@ -49,6 +51,9 @@ export default createStore({
     },
     addMessage: (state, message) => {
       state.messages.push(message)
+    },
+    setChannel: (state, channel) => {
+      state.channel = channel
     }
   },
   actions: {

@@ -28,9 +28,13 @@
 
 
 import 'videojs-youtube/dist/Youtube.min.js';
+import 'videojs-event-tracking/dist/videojs-event-tracking.min';
 import 'video.js/dist/video-js.min.css';
 import videojs from "video.js"
-import {onBeforeUnmount, onMounted, ref} from "vue";
+import {computed, inject, onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {useStore} from "vuex";
+import {getCurrentTime} from "../js/getCurrentTime";
+
 
 
 
@@ -39,55 +43,85 @@ const props = defineProps({
   type: String
 })
 
+const store = useStore()
 
-let player = ref(null)
+const userId = computed(() => store.getters.userId)
+const userName = computed(() => store.getters.userName)
+const profileImage = computed(() => store.getters.profileImage)
+
+const addMessage = (message) => store.commit('addMessage', message)
+const setReRenderVideo = (reRender) => store.commit('setReRenderVideo', reRender)
+const setVidUrl = (vidUrl) => store.commit('setVidUrl', vidUrl)
+
+
+const player = ref(null)
 const videoPlayer = ref(null)
 
-const handlePlay = () => player.value.play()
-
 onMounted(() => {
-  console.log(videoPlayer.value)
-  player.value = videojs(videoPlayer.value, {autoplay: true, muted: true}, () => {
+
+
+  // ---------------------- video.js setup ---------------------------------
+  // ---------------------- video.js setup ---------------------------------
+  // ---------------------- video.js setup ---------------------------------
+  // ---------------------- video.js setup ---------------------------------
+
+  player.value = videojs(
+      videoPlayer.value,
+      {autoplay: true, muted: true, plugins: { eventTracking: true }},
+      () => {
     videojs.log("ready")
   })
-  let button = player.value.controlBar.addChild('button', {}, 1);
+  
+  let button = player.value.controlBar.addChild('button', {}, 1)
   button.addClass("seekIcon")
 
-  console.log(button.el());
+  player.value.on('tracking:seek', (e, data) => console.log(data.seekTo))
 
+
+
+    player.value.on('pause', () => {
+      console.log('hhehe heheh heehehe boooyyy')
+
+      let joinedMessage = {
+        id: userId.value,
+        src: profileImage.value,
+        author: userName.value,
+        added_at: getCurrentTime(),
+        body: 'Paused the video!'
+      }
+
+      let data = {
+        roomRef: store.getters.roomRef,
+        message: JSON.stringify(joinedMessage)
+      }
+
+      fetch("http://localhost:8080/pause/video", {
+        method: "POST",
+        body: JSON.stringify(data),
+      })
+          .then(response => response.json())
+          .then((response) => console.log("response :" + response))
+          .catch((error) => console.log("error :" + error));
+    })
 })
+
+let handlePause = (data) => {
+  addMessage(JSON.parse(data))
+  console.log(data)
+  player.value.pause()
+}
+const bind = inject("bind")
+const unbind = inject("unbind")
+
+bind("pause", handlePause)
+
 
 onBeforeUnmount(() => {
   if(player.value){
     player.value.dispose()
   }
+  unbind("pause", handlePause);
 })
-
-
-
-// export default {
-//
-//   name:'VideoPlayer',
-//
-//   props: ['src', 'type'],
-//   data(){
-//     return {
-//       player:null
-//     }
-//   },
-//   mounted() {
-//
-//     this.player = videojs(this.$refs.videoPlayer, {}, () => {
-//       this.player.log("onPlayerReady", this)
-//      })
-//
-//   },
-//   beforeUnmount() {
-//     if(this.player){
-//       this.player.dispose();
-//     }
-//   }
-// }
 
 
 </script>

@@ -8,7 +8,7 @@ import { ContentLoader } from "vue-content-loader"
 
 // utilities
 import {useStore} from "vuex";
-import {computed, onMounted, ref} from "vue"
+import {computed, onMounted, provide, ref} from "vue"
 import Pusher from "pusher-js"
 import router from "../router";
 
@@ -23,6 +23,7 @@ const store = useStore()
 
 // vuex states
 const dark = computed(() => store.getters.dark)
+// const channel = computed(() => store.getters.channel)
 
 // vuex mutations
 const setReRenderVideo = (reRender) => store.commit('setReRenderVideo', reRender)
@@ -35,15 +36,19 @@ const setNav = (bool) => store.commit('setNav', bool)
 const setRoomRef = (ref) => store.commit('setRoomRef', ref)
 const setRoomId = (id) => store.commit('setRoomId', id)
 const addMessage = (message) => store.commit('addMessage', message)
+const setChannel = (channel) => store.commit('setChannel', channel)
 
 
 const isLoading = ref(true)
 
 
-onMounted(() => {
+onMounted((key, value) => {
+
+  setNav(true)
+
 
   let data = {
-    id : 3
+    id: 3
   }
 
   console.log(`http://localhost:8080/room/${props.roomRef}/${data.id}`)
@@ -55,7 +60,7 @@ onMounted(() => {
       .then((response) => {
         console.log(response.status)
         isLoading.value = false
-        if(response.status === 'error'){
+        if (response.status === 'error') {
           setRoomId(response.data.id)
           setRoomRef(response.data.unique_reference)
           router.push('/main')
@@ -66,25 +71,52 @@ onMounted(() => {
         router.push('/main')
       })
 
-
-  setNav(true)
   setRoomRef(props.roomRef)
-  Pusher.logToConsole = true;
+
+  // ---------------------- pusher setup ---------------------------------
+  // ---------------------- pusher setup ---------------------------------
+  // ---------------------- pusher setup ---------------------------------
+  // ---------------------- pusher setup ---------------------------------
+
+  // Pusher.logToConsole = true;
+
 
   let pusher = new Pusher("ee67aad443c2735b4c8f", {
     cluster: "eu",
   })
   let channel = pusher.subscribe(store.getters.roomRef)
+
   channel.bind('videoUrl', (data) => {
-    setReRenderVideo(store.getters.reRenderVideo+1)
+    setReRenderVideo(store.getters.reRenderVideo + 1)
     setVidUrl(data)
   })
+
   channel.bind('message', (data) => {
     addMessage(JSON.parse(data))
     console.log(data)
   })
 
+ // const pause = (callback) => {
+ //   return channel.bind('pause', (data) => {
+ //     addMessage(JSON.parse(data))
+ //     callback()
+ //     console.log(data)
+ //   });
+ // }
+  // setChannel(channel)
+
+  provide("bind", (...args) => {
+    console.log("hello BOY");
+    channel.bind(...args);
+  })
+
+  provide("unbind", (...args) => {
+    channel.unbind(...args);
+  })
+  // provide("pause", pause)
 })
+
+
 
 
 // const mapMutations = () => {
