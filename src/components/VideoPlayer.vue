@@ -46,10 +46,12 @@ const props = defineProps({
 const store = useStore()
 
 const userId = computed(() => store.getters.userId)
+const sender = computed(() => store.getters.sender)
 const userName = computed(() => store.getters.userName)
 const profileImage = computed(() => store.getters.profileImage)
 
 const addMessage = (message) => store.commit('addMessage', message)
+const setSender = (sender) => store.commit('setSender', sender)
 const setReRenderVideo = (reRender) => store.commit('setReRenderVideo', reRender)
 const setVidUrl = (vidUrl) => store.commit('setVidUrl', vidUrl)
 
@@ -69,58 +71,154 @@ onMounted(() => {
       videoPlayer.value,
       {autoplay: true, muted: true, plugins: { eventTracking: true }},
       () => {
-    videojs.log("ready")
-  })
-  
+        videojs.log("ready")
+      })
+
   let button = player.value.controlBar.addChild('button', {}, 1)
   button.addClass("seekIcon")
 
-  player.value.on('tracking:seek', (e, data) => console.log(data.seekTo))
+  const prepareMessage = (message, returnValue = true) => {
+    let newMessage = {
+      id: userId.value,
+      src: profileImage.value,
+      author: userName.value,
+      added_at: getCurrentTime(),
+      body: message
+    }
+
+    addMessage(newMessage)
+    if(returnValue) return newMessage
+
+  }
 
 
+  const sendMessage = (message, route, time = null) => {
 
-    player.value.on('pause', () => {
-      console.log('hhehe heheh heehehe boooyyy')
+    // console.log("sendMessage : " + time)
+    // let senderId = ( sender.value === null ) ? userId.value : sender.value
+    // let senderId;
+    // if(sender.value === null){
+    //   setSender(userId.value)
+    //    senderId = userId.value
+    // }else{
+    //    senderId = sender.value
+    // }
+    // taha -------------------------- taha
+    // console.log("hehehe boy " + route);
+    // let newMessage = {
+    //     id: userId.value,
+    //     src: profileImage.value,
+    //     author: userName.value,
+    //     added_at: getCurrentTime(),
+    //     body: message
+    // }
+    //
+    // addMessage(newMessage)
+    // taha -------------------------- taha
 
-      let joinedMessage = {
-        id: userId.value,
-        src: profileImage.value,
-        author: userName.value,
-        added_at: getCurrentTime(),
-        body: 'Paused the video!'
-      }
+    let preparedMessage = prepareMessage(message)
 
-      let data = {
-        roomRef: store.getters.roomRef,
-        message: JSON.stringify(joinedMessage)
-      }
+    let data = {
+      roomRef: store.getters.roomRef,
+      time: time,
+      message: JSON.stringify(preparedMessage)
+    }
 
-      fetch("http://localhost:8080/pause/video", {
-        method: "POST",
-        body: JSON.stringify(data),
-      })
-          .then(response => response.json())
-          .then((response) => console.log("response :" + response))
-          .catch((error) => console.log("error :" + error));
+    fetch(`http://localhost:8080/${route}`, {
+      method: "POST",
+      body: JSON.stringify(data),
     })
+        .then(response => response.json())
+        .then((response) => console.log("response :" + response))
+        .catch((error) => console.log("error :" + error));
+
+
+  }
+
+  player.value.on('pause', () => {
+    sendMessage('Paused the video!',"video/pause")
+  })
+
+  player.value.on('play', () => {
+    sendMessage('Played the video!',"video/play")
+  })
+
+  player.value.on('seeked', () => {
+
+    console.log("seeked condition : " + sender.value +" |||| "+ userId.value);
+    let currentTime = player.value.currentTime()
+    let message = `Jumped to ${secToMin(currentTime)}`;
+    if(userId.value !== sender.value) {
+     setSender(userId.value)
+     console.log('mucha gracias')
+     prepareMessage(message, false)
+     return
+   }
+
+    sendMessage(message, 'video/jump', currentTime)
+  })
+
+
+
+  const secToMin = (sec) => {
+    let min = Math.trunc(sec / 60)
+    let remainingSec = Math.trunc(sec - min * 60);
+    return `${min}:${remainingSec}`
+  }
+
+
+  // player.value.on('tracking:buffered', (e, data) =>{
+  //   console.log(data.currentTime)
+  //   let time = data.currentTime/60
+  //   console.log(`taha jumped to ${Math.trunc(time)}:${(time).toFixed(2).substring(2)}`)
+  //   // sendMessage(`Jumped to ${Math.trunc(time)}:${(time).toFixed(2).substring(2)}`)
+  // })
+
+
 })
 
-let handlePause = (data) => {
-  addMessage(JSON.parse(data))
-  console.log(data)
+const bind = inject("bind")
+
+
+let handlePause = () => {
+  if(player.value.paused()) return
   player.value.pause()
 }
-const bind = inject("bind")
-const unbind = inject("unbind")
+
+let handlePlay = () => {
+  if(!player.value.paused()) return
+  player.value.play()
+}
+
+let handleJump = (data) => {
+  let parsedData = JSON.parse(data)
+  let message = JSON.parse(parsedData.message)
+
+  setSender(message.id)
+  // console.log(sender.value + "<=====>" + userId.value)
+  // console.log(`sender check ${sender.value}`)
+  // console.log(`message check ${message.id}`)
+  if(sender.value !== userId.value){
+    player.value.currentTime(parsedData.time)
+  }
+}
 
 bind("pause", handlePause)
+bind("play", handlePlay)
+bind("jump", handleJump)
+
 
 
 onBeforeUnmount(() => {
   if(player.value){
     player.value.dispose()
   }
-  unbind("pause", handlePause);
+
+  const unbind = inject("unbind")
+
+  unbind("pause")
+  unbind("play")
+  unbind("jump")
 })
 
 

@@ -2,6 +2,8 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+
+    sender: null,
     dark: false,
     roomId : null,
     roomRef : null,
@@ -9,14 +11,14 @@ export default createStore({
     reRenderVideo: 0,
     nav: true,
     messages: [],
-    channel: null,
 
     // current authenticated user
-    userId: 1,
+    userId: Math.floor(Math.random() * 10),
     userName: 'Taha Lechgar',
     profileImage: 'profile-image.svg'
   },
   getters: {
+    sender: state => state.sender,
     dark: state => state.dark,
     roomId: state => state.roomId,
     roomRef: state => state.roomRef,
@@ -27,10 +29,12 @@ export default createStore({
     userId: state => state.userId,
     userName: state => state.userName,
     profileImage: state => state.profileImage,
-    channel: state => state.channel,
   },
 
   mutations: {
+    setSender: (state, bool) => {
+      state.sender = bool
+    },
     setDark: (state, bool) => {
       state.dark = bool
     },
@@ -51,9 +55,6 @@ export default createStore({
     },
     addMessage: (state, message) => {
       state.messages.push(message)
-    },
-    setChannel: (state, channel) => {
-      state.channel = channel
     }
   },
   actions: {

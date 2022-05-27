@@ -23,11 +23,13 @@ const store = useStore()
 
 // vuex states
 const dark = computed(() => store.getters.dark)
-// const channel = computed(() => store.getters.channel)
+const userId = computed(() => store.getters.userId)
+
 
 // vuex mutations
 const setReRenderVideo = (reRender) => store.commit('setReRenderVideo', reRender)
-const setVidUrl = (reRender) => store.commit('setVidUrl', reRender)
+const setVidUrl = (url) => store.commit('setVidUrl', url)
+const setSender = (sender) => store.commit('setSender', sender)
 
 
 // const ytbUrl = computed(() => store.getters.dark ? 'https://www.youtube.com/watch?v=drdHIbbBnA0' : 'https://www.youtube.com/watch?v=a5uQMwRMHcs')
@@ -36,7 +38,6 @@ const setNav = (bool) => store.commit('setNav', bool)
 const setRoomRef = (ref) => store.commit('setRoomRef', ref)
 const setRoomId = (id) => store.commit('setRoomId', id)
 const addMessage = (message) => store.commit('addMessage', message)
-const setChannel = (channel) => store.commit('setChannel', channel)
 
 
 const isLoading = ref(true)
@@ -45,6 +46,7 @@ const isLoading = ref(true)
 onMounted((key, value) => {
 
   setNav(true)
+  setSender(userId.value)
 
 
   let data = {
@@ -92,9 +94,18 @@ onMounted((key, value) => {
   })
 
   channel.bind('message', (data) => {
-    addMessage(JSON.parse(data))
+    let parsedData = JSON.parse(data)
+    let message = JSON.parse(parsedData.message)
+    addMessage(message)
     console.log(data)
   })
+
+  // channel.bind('pause', (data) => {
+  //   let parsedData = JSON.parse(data)
+  //   let message = JSON.parse(parsedData.message())
+  //   addMessage(parsedData.message)
+  //   console.log(data)
+  // })
 
  // const pause = (callback) => {
  //   return channel.bind('pause', (data) => {
@@ -106,14 +117,14 @@ onMounted((key, value) => {
   // setChannel(channel)
 
   provide("bind", (...args) => {
-    console.log("hello BOY");
+    console.log("bind BOY");
     channel.bind(...args);
   })
 
   provide("unbind", (...args) => {
+    console.log("unbind BOY")
     channel.unbind(...args);
   })
-  // provide("pause", pause)
 })
 
 
@@ -134,14 +145,6 @@ onMounted((key, value) => {
 
 <template>
 <div v-if="isLoading" class="loading">
-<!--  <content-loader-->
-<!--      viewBox="0 0 400 460"-->
-<!--      :speed="0"-->
-<!--      primaryColor="rgba(123, 44, 191, 0.05)"-->
-<!--  >-->
-<!--    <rect x="-1" y="19" rx="2" ry="2" width="402" height="22" />-->
-<!--    <rect x="1" y="61" rx="2" ry="2" width="400" height="216" />-->
-<!--  </content-loader>-->
 
   <content-loader
       viewBox="0 0 400 600"
