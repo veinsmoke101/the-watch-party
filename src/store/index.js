@@ -15,7 +15,10 @@ export default createStore({
     // current authenticated user
     userId: Math.floor(Math.random() * 10),
     userName: 'Taha Lechgar',
-    profileImage: 'profile-image.svg'
+    profileImage: 'profile-image.svg',
+
+    // video events
+    seeked : false
   },
   getters: {
     sender: state => state.sender,
@@ -29,6 +32,7 @@ export default createStore({
     userId: state => state.userId,
     userName: state => state.userName,
     profileImage: state => state.profileImage,
+    seeked: state => state.seeked,
   },
 
   mutations: {
@@ -55,6 +59,9 @@ export default createStore({
     },
     addMessage: (state, message) => {
       state.messages.push(message)
+    },
+    setSeeked: (state, seeked) => {
+      state.seeked = seeked
     }
   },
   actions: {

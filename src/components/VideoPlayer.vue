@@ -47,11 +47,13 @@ const store = useStore()
 
 const userId = computed(() => store.getters.userId)
 const sender = computed(() => store.getters.sender)
+const seeked = computed(() => store.getters.seeked)
 const userName = computed(() => store.getters.userName)
 const profileImage = computed(() => store.getters.profileImage)
 
 const addMessage = (message) => store.commit('addMessage', message)
 const setSender = (sender) => store.commit('setSender', sender)
+const setSeeked = (seek) => store.commit('setSeeked', seek)
 const setReRenderVideo = (reRender) => store.commit('setReRenderVideo', reRender)
 const setVidUrl = (vidUrl) => store.commit('setVidUrl', vidUrl)
 
@@ -140,11 +142,15 @@ onMounted(() => {
   })
 
   player.value.on('play', () => {
+    if (seeked.value === true){
+      setSeeked(false)
+      return
+    }
     sendMessage('Played the video!',"video/play")
   })
 
   player.value.on('seeked', () => {
-
+    setSeeked(true)
     console.log("seeked condition : " + sender.value +" |||| "+ userId.value);
     let currentTime = player.value.currentTime()
     let message = `Jumped to ${secToMin(currentTime)}`;
