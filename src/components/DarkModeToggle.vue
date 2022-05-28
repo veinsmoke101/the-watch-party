@@ -1,37 +1,37 @@
-<!--<script setup>-->
-<!--import {useStore} from "vuex";-->
-<!--import {computed, onMounted} from "vue";-->
+<script setup>
+import {useStore} from "vuex";
+import {computed, onMounted} from "vue";
 
 
-<!--const store = useStore()-->
-<!--const dark = computed(() => store.getters.dark)-->
-<!--const setDark = (mode) => store.commit('setDark', mode)-->
+const store = useStore()
+const dark = computed(() => store.getters.dark)
+const setDark = (mode) => store.commit('setDark', mode)
 
-<!--const toggleDarkMode = () => {-->
-<!--  setDark(!dark);-->
-<!--  console.log(!dark)-->
-<!--  localStorage.theme = dark ? "dark" : "light";-->
-<!--}-->
+const toggleDarkMode = () => {
+  setDark(!dark.value);
+  console.log(!dark)
+  localStorage.theme = dark ? "dark" : "light";
+}
 
-<!--onMounted(() => {-->
-<!--  if (localStorage.theme === undefined) {-->
-<!--    if (-->
-<!--        window.matchMedia &&-->
-<!--        window.matchMedia('(prefers-color-scheme: dark)')-->
-<!--            .matches-->
-<!--    ) {-->
-<!--      localStorage.theme = 'dark';-->
-<!--      setDark(true);-->
-<!--    } else {-->
-<!--      localStorage.theme = 'light';-->
-<!--    }-->
-<!--  } else {-->
-<!--    setDark(localStorage.theme === 'dark');-->
-<!--  }-->
-<!--})-->
+onMounted(() => {
+  if (localStorage.theme === undefined) {
+    if (
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)')
+            .matches
+    ) {
+      localStorage.theme = 'dark';
+      setDark(true);
+    } else {
+      localStorage.theme = 'light';
+    }
+  } else {
+    setDark(localStorage.theme === 'dark');
+  }
+})
 
 
-<!--</script>-->
+</script>
 
 
 
@@ -72,40 +72,7 @@
 </template>
 
 
-<script>
-import { mapGetters, mapMutations } from "vuex";
 
-export default {
-  computed: {
-    ...mapGetters(["dark"]),
-  },
-
-  mounted() {
-    if (localStorage.theme === undefined) {
-      if (
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-      ) {
-        localStorage.theme = "dark";
-        this.setDark(true);
-      } else {
-        localStorage.theme = "light";
-      }
-    } else {
-      this.setDark(localStorage.theme === "dark");
-    }
-  },
-
-  methods: {
-    ...mapMutations(["setDark"]),
-
-    toggleDarkMode() {
-      this.setDark(!this.dark);
-      localStorage.theme = this.dark ? "dark" : "light";
-    },
-  },
-};
-</script>
 <style scoped>
   svg{
     margin-top: 0.5rem;
