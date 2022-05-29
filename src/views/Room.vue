@@ -11,7 +11,7 @@ import {useStore} from "vuex";
 import {computed, onMounted, provide, ref} from "vue"
 import Pusher from "pusher-js"
 import router from "../router";
-
+import axios from 'axios'
 
 // props
  const props = defineProps({
@@ -44,7 +44,7 @@ const addMessage = (message) => store.commit('addMessage', message)
 const isLoading = ref(true)
 
 
-onMounted((key, value) => {
+onMounted(() => {
 
   setNav(true)
   setSender(userId.value)
@@ -56,23 +56,38 @@ onMounted((key, value) => {
 
   console.log(`http://localhost:8080/room/${props.roomRef}/${data.id}`)
 
-  fetch(`http://localhost:8080/room/${props.roomRef}/${data.id}`, {
-    method: 'GET',
-  })
-      .then(response => response.json())
-      .then((response) => {
-        console.log(response.status)
-        isLoading.value = false
-        if (response.status === 'error') {
-          setRoomId(response.data.id)
-          setRoomRef(response.data.unique_reference)
-          router.push('/main')
-        }
-      })
-      .catch((error) => {
-        console.log("error :" + error)
+  axios.get(`http://localhost:8080/room/${props.roomRef}/${data.id}`)
+    .then((response) => {
+      console.log(response.status)
+      isLoading.value = false
+      if (response.status === 'error') {
+        setRoomId(response.data.id)
+        setRoomRef(response.data.unique_reference)
         router.push('/main')
-      })
+      }
+    })
+    .catch((error) => {
+      console.log("error :" + error)
+      router.push('/main')
+    })
+
+  // fetch(`http://localhost:8080/room/${props.roomRef}/${data.id}`, {
+  //   method: 'GET',
+  // })
+  //     .then(response => response.json())
+  //     .then((response) => {
+  //       console.log(response.status)
+  //       isLoading.value = false
+  //       if (response.status === 'error') {
+  //         setRoomId(response.data.id)
+  //         setRoomRef(response.data.unique_reference)
+  //         router.push('/main')
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("error :" + error)
+  //       router.push('/main')
+  //     })
 
   setRoomRef(props.roomRef)
 
@@ -101,21 +116,6 @@ onMounted((key, value) => {
     console.log(data)
   })
 
-  // channel.bind('pause', (data) => {
-  //   let parsedData = JSON.parse(data)
-  //   let message = JSON.parse(parsedData.message())
-  //   addMessage(parsedData.message)
-  //   console.log(data)
-  // })
-
- // const pause = (callback) => {
- //   return channel.bind('pause', (data) => {
- //     addMessage(JSON.parse(data))
- //     callback()
- //     console.log(data)
- //   });
- // }
-  // setChannel(channel)
 
   provide("bind", (...args) => {
     console.log("bind BOY");
@@ -127,9 +127,6 @@ onMounted((key, value) => {
     channel.unbind(...args);
   })
 })
-
-
-
 
 // const mapMutations = () => {
 //   const store = useStore()
