@@ -108,10 +108,10 @@ const instagram = computed(() => store.getters.dark ? darkInstagram : lightInsta
     }
   }
   &__social a img{
-    width: 2rem;
+    width: 1.2rem;
   }
   &__social--twitter a img{
-    width: 2.5rem;
+    width: 1.6rem;
   }
   &__copyright {
     color: #c4c4c4;
