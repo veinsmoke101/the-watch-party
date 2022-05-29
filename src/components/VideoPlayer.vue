@@ -34,6 +34,7 @@ import videojs from "video.js"
 import {computed, inject, onBeforeUnmount, onMounted, ref, watch} from "vue";
 import {useStore} from "vuex";
 import {getCurrentTime} from "../js/getCurrentTime";
+import axios from "axios";
 
 
 
@@ -126,13 +127,17 @@ onMounted(() => {
       message: JSON.stringify(preparedMessage)
     }
 
-    fetch(`http://localhost:8080/${route}`, {
-      method: "POST",
-      body: JSON.stringify(data),
-    })
-        .then(response => response.json())
+    axios.post(`http://localhost:8080/${route}`, data)
         .then((response) => console.log("response :" + response))
-        .catch((error) => console.log("error :" + error));
+        .catch((error) => console.log("error :" + error))
+
+    // fetch(`http://localhost:8080/${route}`, {
+    //   method: "POST",
+    //   body: JSON.stringify(data),
+    // })
+    //     .then(response => response.json())
+    //     .then((response) => console.log("response :" + response))
+    //     .catch((error) => console.log("error :" + error));
 
 
   }
