@@ -79,6 +79,7 @@ import uploadDark from "../../assets/icons/upload-dark.svg"
 // utilities
 import { ref, computed } from "vue";
 import {useStore} from "vuex";
+import axios from 'axios'
 
 
 // vuex store
@@ -102,13 +103,17 @@ const handleSearch = () => {
     videoUrl: search.value
   }
 
-  fetch("http://localhost:8080/new/vid", {
-    method: "post",
-    body: JSON.stringify(data),
-  })
-      .then(response => response.json())
+  axios.post("http://localhost:8080/new/vid",data)
       .then((response) => console.log("response :" + response))
       .catch((error) => console.log("error :" + error));
+
+  // fetch("http://localhost:8080/new/vid", {
+  //   method: "post",
+  //   body: JSON.stringify(data),
+  // })
+  //     .then(response => response.json())
+  //     .then((response) => console.log("response :" + response))
+  //     .catch((error) => console.log("error :" + error));
 
 }
 
