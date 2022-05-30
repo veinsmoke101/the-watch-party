@@ -36,7 +36,7 @@
          if(response.status === "success")
              setRoomId(response.data.id)
              setRoomRef(response.data.unique_reference)
-             router.push('/room/'+response.data.unique_reference)
+             router.push('/room/' + response.data.unique_reference)
            }
        )
        .catch((error) => console.log("error :" + error))

@@ -31,7 +31,7 @@ import 'videojs-youtube/dist/Youtube.min.js';
 import 'videojs-event-tracking/dist/videojs-event-tracking.min';
 import 'video.js/dist/video-js.min.css';
 import videojs from "video.js"
-import {computed, inject, onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {computed, inject, onBeforeUnmount, onMounted, ref} from "vue";
 import {useStore} from "vuex";
 import {getCurrentTime} from "../js/getCurrentTime";
 import axios from "axios";
@@ -80,6 +80,7 @@ onMounted(() => {
   let button = player.value.controlBar.addChild('button', {}, 1)
   button.addClass("seekIcon")
 
+  // add a message to local store and return it if specified
   const prepareMessage = (message, returnValue = true) => {
     let newMessage = {
       id: userId.value,
@@ -94,33 +95,10 @@ onMounted(() => {
 
   }
 
-
+  // send message to the server
   const sendMessage = (message, route, time = null) => {
 
-    // console.log("sendMessage : " + time)
-    // let senderId = ( sender.value === null ) ? userId.value : sender.value
-    // let senderId;
-    // if(sender.value === null){
-    //   setSender(userId.value)
-    //    senderId = userId.value
-    // }else{
-    //    senderId = sender.value
-    // }
-    // taha -------------------------- taha
-    // console.log("hehehe boy " + route);
-    // let newMessage = {
-    //     id: userId.value,
-    //     src: profileImage.value,
-    //     author: userName.value,
-    //     added_at: getCurrentTime(),
-    //     body: message
-    // }
-    //
-    // addMessage(newMessage)
-    // taha -------------------------- taha
-
     let preparedMessage = prepareMessage(message)
-
     let data = {
       roomRef: store.getters.roomRef,
       time: time,
@@ -130,15 +108,6 @@ onMounted(() => {
     axios.post(`http://localhost:8080/${route}`, data)
         .then((response) => console.log("response :" + response))
         .catch((error) => console.log("error :" + error))
-
-    // fetch(`http://localhost:8080/${route}`, {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    // })
-    //     .then(response => response.json())
-    //     .then((response) => console.log("response :" + response))
-    //     .catch((error) => console.log("error :" + error));
-
 
   }
 
@@ -173,19 +142,10 @@ onMounted(() => {
 
   const secToMin = (sec) => {
     let min = Math.trunc(sec / 60)
-    let remainingSec = Math.trunc(sec - min * 60);
-    return `${min}:${remainingSec}`
+    let remainingSec = Math.trunc(sec - min * 60)
+    remainingSec = (remainingSec < 10 ) ? `0${remainingSec}` : remainingSec
+    return `${min}:${(remainingSec)}`
   }
-
-
-  // player.value.on('tracking:buffered', (e, data) =>{
-  //   console.log(data.currentTime)
-  //   let time = data.currentTime/60
-  //   console.log(`taha jumped to ${Math.trunc(time)}:${(time).toFixed(2).substring(2)}`)
-  //   // sendMessage(`Jumped to ${Math.trunc(time)}:${(time).toFixed(2).substring(2)}`)
-  // })
-
-
 })
 
 const bind = inject("bind")

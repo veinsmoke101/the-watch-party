@@ -58,13 +58,18 @@ onMounted(() => {
 
   axios.get(`http://localhost:8080/room/${props.roomRef}/${data.id}`)
     .then((response) => {
-      console.log(response.status)
+      console.log(response.data.roomData.id)
       isLoading.value = false
-      if (response.status === 'error') {
-        setRoomId(response.data.id)
-        setRoomRef(response.data.unique_reference)
+      if (response.data.status === 'error') {
         router.push('/main')
       }
+      setRoomId(response.data.roomData.id)
+      setRoomRef(response.data.roomData.unique_reference)
+      let messages = response.data.roomMessages
+      messages.slice().reverse().forEach(el => {
+        let message = JSON.parse(JSON.parse(el).message)
+        addMessage(message)
+      })
     })
     .catch((error) => {
       console.log("error :" + error)
