@@ -49,7 +49,7 @@
 
     </section>
      <section class="greeting">
-      <h1 class="greeting__title" :style="{color: color}">Mom,  come meet our new friend</h1>
+      <h1 class="greeting__title" :style="{color: color}">Let's get the party started</h1>
 <!--      <h1 class="greeting__title"><span class="greeting__span text-gray-700 dark:text-white"> Play </span>Hard !</h1>-->
       <img class="greeting__illustration" :src="illustration" alt="login-ils">
     </section>
@@ -71,7 +71,7 @@ const theme = computed(() => store.getters.dark ? 'dark' : 'light')
 const setNav = (bool) => store.commit('setNav', bool)
 
 onMounted(() => {
-  setNav(false)
+  setNav(true)
 })
 
 </script>
@@ -115,7 +115,8 @@ onMounted(() => {
   }
 
   .greeting__title {
-    font-size: 72px;
+    font-size: 64px;
+    width: 95%;
     //color: base.$main;
     @include base.large-tablet {
       font-size: 52px;
@@ -128,8 +129,12 @@ onMounted(() => {
 }
 
 .sideForm {
-  width: 30%;
-  height: 100%;
+
+  width: 35%;
+  height: auto;
+  border-radius: 10px;
+  margin:5% 0 10px 2%;
+  padding-bottom: 10px;
   @include base.flexColumn(center, center);
 
   .sideForm__container {
@@ -151,12 +156,12 @@ onMounted(() => {
       }
 
       .sideForm__label {
-        margin: 10px 0;
+        margin: 5px 0;
       }
 
       .sideForm__forgotPassword {
         color: base.$main;
-        margin: 20px 0;
+        margin: 10px 0;
         text-decoration: underline;
       }
 
@@ -185,6 +190,7 @@ onMounted(() => {
     .sideForm__heading {
       @include base.flexColumn(flex-start, center);
       .sideForm__title {
+        margin-top: 5px;
         font-size: 28px;
         font-weight: bolder;
         font-family: base.$montserrat;
@@ -201,6 +207,8 @@ onMounted(() => {
 
   @include base.tablet {
     width: 100%;
+    margin: 0;
+    height: 100%;
   }
 }
 
