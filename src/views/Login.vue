@@ -17,7 +17,7 @@
             Enter your email address
           </label>
           <input name="email" id="email" required value="" type="email"
-                 class="sideForm__input sideForm__input--email"
+                 class="sideForm__input sideForm__input--email dark:bg-gray-800 dark:text-white dark:border-gray-200"
                  placeholder="name@example.com">
 
           <span class="invalid-feedback" role="alert">
@@ -28,7 +28,7 @@
             Enter your password
           </label>
           <input name="password" id="password" required type="password"
-                 class="sideForm__input sideForm__input--password @error('password') is-invalid @enderror"
+                 class="sideForm__input sideForm__input--password dark:bg-gray-800 dark:text-white dark:border-gray-200"
                  placeholder="at least 8 characters">
           <span class="invalid-feedback" role="alert">
                                         <strong> message </strong>
@@ -64,16 +64,20 @@ const theme = computed(() => store.getters.dark ? 'dark' : 'light')
 const setNav = (bool) => store.commit('setNav', bool)
 
 onMounted(() => {
-  setNav(false)
+  setNav(true)
 })
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 @use '../sass/base';
 
+#app{
+  margin-top: 0 !important;
+}
 
 .wrapper {
+  overflow-y: hidden;
   @include base.flexRow(center, center);
   font-size: 0.8rem ;
   width: 100vw;
@@ -117,8 +121,11 @@ onMounted(() => {
 }
 
 .sideForm {
-  width: 30%;
-  height: 100%;
+  width: 40%;
+  height: 83%;
+  border-radius: 10px;
+  margin-top: 4%;
+  margin-right: 4%;
   @include base.flexColumn(center, center);
 
   .sideForm__container {
@@ -136,6 +143,7 @@ onMounted(() => {
         padding: 10px 20px;
         width: 100%;
         border: 1px solid #c1c1c1;
+        outline: none;
       }
 
       .sideForm__label {
@@ -188,6 +196,8 @@ onMounted(() => {
 
   @include base.tablet {
     width: 100%;
+    margin: 0;
+    height: 100%;
   }
 }
 

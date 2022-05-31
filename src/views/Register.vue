@@ -12,15 +12,15 @@
           <label class="sideForm__label dark:text-white" for="name">
             Enter your full name
           </label>
-          <input name="name" id="name" required value="name"  type="text" class="sideForm__input sideForm__input--name " placeholder="name@example.com">
-          <span class="invalid-feedback" role="alert">
+          <input name="name" id="name" required value="name"  type="text" class="sideForm__input sideForm__input--name dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="name@example.com">
+          <span class="invalid-feedback " role="alert">
                         <strong> message </strong>
                     </span>
 
           <label class="sideForm__label dark:text-white" for="email">
             Enter your email address
           </label>
-          <input name="email" id="email" required value=""  type="email" class="sideForm__input sideForm__input--email " placeholder="name@example.com">
+          <input name="email" id="email" required value=""  type="email" class="sideForm__input sideForm__input--email dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="name@example.com">
 
           <span class="invalid-feedback" role="alert">
                         <strong> message </strong>
@@ -29,7 +29,7 @@
           <label class="sideForm__label dark:text-white" for="password">
             Enter your password
           </label>
-          <input name="password" id="password" required type="password" class="sideForm__input sideForm__input--password " placeholder="at least 8 characters">
+          <input name="password" id="password" required type="password" class="sideForm__input sideForm__input--password dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="at least 8 characters">
 
           <span class="invalid-feedback" role="alert">
                         <strong> message </strong>
@@ -38,7 +38,7 @@
           <label class="sideForm__label dark:text-white" for="password-confirm">
             Confirm password
           </label>
-          <input name="password_confirmation" id="password-confirm" required type="password" class="sideForm__input sideForm__input--password" placeholder="confirm password">
+          <input name="password_confirmation" id="password-confirm" required type="password" class="sideForm__input sideForm__input--password dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="confirm password">
 
           <input class="sideForm__submit" type="submit" name="submit" value="Register">
         </form>
@@ -147,6 +147,7 @@ onMounted(() => {
         padding: 10px 20px;
         width: 100%;
         border: 1px solid #c1c1c1;
+        outline: none;
       }
 
       .sideForm__label {

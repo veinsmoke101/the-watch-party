@@ -134,7 +134,7 @@ onMounted(() => {
      prepareMessage(message, false)
      return
    }
-
+    console.log('im sending : ' + player.value.currentTime())
     sendMessage(message, 'video/jump', currentTime)
   })
 
@@ -170,6 +170,7 @@ let handleJump = (data) => {
   // console.log(`sender check ${sender.value}`)
   // console.log(`message check ${message.id}`)
   if(sender.value !== userId.value){
+    console.log( 'im receiving : ' + parsedData.time)
     player.value.currentTime(parsedData.time)
   }
 }
