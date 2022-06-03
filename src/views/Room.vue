@@ -71,23 +71,6 @@ onMounted(() => {
       router.push('/main')
     })
 
-  // fetch(`http://localhost:8080/room/${props.roomRef}/${data.id}`, {
-  //   method: 'GET',
-  // })
-  //     .then(response => response.json())
-  //     .then((response) => {
-  //       console.log(response.status)
-  //       isLoading.value = false
-  //       if (response.status === 'error') {
-  //         setRoomId(response.data.id)
-  //         setRoomRef(response.data.unique_reference)
-  //         router.push('/main')
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log("error :" + error)
-  //       router.push('/main')
-  //     })
 
   setRoomRef(props.roomRef)
 

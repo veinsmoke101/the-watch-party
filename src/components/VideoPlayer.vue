@@ -83,9 +83,9 @@ onMounted(() => {
   // add a message to local store and return it if specified
   const prepareMessage = (message, returnValue = true) => {
     let newMessage = {
-      id: userId.value,
-      src: profileImage.value,
-      author: userName.value,
+      id: localStorage.getItem('userId'),
+      src: localStorage.getItem('profileImage'),
+      author: localStorage.getItem('username'),
       added_at: getCurrentTime(),
       body: message
     }
@@ -165,10 +165,9 @@ let handleJump = (data) => {
   let parsedData = JSON.parse(data)
   let message = JSON.parse(parsedData.message)
 
+  // identify the sender so he can't receive the event
   setSender(message.id)
-  // console.log(sender.value + "<=====>" + userId.value)
-  // console.log(`sender check ${sender.value}`)
-  // console.log(`message check ${message.id}`)
+
   if(sender.value !== userId.value){
     console.log( 'im receiving : ' + parsedData.time)
     player.value.currentTime(parsedData.time)
