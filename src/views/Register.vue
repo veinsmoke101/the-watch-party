@@ -8,38 +8,33 @@
           <h3 class="sideForm__title dark:text-white">Sign up. </h3>
           <p class="sideForm__subTitle dark:text-white">My mom will be happy to have you with us</p>
         </div>
-        <form method="POST" action="" class="sideForm__form">
+        <form @submit="handleSubmit" method="POST" action="" class="sideForm__form">
           <label class="sideForm__label dark:text-white" for="name">
             Enter your full name
           </label>
-          <input name="name" id="name" required value="name"  type="text" class="sideForm__input sideForm__input--name dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="name@example.com">
-          <span class="invalid-feedback " role="alert">
-                        <strong> message </strong>
-                    </span>
+          <input name="name" id="name" v-model="username" type="text" class="sideForm__input sideForm__input--name dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="fatBatman">
+
 
           <label class="sideForm__label dark:text-white" for="email">
             Enter your email address
           </label>
-          <input name="email" id="email" required value=""  type="email" class="sideForm__input sideForm__input--email dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="name@example.com">
+          <input name="email" v-model="email" id="email" type="email" class="sideForm__input sideForm__input--email dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="name@example.com">
 
-          <span class="invalid-feedback" role="alert">
-                        <strong> message </strong>
-                    </span>
 
           <label class="sideForm__label dark:text-white" for="password">
             Enter your password
           </label>
-          <input name="password" id="password" required type="password" class="sideForm__input sideForm__input--password dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="at least 8 characters">
+          <input name="password" v-model="password" id="password" type="password" class="sideForm__input sideForm__input--password dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="at least 8 characters">
 
-          <span class="invalid-feedback" role="alert">
-                        <strong> message </strong>
-                    </span>
+
 
           <label class="sideForm__label dark:text-white" for="password-confirm">
             Confirm password
           </label>
-          <input name="password_confirmation" id="password-confirm" required type="password" class="sideForm__input sideForm__input--password dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="confirm password">
-
+          <input name="password_confirmation" v-model="confirmPassword" id="password-confirm" type="password" class="sideForm__input sideForm__input--password dark:bg-gray-800 dark:text-white dark:border-gray-200" placeholder="confirm password">
+          <span class="invalid-feedback" role="alert">
+                        <strong> {{ error }} </strong>
+                    </span>
           <input class="sideForm__submit" type="submit" name="submit" value="Register">
         </form>
         <hr>
@@ -50,7 +45,6 @@
     </section>
      <section class="greeting">
       <h1 class="greeting__title" :style="{color: color}">Let's get the party started</h1>
-<!--      <h1 class="greeting__title"><span class="greeting__span text-gray-700 dark:text-white"> Play </span>Hard !</h1>-->
       <img class="greeting__illustration" :src="illustration" alt="login-ils">
     </section>
   </div>
@@ -59,10 +53,12 @@
 
 <script setup>
 import { useStore } from "vuex";
-import { computed, onMounted } from "vue";
+import {computed, onMounted, ref} from "vue";
 import illustrationLight from "../assets/images/new-room.svg"
 import illustrationDark from "../assets/images/new-room-dark.svg"
 import {onUnmounted} from "vue";
+import axios from "axios";
+import router from "../router";
 
 const store  = useStore()
 
@@ -70,7 +66,58 @@ const color = computed(() => store.getters.dark ? 'white' : '#7B2CBF')
 const illustration = computed(() => store.getters.dark ? illustrationDark : illustrationLight)
 const theme = computed(() => store.getters.dark ? 'dark' : 'light')
 
+const username        = ref('')
+const email           = ref('')
+const password        = ref('')
+const confirmPassword = ref('')
+const error           = ref('')
+
 const setMargin = (bool) => store.commit('setMargin', bool)
+
+const handleSubmit = (e) => {
+  e.preventDefault()
+  console.log("i am username : " + username.value);
+  if(email.value === '' || password.value === '' || username.value === '' || confirmPassword.value === ''){
+    error.value = 'Please fill all the fields before submitting!'
+    return
+  }
+  if(password.value.length < 8 ){
+    error.value = 'Password must contain at least 8 characters'
+    return
+  }
+  if(password.value !== confirmPassword.value){
+    error.value = 'Password confirmation does not match'
+    return
+  }
+
+    let data = {
+      username: username.value,
+      email: email.value,
+      password: password.value
+    }
+    axios.post('http://localhost:8080/register', data)
+        .then((response) => {
+          let data = response.data
+          console.log(data)
+          if(data.status === 'error'){
+            error.value = data.message
+            return
+          }
+          let userData = data.data
+          localStorage.setItem('jwt', data.jwt)
+          localStorage.setItem('userId', userData.id)
+          localStorage.setItem('username', userData.username)
+          localStorage.setItem('email', userData.email)
+          localStorage.setItem('profileImage', userData.image)
+          router.push('/main')
+        })
+        .catch((response) => {
+          error.value = 'something went wrong!'
+          console.log(response);
+        })
+
+}
+
 
 
 onMounted(() => {
@@ -105,7 +152,6 @@ onUnmounted(() => {
 
 .invalid-feedback {
   color: red;
-  display: none;
 }
 
 .greeting {
