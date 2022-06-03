@@ -62,16 +62,23 @@ import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
 import illustrationLight from "../assets/images/new-room.svg"
 import illustrationDark from "../assets/images/new-room-dark.svg"
+import {onUnmounted} from "vue";
 
 const store  = useStore()
 
 const color = computed(() => store.getters.dark ? 'white' : '#7B2CBF')
 const illustration = computed(() => store.getters.dark ? illustrationDark : illustrationLight)
 const theme = computed(() => store.getters.dark ? 'dark' : 'light')
-const setNav = (bool) => store.commit('setNav', bool)
+
+const setMargin = (bool) => store.commit('setMargin', bool)
+
 
 onMounted(() => {
-  setNav(true)
+  setMargin(false)
+})
+
+onUnmounted(() => {
+  setMargin(true)
 })
 
 </script>

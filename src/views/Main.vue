@@ -9,15 +9,12 @@
  const store = useStore()
 
  const illustration = computed( () => store.getters.dark ? illustrationDark : illustrationLight )
- const setNav = (bool) => store.commit('setNav', bool)
  const setRoomId = (roomId) => store.commit('setRoomId', roomId)
  const setRoomRef = (roomRef) => store.commit('setRoomRef', roomRef)
 
 
 
  onMounted(() => {
-   setNav(true)
-
 
  })
 

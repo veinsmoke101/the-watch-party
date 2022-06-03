@@ -9,7 +9,6 @@ import darkLogo from '../assets/icons/the-watch-party-logo-dark.png'
 const store = useStore()
 
 // states
-const nav = computed(() => store.getters.nav )
 const logo = computed(() => store.getters.dark ? darkLogo : lightLogo)
 const isActive = ref(false)
 
@@ -29,7 +28,7 @@ const handleNavToggle = () => {
 
 <template>
 
-  <nav v-if="nav" class="nav bg-white dark:bg-gray-900" >
+  <nav class="nav bg-white dark:bg-gray-900" >
     <div class="nav__container">
       <div class="nav__logo">
         <img :src="logo" alt="watch-party-logo">

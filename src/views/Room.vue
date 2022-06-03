@@ -35,7 +35,6 @@ const setSender = (sender) => store.commit('setSender', sender)
 
 // const ytbUrl = computed(() => store.getters.dark ? 'https://www.youtube.com/watch?v=drdHIbbBnA0' : 'https://www.youtube.com/watch?v=a5uQMwRMHcs')
 
-const setNav = (bool) => store.commit('setNav', bool)
 const setRoomRef = (ref) => store.commit('setRoomRef', ref)
 const setRoomId = (id) => store.commit('setRoomId', id)
 const addMessage = (message) => store.commit('addMessage', message)
@@ -45,11 +44,7 @@ const isLoading = ref(true)
 
 
 onMounted(() => {
-
-  setNav(true)
   setSender(userId.value)
-
-
   let data = {
     id: 3
   }

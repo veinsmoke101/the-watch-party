@@ -4,16 +4,17 @@ export default createStore({
   state: {
     sender: null,
     dark: false,
+    margin: true,
     roomId : null,
     roomRef : null,
     vidUrl: null,
     reRenderVideo: 0,
-    nav: true,
     messages: [],
 
     // current authenticated user
     userId: Math.floor(Math.random() * 10),
     userName: 'Taha Lechgar',
+    email: 'tahamr08@gmail.com',
     profileImage: 'profile-image.svg',
 
     // video events
@@ -22,15 +23,16 @@ export default createStore({
   getters: {
     sender: state => state.sender,
     dark: state => state.dark,
+    margin: state => state.margin,
     roomId: state => state.roomId,
     roomRef: state => state.roomRef,
     vidUrl: state => state.vidUrl,
     reRenderVideo: state => state.reRenderVideo,
-    nav: state => state.nav,
     messages: state => state.messages,
     userId: state => state.userId,
     userName: state => state.userName,
     profileImage: state => state.profileImage,
+    email: state => state.email,
     seeked: state => state.seeked,
   },
 
@@ -40,6 +42,9 @@ export default createStore({
     },
     setDark: (state, bool) => {
       state.dark = bool
+    },
+    setMargin: (state, bool) => {
+      state.margin = bool
     },
     setRoomId: (state, roomId) => {
       state.roomId = roomId
@@ -53,11 +58,20 @@ export default createStore({
     setReRenderVideo: (state, reRenderVideo) => {
       state.reRenderVideo = reRenderVideo
     },
-    setNav: (state, bool) => {
-      state.nav = bool
-    },
     addMessage: (state, message) => {
       state.messages.push(message)
+    },
+    setUserId: (state, id) => {
+      state.userId = id
+    },
+    setUserName: (state, userName) => {
+      state.userName = userName
+    },
+    setEmail: (state, email) => {
+      state.email = email
+    },
+    setProfileImage: (state, profileImage) => {
+      state.profileImage = profileImage
     },
     setSeeked: (state, seeked) => {
       state.seeked = seeked

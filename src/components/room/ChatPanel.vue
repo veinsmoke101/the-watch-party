@@ -16,7 +16,6 @@ const store = useStore()
 const dark = computed(() => store.getters.dark)
 const messages = computed(() => store.getters.messages)
 const userId = computed(() => store.getters.userId)
-const userName = computed(() => store.getters.userName)
 const profileImage = computed(() => store.getters.profileImage)
 const addMessage = (message) => store.commit('addMessage', message)
 
@@ -35,7 +34,7 @@ const handleEmojiClick = (detail) => {
   window.console.log(detail)
 }
 
-const reRender = ref(0)
+const reRender    = ref(0)
 const messageBody = ref('')
 
 
@@ -44,9 +43,9 @@ const messageBody = ref('')
 
 onMounted(() => {
   let joinedMessage = {
-    id: userId.value,
-    src: profileImage.value,
-    author: userName.value,
+    id: localStorage.getItem('userId'),
+    src: localStorage.getItem('profileImage'),
+    author: localStorage.getItem('username'),
     added_at: getCurrentTime(),
     body: 'Joined the party!'
   }
@@ -63,9 +62,6 @@ onMounted(() => {
       .then(response => response.json())
       .then((response) => console.log("response :" + response))
       .catch((error) => console.log("error :" + error));
-
-
-
 })
 
 onUpdated( () => {
@@ -79,9 +75,9 @@ const handleMessageSubmit = (event) => {
   if(messageBody.value === '') return
 
   let newMessage = {
-    id: userId.value,
-    src: profileImage.value,
-    author: userName.value,
+    id: localStorage.getItem('userId'),
+    src: localStorage.getItem('profileImage'),
+    author: localStorage.getItem('username'),
     added_at: getCurrentTime(),
     body: messageBody.value
   }

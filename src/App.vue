@@ -5,7 +5,7 @@ import Nav from "./components/Nav.vue"
 
 const store  = useStore()
 const dark = computed( () => store.getters.dark)
-const margin = computed( () => store.getters.nav ? '50px' : '0')
+const margin = computed( () => store.getters.margin ? '50px' : '0')
 
 
 

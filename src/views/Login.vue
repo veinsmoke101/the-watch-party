@@ -11,27 +11,23 @@
           <h3 class="sideForm__title dark:text-white" >Log in.</h3>
           <p class="sideForm__subTitle dark:text-white">Log in your information that you entered during your registration</p>
         </div>
-        <form method="POST" action="" class="sideForm__form">
+        <form @submit="handleSubmit" method="POST" action="" class="sideForm__form">
 
           <label class="sideForm__label dark:text-white" for="email">
             Enter your email address
           </label>
-          <input name="email" id="email" required value="" type="email"
+          <input v-model="email" name="email" id="email" type="email"
                  class="sideForm__input sideForm__input--email dark:bg-gray-800 dark:text-white dark:border-gray-200"
                  placeholder="name@example.com">
-
-          <span class="invalid-feedback" role="alert">
-                                        <strong>message</strong>
-                                    </span>
 
           <label class="sideForm__label dark:text-white" for="password">
             Enter your password
           </label>
-          <input name="password" id="password" required type="password"
+          <input v-model="password" name="password" id="password" type="password"
                  class="sideForm__input sideForm__input--password dark:bg-gray-800 dark:text-white dark:border-gray-200"
                  placeholder="at least 8 characters">
           <span class="invalid-feedback" role="alert">
-                                        <strong> message </strong>
+                                        <strong> {{ error }} </strong>
                                     </span>
           <a class="sideForm__forgotPassword" href="">
             forgot your password ?
@@ -52,19 +48,63 @@
 
 <script setup>
 import { useStore } from "vuex";
-import { computed, onMounted } from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import illustrationDark from "../assets/icons/login-illustration-dark.svg"
 import illustrationLight from "../assets/icons/login-illustration.svg"
+import axios from "axios"
+import router from "../router";
 
 const store  = useStore()
 
 const color = computed(() => store.getters.dark ? 'white' : '#7B2CBF')
 const illustration = computed(() => store.getters.dark ? illustrationDark : illustrationLight)
 const theme = computed(() => store.getters.dark ? 'dark' : 'light')
-const setNav = (bool) => store.commit('setNav', bool)
+
+const setMargin = (bool) => store.commit('setMargin', bool)
+
+const email     = ref(null)
+const password  = ref(null)
+const error     = ref(null)
+
+const handleSubmit = (e) => {
+  e.preventDefault()
+  if(email.value === null || password.value === null){
+    error.value = 'Please fill all the fields before submitting!'
+  }else{
+    let data = {
+      email: email.value,
+      password: password.value
+    }
+    axios.post('http://localhost:8080/login', data)
+        .then((response) => {
+          let data = response.data
+          console.log(data)
+          if(data.status === 'error'){
+            error.value = data.message
+            return
+          }
+          let userData = data.data
+          localStorage.setItem('jwt', data.jwt)
+          localStorage.setItem('userId', userData.id)
+          localStorage.setItem('username', userData.username)
+          localStorage.setItem('email', userData.email)
+          localStorage.setItem('profileImage', userData.image)
+          router.push('/main')
+        })
+        .catch((response) => {
+          error.value = 'something went wrong!'
+          console.log(response);
+        })
+  }
+}
+
 
 onMounted(() => {
-  setNav(true)
+  setMargin(false)
+})
+
+onUnmounted(() => {
+  setMargin(true)
 })
 
 </script>
@@ -72,9 +112,7 @@ onMounted(() => {
 <style lang="scss" >
 @use '../sass/base';
 
-#app{
-  margin-top: 0 !important;
-}
+
 
 .wrapper {
   overflow-y: hidden;
@@ -95,7 +133,6 @@ onMounted(() => {
 
 .invalid-feedback {
   color: red;
-  display: none;
 }
 
 .greeting {

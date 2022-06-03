@@ -14,8 +14,7 @@ import uploadLight from "../assets/images/upload-file.svg"
 import uploadDark from "../assets/images/upload-file-dark.svg"
 import youtubeLight from "../assets/images/youtube.svg"
 import youtubeDark from "../assets/images/youtube-dark.svg"
-import darkLogo from "../assets/icons/the-watch-party-logo-dark.png";
-import lightLogo from "../assets/icons/the-watch-party-logo-light.png";
+
 
 
 
@@ -27,7 +26,6 @@ const text      = computed(() => store.getters.dark ? textDark : textLight)
 const voice     = computed(() => store.getters.dark ? voiceDark : voiceLight)
 const upload    = computed(() => store.getters.dark ? uploadDark : uploadLight)
 const youtube   = computed(() => store.getters.dark ? youtubeDark : youtubeLight)
-const logo      = computed(() => store.getters.dark ? darkLogo : lightLogo)
 
 
 
