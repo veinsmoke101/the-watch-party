@@ -10,7 +10,12 @@ const store = useStore()
 
 // states
 const logo = computed(() => store.getters.dark ? darkLogo : lightLogo)
+const logged = computed(() => store.getters.logged )
+
+const username = ref(localStorage.getItem('username'))
 const isActive = ref(false)
+
+
 
 onMounted(() => {
 
@@ -38,8 +43,9 @@ const handleNavToggle = () => {
           <DarkModeToggle />
         </li>
 
-        <li class="nav__item "><router-link class="text-black dark:text-white" to="/register">Sign up</router-link></li>
-        <li class="nav__item "><router-link class="nav__item--button " to="/login">Login</router-link></li>
+        <li v-if="logged" class="nav__item text-black dark:text-white mx-9 ">{{ username }}</li>
+        <li v-if="!logged" class="nav__item "><router-link class="text-black dark:text-white" to="/register">Sign up</router-link></li>
+        <li v-if="!logged"  class="nav__item "><router-link class="nav__item--button " to="/login">Login</router-link></li>
       </ul>
       <button class="hamburger" :class="{'is-active': isActive }" @click="handleNavToggle">
         <span class="bg-gray-900 dark:bg-white"></span>

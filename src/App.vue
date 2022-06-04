@@ -1,12 +1,15 @@
 <script setup>
 import { useStore } from "vuex"
-import {computed} from "vue"
+import {computed, onMounted} from "vue"
 import Nav from "./components/Nav.vue"
 
 const store  = useStore()
 const dark = computed( () => store.getters.dark)
 const margin = computed( () => store.getters.margin ? '50px' : '0')
 
+onMounted(() => {
+
+})
 
 
 </script>

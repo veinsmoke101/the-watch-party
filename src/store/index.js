@@ -4,6 +4,7 @@ export default createStore({
   state: {
     sender: null,
     dark: false,
+    logged: false,
     margin: true,
     roomId : null,
     roomRef : null,
@@ -18,11 +19,13 @@ export default createStore({
     profileImage: 'profile-image.svg',
 
     // video events
-    seeked : false
+    seeked : false,
+    issuer : false
   },
   getters: {
     sender: state => state.sender,
     dark: state => state.dark,
+    logged: state => state.logged,
     margin: state => state.margin,
     roomId: state => state.roomId,
     roomRef: state => state.roomRef,
@@ -34,14 +37,18 @@ export default createStore({
     profileImage: state => state.profileImage,
     email: state => state.email,
     seeked: state => state.seeked,
+    issuer: state => state.issuer,
   },
 
   mutations: {
-    setSender: (state, bool) => {
-      state.sender = bool
+    setSender: (state, id) => {
+      state.sender = id
     },
     setDark: (state, bool) => {
       state.dark = bool
+    },
+    setLogged: (state, bool) => {
+      state.logged = bool
     },
     setMargin: (state, bool) => {
       state.margin = bool
@@ -75,6 +82,9 @@ export default createStore({
     },
     setSeeked: (state, seeked) => {
       state.seeked = seeked
+    },
+    setIssuer: (state, issuer) => {
+      state.issuer = issuer
     }
   },
   actions: {

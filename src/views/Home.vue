@@ -1,7 +1,7 @@
 <script setup>
 import Footer from '../components/Footer.vue'
 import {useStore} from "vuex";
-import {computed} from "vue";
+import {computed, onMounted} from "vue";
 import watchLight from "../assets/images/how-to-watch.svg"
 import watchDark from "../assets/images/how-to-watch-dark.svg"
 import syncLight from "../assets/images/sync.svg"
@@ -27,6 +27,12 @@ const voice     = computed(() => store.getters.dark ? voiceDark : voiceLight)
 const upload    = computed(() => store.getters.dark ? uploadDark : uploadLight)
 const youtube   = computed(() => store.getters.dark ? youtubeDark : youtubeLight)
 
+const setLogged = (bool) => store.commit('setLogged', bool)
+
+
+onMounted(() => {
+  setLogged(false)
+})
 
 
 

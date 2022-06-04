@@ -73,6 +73,7 @@ const confirmPassword = ref('')
 const error           = ref('')
 
 const setMargin = (bool) => store.commit('setMargin', bool)
+const setLogged = (bool) => store.commit('setLogged', bool)
 
 const handleSubmit = (e) => {
   e.preventDefault()
@@ -122,6 +123,7 @@ const handleSubmit = (e) => {
 
 onMounted(() => {
   setMargin(false)
+  setLogged(false)
 })
 
 onUnmounted(() => {

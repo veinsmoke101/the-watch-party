@@ -61,12 +61,14 @@ const illustration = computed(() => store.getters.dark ? illustrationDark : illu
 const theme = computed(() => store.getters.dark ? 'dark' : 'light')
 
 const setMargin = (bool) => store.commit('setMargin', bool)
+const setLogged = (bool) => store.commit('setLogged', bool)
 
 const email     = ref('')
 const password  = ref('')
 const error     = ref('')
 
 const handleSubmit = (e) => {
+  setLogged(false)
   e.preventDefault()
   if(email.value === '' || password.value === ''){
     error.value = 'Please fill all the fields before submitting!'

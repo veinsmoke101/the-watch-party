@@ -31,6 +31,8 @@ const userId = computed(() => store.getters.userId)
 const setReRenderVideo = (reRender) => store.commit('setReRenderVideo', reRender)
 const setVidUrl = (url) => store.commit('setVidUrl', url)
 const setSender = (sender) => store.commit('setSender', sender)
+const setLogged = (bool) => store.commit('setLogged', bool)
+
 
 
 // const ytbUrl = computed(() => store.getters.dark ? 'https://www.youtube.com/watch?v=drdHIbbBnA0' : 'https://www.youtube.com/watch?v=a5uQMwRMHcs')
@@ -44,7 +46,8 @@ const isLoading = ref(true)
 
 
 onMounted(() => {
-  setSender(userId.value)
+  setLogged(true)
+  setSender(localStorage.getItem('userId'))
   let data = {
     id: 3
   }

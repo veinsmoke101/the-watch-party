@@ -118,7 +118,7 @@ const handleMessageSubmit = (event) => {
 
   <div class="videoRoom__chatPanel">
     <div class="videoRoom__settings">
-      <p class="text-white">13 users watching</p>
+      <p class="text-white">2 users watching</p>
       <img @click="isSettingOpen = !isSettingOpen" src="@/assets/icons/view-more.svg" alt="settings-icon">
       <div v-show="isSettingOpen" class="videoRoom__settingMenu">
         <div class="menuWrapper">

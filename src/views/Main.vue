@@ -11,11 +11,11 @@
  const illustration = computed( () => store.getters.dark ? illustrationDark : illustrationLight )
  const setRoomId = (roomId) => store.commit('setRoomId', roomId)
  const setRoomRef = (roomRef) => store.commit('setRoomRef', roomRef)
-
+ const setLogged = (bool) => store.commit('setLogged', bool)
 
 
  onMounted(() => {
-
+   setLogged(true)
  })
 
  const handleNewRoom = () => {
