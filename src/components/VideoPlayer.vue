@@ -160,7 +160,7 @@ onMounted(() => {
   // })
 
   player.value.on('play', () => {
-    if(!issuedByMe.value){
+    if(!issuedByMe.value || seeked.value){
       setIssuedByMe(true)
       return
     }
@@ -172,7 +172,7 @@ onMounted(() => {
 
   player.value.on('pause', () => {
     console.log("i'm ON from paused");
-    if(!issuedByMe.value){
+    if(!issuedByMe.value || !seeked.value){
       setIssuedByMe(true)
       return
     }
@@ -180,20 +180,21 @@ onMounted(() => {
     sendMessage('Paused the video!',"video/pause")
   })
 
+
   player.value.on('seeked', () => {
     console.log("i'm ON from seeked");
-    if(!issuedByMe.value){
-      setIssuedByMe(true)
+    if(!seeked.value){
+      setSeeked(true)
       return
     }
+
     // setSender(localStorage.getItem('userId'))
-    console.log("i'm ON from seeked after condition");
-    console.log("seeked condition : " + sender.value +" |||| "+ localStorage.getItem('userId'));
+    console.log("i'm ON from seeked after condition")
+    console.log("seeked condition : " + sender.value +" |||| "+ localStorage.getItem('userId'))
     let currentTime = player.value.currentTime()
-    let message = `Jumped to ${secToMin(currentTime)}`;
+    let message = `Jumped to ${secToMin(currentTime)}`
     console.log('im sending : ' + player.value.currentTime())
     setCurrentTime(player.value.currentTime())
-
     sendMessage(message, 'video/jump', currentTime)
 
   })
@@ -248,6 +249,7 @@ const bind = inject("bind")
 
 let handlePause = (data) => {
   if(player.value.paused()) return
+  console.log("i'm handle from paused");
 
   let parsedData = JSON.parse(data)
   let message = JSON.parse(parsedData.message)
@@ -258,7 +260,6 @@ let handlePause = (data) => {
 
 let handlePlay = (data) => {
   if(!player.value.paused()) return
-  console.log("i'm handle from paused");
 
   let parsedData = JSON.parse(data)
   let message = JSON.parse(parsedData.message)
@@ -274,10 +275,8 @@ let handleJump = (data) => {
   let message = JSON.parse(parsedData.message)
   addMessage(message)
   console.log( 'im receiving : ' + parsedData.time)
-  if(currentTime.value === parsedData.time) return
-
-  setIssuedByMe(false)
-
+  // if(currentTime.value === parsedData.time ) return
+  setSeeked(false)
   player.value.currentTime(parsedData.time)
 }
 

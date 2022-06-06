@@ -19,7 +19,7 @@ export default createStore({
     profileImage: 'profile-image.svg',
 
     // video events
-    seeked : false,
+    seeked : true,
     issuer : false,
     issuedByMe: true,
     currentTime: 0,
