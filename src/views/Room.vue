@@ -51,7 +51,7 @@ onMounted(() => {
   setLogged(true)
   setSender(localStorage.getItem('userId'))
   let data = {
-    id: 3
+    id: localStorage.getItem('userId')
   }
 
   console.log(`http://localhost:8080/room/${props.roomRef}/${data.id}`)

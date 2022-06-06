@@ -11,12 +11,7 @@ export default createStore({
     vidUrl: null,
     reRenderVideo: 0,
     messages: [],
-
-    // current authenticated user
-    userId: Math.floor(Math.random() * 10),
-    userName: 'Taha Lechgar',
-    email: 'tahamr08@gmail.com',
-    profileImage: 'profile-image.svg',
+    currentUsers: [],
 
     // video events
     seeked : true,
@@ -35,10 +30,6 @@ export default createStore({
     vidUrl: state => state.vidUrl,
     reRenderVideo: state => state.reRenderVideo,
     messages: state => state.messages,
-    userId: state => state.userId,
-    userName: state => state.userName,
-    profileImage: state => state.profileImage,
-    email: state => state.email,
     seeked: state => state.seeked,
     issuer: state => state.issuer,
     issuedByMe: state => state.issuedByMe,
@@ -73,18 +64,6 @@ export default createStore({
     },
     addMessage: (state, message) => {
       state.messages.push(message)
-    },
-    setUserId: (state, id) => {
-      state.userId = id
-    },
-    setUserName: (state, userName) => {
-      state.userName = userName
-    },
-    setEmail: (state, email) => {
-      state.email = email
-    },
-    setProfileImage: (state, profileImage) => {
-      state.profileImage = profileImage
     },
     setSeeked: (state, seeked) => {
       state.seeked = seeked
