@@ -50,13 +50,18 @@ const userId = computed(() => store.getters.userId)
 const sender = computed(() => store.getters.sender)
 const seeked = computed(() => store.getters.seeked)
 const issuer = computed(() => store.getters.issuer)
+const issuedByMe = computed(() => store.getters.issuedByMe)
+const currentTime = computed(() => store.getters.currentTime)
 const userName = computed(() => store.getters.userName)
 const profileImage = computed(() => store.getters.profileImage)
+const socketId = computed(() => store.getters.socketId)
 
 const addMessage = (message) => store.commit('addMessage', message)
 const setSender = (sender) => store.commit('setSender', sender)
 const setSeeked = (seek) => store.commit('setSeeked', seek)
 const setIssuer = (issuer) => store.commit('setIssuer', issuer)
+const setIssuedByMe = (issuer) => store.commit('setIssuedByMe', issuer)
+const setCurrentTime = (issuer) => store.commit('setCurrentTime', issuer)
 const setReRenderVideo = (reRender) => store.commit('setReRenderVideo', reRender)
 const setVidUrl = (vidUrl) => store.commit('setVidUrl', vidUrl)
 
@@ -98,12 +103,13 @@ onMounted(() => {
 
   // send message to the server
   const sendMessage = (message, route, time = null) => {
-    let addMsgLocally = (route !== 'video/jump')
-    let preparedMessage = prepareMessage(message, addMsgLocally)
+    // let addMsgLocally = (route !== 'video/jump')
+    let preparedMessage = prepareMessage(message, false)
     let data = {
       roomRef: store.getters.roomRef,
       time: time,
-      message: JSON.stringify(preparedMessage)
+      message: JSON.stringify(preparedMessage),
+      socketId: socketId.value
     }
 
     axios.post(`http://localhost:8080/${route}`, data)
@@ -112,45 +118,84 @@ onMounted(() => {
 
   }
 
-  player.value.on('pause', () => {
-    if (issuer.value === true){
-      setIssuer(false)
-      return
-    }
-    sendMessage('Paused the video!',"video/pause")
-  })
+  // player.value.on('pause', () => {
+  //   if (issuer.value === true){
+  //     setIssuer(false)
+  //     return
+  //   }
+  //   sendMessage('Paused the video!',"video/pause")
+  // })
+  //
+  // player.value.on('play', () => {
+  //   if (seeked.value){
+  //     setSeeked(false)
+  //     return
+  //   }
+  //
+  //   if (issuer.value){
+  //     setIssuer(false)
+  //     return
+  //   }
+  //
+  //   sendMessage('Played the video!',"video/play")
+  // })
+  //
+  // player.value.on('seeked', () => {
+  //
+  //   setSeeked(true)
+  //
+  //   console.log("seeked condition : " + sender.value +" |||| "+ localStorage.getItem('userId'));
+  //   let currentTime = player.value.currentTime()
+  //   let message = `Jumped to ${secToMin(currentTime)}`;
+  //
+  //   if(localStorage.getItem('userId') !== sender.value) {
+  //    setSender(localStorage.getItem('userId'))
+  //    console.log('mucha gracias')
+  //    // prepareMessage(message,true, false)
+  //    return
+  //  }
+  //
+  //   console.log('im sending : ' + player.value.currentTime())
+  //   sendMessage(message, 'video/jump', currentTime)
+  // })
 
   player.value.on('play', () => {
-    if (seeked.value){
-      setSeeked(false)
+    if(!issuedByMe.value){
+      setIssuedByMe(true)
       return
     }
 
-    if (issuer.value){
-      setIssuer(false)
-      return
-    }
-
+    prepareMessage('Played the video!', true, false)
     sendMessage('Played the video!',"video/play")
   })
 
+
+  player.value.on('pause', () => {
+    console.log("i'm ON from paused");
+    if(!issuedByMe.value){
+      setIssuedByMe(true)
+      return
+    }
+    prepareMessage('Paused the video!', true, false)
+    sendMessage('Paused the video!',"video/pause")
+  })
+
   player.value.on('seeked', () => {
-
-    setSeeked(true)
-
+    console.log("i'm ON from seeked");
+    if(!issuedByMe.value){
+      setIssuedByMe(true)
+      return
+    }
+    // setSender(localStorage.getItem('userId'))
+    console.log("i'm ON from seeked after condition");
     console.log("seeked condition : " + sender.value +" |||| "+ localStorage.getItem('userId'));
     let currentTime = player.value.currentTime()
     let message = `Jumped to ${secToMin(currentTime)}`;
-
-    if(localStorage.getItem('userId') !== sender.value) {
-     setSender(localStorage.getItem('userId'))
-     console.log('mucha gracias')
-     // prepareMessage(message,true, false)
-     return
-   }
-
     console.log('im sending : ' + player.value.currentTime())
+    setCurrentTime(player.value.currentTime())
+
     sendMessage(message, 'video/jump', currentTime)
+
   })
 
 
@@ -166,39 +211,76 @@ onMounted(() => {
 const bind = inject("bind")
 
 
+// let handlePause = (data) => {
+//   if(player.value.paused()) return
+//
+//   setIssuer(true)
+//   let parsedData = JSON.parse(data)
+//   let message = JSON.parse(parsedData.message)
+//   addMessage(message)
+//   player.value.pause()
+// }
+//
+// let handlePlay = (data) => {
+//   if(!player.value.paused()) return
+//
+//   setIssuer(true)
+//   let parsedData = JSON.parse(data)
+//   let message = JSON.parse(parsedData.message)
+//   addMessage(message)
+//   player.value.play()
+// }
+//
+// let handleJump = (data) => {
+//   let parsedData = JSON.parse(data)
+//   let message = JSON.parse(parsedData.message)
+//   addMessage(message)
+//
+//   // identify the sender so he can't receive the event
+//   setSender(message.id)
+//
+//   if(sender.value !== localStorage.getItem('userId')){
+//     console.log( 'im receiving : ' + parsedData.time)
+//     player.value.currentTime(parsedData.time)
+//   }
+// }
+
+
 let handlePause = (data) => {
   if(player.value.paused()) return
 
-  setIssuer(true)
   let parsedData = JSON.parse(data)
   let message = JSON.parse(parsedData.message)
   addMessage(message)
+  setIssuedByMe(false)
   player.value.pause()
 }
 
 let handlePlay = (data) => {
   if(!player.value.paused()) return
+  console.log("i'm handle from paused");
 
-  setIssuer(true)
   let parsedData = JSON.parse(data)
   let message = JSON.parse(parsedData.message)
   addMessage(message)
+  setIssuedByMe(false)
   player.value.play()
 }
 
 let handleJump = (data) => {
+  console.log("i'm handle from seeked");
+
   let parsedData = JSON.parse(data)
   let message = JSON.parse(parsedData.message)
   addMessage(message)
+  console.log( 'im receiving : ' + parsedData.time)
+  if(currentTime.value === parsedData.time) return
 
-  // identify the sender so he can't receive the event
-  setSender(message.id)
+  setIssuedByMe(false)
 
-  if(sender.value !== localStorage.getItem('userId')){
-    console.log( 'im receiving : ' + parsedData.time)
-    player.value.currentTime(parsedData.time)
-  }
+  player.value.currentTime(parsedData.time)
 }
+
 
 bind("pause", handlePause)
 bind("play", handlePlay)

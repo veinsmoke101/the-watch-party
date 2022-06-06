@@ -20,7 +20,10 @@ export default createStore({
 
     // video events
     seeked : false,
-    issuer : false
+    issuer : false,
+    issuedByMe: true,
+    currentTime: 0,
+    socketId: null
   },
   getters: {
     sender: state => state.sender,
@@ -38,6 +41,9 @@ export default createStore({
     email: state => state.email,
     seeked: state => state.seeked,
     issuer: state => state.issuer,
+    issuedByMe: state => state.issuedByMe,
+    currentTime: state => state.currentTime,
+    socketId: state => state.socketId
   },
 
   mutations: {
@@ -85,6 +91,15 @@ export default createStore({
     },
     setIssuer: (state, issuer) => {
       state.issuer = issuer
+    },
+    setIssuedByMe: (state, issuedByMe) => {
+      state.issuedByMe = issuedByMe
+    },
+    setCurrentTime: (state, currentTime) => {
+      state.currentTime = currentTime
+    },
+    setSocketId: (state, socketId) => {
+      state.socketId = socketId
     }
   },
   actions: {

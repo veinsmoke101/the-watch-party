@@ -25,6 +25,7 @@ const store = useStore()
 // vuex states
 const dark = computed(() => store.getters.dark)
 const userId = computed(() => store.getters.userId)
+const socketId = computed(() => store.getters.socketId)
 
 
 // vuex mutations
@@ -32,6 +33,7 @@ const setReRenderVideo = (reRender) => store.commit('setReRenderVideo', reRender
 const setVidUrl = (url) => store.commit('setVidUrl', url)
 const setSender = (sender) => store.commit('setSender', sender)
 const setLogged = (bool) => store.commit('setLogged', bool)
+const setSocketId = (bool) => store.commit('setSocketId', bool)
 
 
 
@@ -88,7 +90,14 @@ onMounted(() => {
   let pusher = new Pusher("ee67aad443c2735b4c8f", {
     cluster: "eu",
   })
+
+
+
   let channel = pusher.subscribe(store.getters.roomRef)
+
+  pusher.connection.bind('connected', () => {
+    setSocketId(pusher.connection.socket_id)
+  })
 
   channel.bind('videoUrl', (data) => {
     setReRenderVideo(store.getters.reRenderVideo + 1)
