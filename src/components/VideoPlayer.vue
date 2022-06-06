@@ -52,7 +52,6 @@ const seeked = computed(() => store.getters.seeked)
 const issuer = computed(() => store.getters.issuer)
 const issuedByMe = computed(() => store.getters.issuedByMe)
 const currentTime = computed(() => store.getters.currentTime)
-const userName = computed(() => store.getters.userName)
 const profileImage = computed(() => store.getters.profileImage)
 const socketId = computed(() => store.getters.socketId)
 
@@ -62,8 +61,6 @@ const setSeeked = (seek) => store.commit('setSeeked', seek)
 const setIssuer = (issuer) => store.commit('setIssuer', issuer)
 const setIssuedByMe = (issuer) => store.commit('setIssuedByMe', issuer)
 const setCurrentTime = (issuer) => store.commit('setCurrentTime', issuer)
-const setReRenderVideo = (reRender) => store.commit('setReRenderVideo', reRender)
-const setVidUrl = (vidUrl) => store.commit('setVidUrl', vidUrl)
 
 
 const player = ref(null)
@@ -103,7 +100,6 @@ onMounted(() => {
 
   // send message to the server
   const sendMessage = (message, route, time = null) => {
-    // let addMsgLocally = (route !== 'video/jump')
     let preparedMessage = prepareMessage(message, false)
     let data = {
       roomRef: store.getters.roomRef,
@@ -195,6 +191,7 @@ onMounted(() => {
     let message = `Jumped to ${secToMin(currentTime)}`
     console.log('im sending : ' + player.value.currentTime())
     setCurrentTime(player.value.currentTime())
+    prepareMessage(message, true, false)
     sendMessage(message, 'video/jump', currentTime)
 
   })
@@ -275,7 +272,6 @@ let handleJump = (data) => {
   let message = JSON.parse(parsedData.message)
   addMessage(message)
   console.log( 'im receiving : ' + parsedData.time)
-  // if(currentTime.value === parsedData.time ) return
   setSeeked(false)
   player.value.currentTime(parsedData.time)
 }
