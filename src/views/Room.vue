@@ -8,7 +8,7 @@ import { ContentLoader } from "vue-content-loader"
 
 // utilities
 import {useStore} from "vuex";
-import {computed, onMounted, provide, ref} from "vue"
+import {computed, onBeforeUnmount, onMounted, onUnmounted, provide, ref} from "vue"
 import Pusher from "pusher-js"
 import router from "../router";
 import axios from 'axios'
@@ -24,7 +24,6 @@ const store = useStore()
 
 // vuex states
 const dark = computed(() => store.getters.dark)
-const userId = computed(() => store.getters.userId)
 const socketId = computed(() => store.getters.socketId)
 
 
@@ -121,6 +120,19 @@ onMounted(() => {
     console.log("unbind BOY")
     channel.unbind(...args);
   })
+})
+
+
+
+onBeforeUnmount(() => {
+  let data = {
+    user_id: localStorage.getItem('userId'),
+    room_ref: props.roomRef
+  }
+
+  axios.post(`http://localhost:8080/leave/room`, data)
+      .then((response)  => console.log(response))
+      .catch((response) => console.log(response))
 })
 
 // const mapMutations = () => {

@@ -49,14 +49,12 @@ const store = useStore()
 const userId = computed(() => store.getters.userId)
 const sender = computed(() => store.getters.sender)
 const seeked = computed(() => store.getters.seeked)
-const issuer = computed(() => store.getters.issuer)
 const issuedByMe = computed(() => store.getters.issuedByMe)
-const currentTime = computed(() => store.getters.currentTime)
-const profileImage = computed(() => store.getters.profileImage)
 const socketId = computed(() => store.getters.socketId)
 
+let localSeeked = true
+
 const addMessage = (message) => store.commit('addMessage', message)
-const setSender = (sender) => store.commit('setSender', sender)
 const setSeeked = (seek) => store.commit('setSeeked', seek)
 const setIssuer = (issuer) => store.commit('setIssuer', issuer)
 const setIssuedByMe = (issuer) => store.commit('setIssuedByMe', issuer)
@@ -65,6 +63,36 @@ const setCurrentTime = (issuer) => store.commit('setCurrentTime', issuer)
 
 const player = ref(null)
 const videoPlayer = ref(null)
+
+// add a message to vuex store and return it if specified
+const prepareMessage = (message, addMsgLocally, returnValue = true) => {
+  let newMessage = {
+    id: localStorage.getItem('userId'),
+    src: localStorage.getItem('profileImage'),
+    author: localStorage.getItem('username'),
+    added_at: getCurrentTime(),
+    body: message
+  }
+
+  if(addMsgLocally) addMessage(newMessage)
+  if(returnValue) return newMessage
+}
+
+// send message to the server
+const sendMessage = (message, route, time = null) => {
+  let preparedMessage = prepareMessage(message, false)
+  let data = {
+    roomRef: store.getters.roomRef,
+    time: time,
+    message: JSON.stringify(preparedMessage),
+    socketId: socketId.value
+  }
+
+  axios.post(`http://localhost:8080/${route}`, data)
+      .then((response) => console.log("response :" + response))
+      .catch((error) => console.log("error :" + error))
+
+}
 
 onMounted(() => {
 
@@ -84,82 +112,27 @@ onMounted(() => {
   let button = player.value.controlBar.addChild('button', {}, 1)
   button.addClass("seekIcon")
 
-  // add a message to vuex store and return it if specified
-  const prepareMessage = (message, addMsgLocally, returnValue = true) => {
-    let newMessage = {
-      id: localStorage.getItem('userId'),
-      src: localStorage.getItem('profileImage'),
-      author: localStorage.getItem('username'),
-      added_at: getCurrentTime(),
-      body: message
-    }
 
-    if(addMsgLocally) addMessage(newMessage)
-    if(returnValue) return newMessage
-  }
 
-  // send message to the server
-  const sendMessage = (message, route, time = null) => {
-    let preparedMessage = prepareMessage(message, false)
-    let data = {
-      roomRef: store.getters.roomRef,
-      time: time,
-      message: JSON.stringify(preparedMessage),
-      socketId: socketId.value
-    }
-
-    axios.post(`http://localhost:8080/${route}`, data)
-        .then((response) => console.log("response :" + response))
-        .catch((error) => console.log("error :" + error))
-
-  }
-
-  // player.value.on('pause', () => {
-  //   if (issuer.value === true){
-  //     setIssuer(false)
-  //     return
-  //   }
-  //   sendMessage('Paused the video!',"video/pause")
-  // })
-  //
-  // player.value.on('play', () => {
-  //   if (seeked.value){
-  //     setSeeked(false)
-  //     return
-  //   }
-  //
-  //   if (issuer.value){
-  //     setIssuer(false)
-  //     return
-  //   }
-  //
-  //   sendMessage('Played the video!',"video/play")
-  // })
-  //
-  // player.value.on('seeked', () => {
-  //
-  //   setSeeked(true)
-  //
-  //   console.log("seeked condition : " + sender.value +" |||| "+ localStorage.getItem('userId'));
-  //   let currentTime = player.value.currentTime()
-  //   let message = `Jumped to ${secToMin(currentTime)}`;
-  //
-  //   if(localStorage.getItem('userId') !== sender.value) {
-  //    setSender(localStorage.getItem('userId'))
-  //    console.log('mucha gracias')
-  //    // prepareMessage(message,true, false)
-  //    return
-  //  }
-  //
-  //   console.log('im sending : ' + player.value.currentTime())
-  //   sendMessage(message, 'video/jump', currentTime)
-  // })
 
   player.value.on('play', () => {
-    if(!issuedByMe.value || seeked.value){
+    console.log("i'm ON play")
+
+    if(!localSeeked){
+      localSeeked = true
+      return
+    }
+
+    if(!seeked.value){
+      return
+    }
+    if(!issuedByMe.value ){
       setIssuedByMe(true)
       return
     }
+
+    console.log("i'm ON play after condition");
+
 
     prepareMessage('Played the video!', true, false)
     sendMessage('Played the video!',"video/play")
@@ -168,7 +141,7 @@ onMounted(() => {
 
   player.value.on('pause', () => {
     console.log("i'm ON from paused");
-    if(!issuedByMe.value || !seeked.value){
+    if(!issuedByMe.value ){
       setIssuedByMe(true)
       return
     }
@@ -186,6 +159,7 @@ onMounted(() => {
 
     // setSender(localStorage.getItem('userId'))
     console.log("i'm ON from seeked after condition")
+    localSeeked = false
     console.log("seeked condition : " + sender.value +" |||| "+ localStorage.getItem('userId'))
     let currentTime = player.value.currentTime()
     let message = `Jumped to ${secToMin(currentTime)}`
@@ -256,7 +230,9 @@ let handlePause = (data) => {
 }
 
 let handlePlay = (data) => {
+  console.log("i'm handle play");
   if(!player.value.paused()) return
+  console.log("i'm handle play after condition");
 
   let parsedData = JSON.parse(data)
   let message = JSON.parse(parsedData.message)
@@ -284,6 +260,10 @@ bind("jump", handleJump)
 
 
 onBeforeUnmount(() => {
+
+  prepareMessage('Left the party!', true, false)
+  sendMessage('Left the party!',"new/message")
+
   if(player.value){
     player.value.dispose()
   }
