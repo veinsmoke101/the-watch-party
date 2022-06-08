@@ -10,14 +10,17 @@ import insertText from 'https://cdn.jsdelivr.net/npm/insert-text-at-cursor@0.3.0
 import {ref, computed, onMounted, onUpdated} from "vue";
 import { useStore } from "vuex";
 import { getCurrentTime } from "../../js/getCurrentTime";
+import axios from "axios";
 
 
 const store = useStore()
 const dark = computed(() => store.getters.dark)
 const messages = computed(() => store.getters.messages)
-const userId = computed(() => store.getters.userId)
-const profileImage = computed(() => store.getters.profileImage)
+const roomUsersCount = computed(() => store.getters.roomUsersCount)
+const roomRef = computed(() => store.getters.roomRef)
 const addMessage = (message) => store.commit('addMessage', message)
+
+const setRoomUsersCount = (count) => store.commit('setRoomUsersCount', count)
 
 
 // modals states
@@ -62,6 +65,18 @@ onMounted(() => {
       .then(response => response.json())
       .then((response) => console.log("response :" + response))
       .catch((error) => console.log("error :" + error));
+
+  let newData = {
+    room_ref: roomRef.value,
+    count:  true
+  }
+
+  // get current room users count
+  axios.post("http://localhost:8080/room/current/users", newData)
+      .then(response => {
+        setRoomUsersCount(response.data.data)
+      })
+      .catch(response => console.log(response))
 })
 
 onUpdated( () => {
@@ -83,21 +98,18 @@ const handleMessageSubmit = (event) => {
   }
   messageBody.value = ''
 
-  // send message to other users
-  let data = {
+  //message to send other users
+  let messageData = {
     roomRef: store.getters.roomRef,
     message: JSON.stringify(newMessage)
   }
 
   // addMessage(data)
-  
-  fetch("http://localhost:8080/new/message", {
-    method: "POST",
-    body: JSON.stringify(data),
-  })
-      .then(response => response.json())
+  axios.post("http://localhost:8080/new/message", messageData)
       .then((response) => console.log("response :" + response))
       .catch((error) => console.log("error :" + error));
+
+
 
 
 
@@ -118,7 +130,7 @@ const handleMessageSubmit = (event) => {
 
   <div class="videoRoom__chatPanel">
     <div class="videoRoom__settings">
-      <p class="text-white">2 users watching</p>
+      <p class="text-white">{{ roomUsersCount }} users watching</p>
       <img @click="isSettingOpen = !isSettingOpen" src="@/assets/icons/view-more.svg" alt="settings-icon">
       <div v-show="isSettingOpen" class="videoRoom__settingMenu">
         <div class="menuWrapper">

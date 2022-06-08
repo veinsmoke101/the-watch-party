@@ -12,6 +12,7 @@ export default createStore({
     reRenderVideo: 0,
     messages: [],
     currentUsers: [],
+    roomUsersCount: 0,
 
     // video events
     seeked : true,
@@ -34,7 +35,8 @@ export default createStore({
     issuer: state => state.issuer,
     issuedByMe: state => state.issuedByMe,
     currentTime: state => state.currentTime,
-    socketId: state => state.socketId
+    socketId: state => state.socketId,
+    roomUsersCount: state => state.roomUsersCount,
   },
 
   mutations: {
@@ -79,7 +81,11 @@ export default createStore({
     },
     setSocketId: (state, socketId) => {
       state.socketId = socketId
+    },
+    setRoomUsersCount: (state, roomUsersCount) => {
+      state.roomUsersCount = roomUsersCount
     }
+
   },
   actions: {
     addMessage : ({commit, getters}, payload) => {
