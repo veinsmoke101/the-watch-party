@@ -42,6 +42,7 @@ const setSocketId = (bool) => store.commit('setSocketId', bool)
 const setRoomRef = (ref) => store.commit('setRoomRef', ref)
 const setRoomId = (id) => store.commit('setRoomId', id)
 const addMessage = (message) => store.commit('addMessage', message)
+const addUser = (user) => store.commit('addUser', user)
 const setRoomUsersCount = (count) => store.commit('setRoomUsersCount', count)
 const setCurrentUsers = (currentUsers) => store.commit('setCurrentUsers', currentUsers)
 
@@ -87,8 +88,7 @@ onMounted(() => {
     id: localStorage.getItem('userId')
   }
 
-  console.log(`http://localhost:8080/room/${props.roomRef}/${data.id}`)
-
+  // request to join a room
   axios.get(`http://localhost:8080/room/${props.roomRef}/${data.id}`)
     .then((response) => {
       console.log(response.data.roomData.id)
@@ -98,11 +98,16 @@ onMounted(() => {
       }
       setRoomId(response.data.roomData.id)
       setRoomRef(response.data.roomData.unique_reference)
+      // add message to vuex store
       let messages = response.data.roomMessages
       messages.slice().reverse().forEach(el => {
         let message = JSON.parse(JSON.parse(el).message)
         addMessage(message)
       })
+
+      // add  current users to vuex store
+      let users = response.data.roomUsers
+      setCurrentUsers(users)
     })
     .catch((error) => {
       console.log("error :" + error)
@@ -150,9 +155,9 @@ onMounted(() => {
     setRoomUsersCount(data)
   })
 
-  channel.bind('roomUsers', (data) => {
-    setCurrentUsers(JSON.parse(data))
-  })
+  // channel.bind('roomUsers', (data) => {
+  //   setCurrentUsers(JSON.parse(data))
+  // })
 
   provide("bind", (...args) => {
     console.log("bind BOY");

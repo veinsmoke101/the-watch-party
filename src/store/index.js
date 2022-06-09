@@ -89,7 +89,9 @@ export default createStore({
     setCurrentUsers: (state, currentUsers) => {
       state.currentUsers = currentUsers
     },
-
+    addUser: (state, user) => {
+      state.currentUsers.push(user)
+    }
   },
   actions: {
     addMessage : ({commit, getters}, payload) => {
