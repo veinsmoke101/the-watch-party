@@ -8,10 +8,11 @@ import { ContentLoader } from "vue-content-loader"
 
 // utilities
 import {useStore} from "vuex";
-import {computed, onBeforeUnmount, onMounted, onUnmounted, provide, ref} from "vue"
+import {computed, onBeforeUnmount, onMounted, provide, ref} from "vue"
 import Pusher from "pusher-js"
 import router from "../router";
 import axios from 'axios'
+import {getCurrentTime} from "../js/getCurrentTime";
 
 // props
  const props = defineProps({
@@ -41,9 +42,41 @@ const setSocketId = (bool) => store.commit('setSocketId', bool)
 const setRoomRef = (ref) => store.commit('setRoomRef', ref)
 const setRoomId = (id) => store.commit('setRoomId', id)
 const addMessage = (message) => store.commit('addMessage', message)
-
+const setRoomUsersCount = (count) => store.commit('setRoomUsersCount', count)
 
 const isLoading = ref(true)
+
+const leaveRoom = () => {
+  let data = {
+    user_id: localStorage.getItem('userId'),
+    room_ref: props.roomRef
+  }
+
+  axios.post(`http://localhost:8080/leave/room`, data)
+      .then((response)  => console.log(response))
+      .catch((response) => console.log(response))
+
+  let leftMessage = {
+    id: localStorage.getItem('userId'),
+    src: localStorage.getItem('profileImage'),
+    author: localStorage.getItem('username'),
+    added_at: getCurrentTime(),
+    body: 'Left the party!'
+  }
+
+  //message to send other users
+  let messageData = {
+    roomRef: store.getters.roomRef,
+    message: JSON.stringify(leftMessage)
+  }
+
+  // addMessage(data)
+  axios.post("http://localhost:8080/new/message", messageData)
+      .then((response) => console.log("response :" + response))
+      .catch((error) => console.log("error :" + error));
+}
+
+window.onunload = leaveRoom
 
 
 onMounted(() => {
@@ -98,6 +131,8 @@ onMounted(() => {
     setSocketId(pusher.connection.socket_id)
   })
 
+  pusher.connection.bind("disconnected", () => leaveRoom());
+
   channel.bind('videoUrl', (data) => {
     setReRenderVideo(store.getters.reRenderVideo + 1)
     setVidUrl(data)
@@ -110,6 +145,10 @@ onMounted(() => {
     console.log(data)
   })
 
+  channel.bind('roomUsersCount', (data) => {
+    setRoomUsersCount(data)
+  })
+
 
   provide("bind", (...args) => {
     console.log("bind BOY");
@@ -120,20 +159,14 @@ onMounted(() => {
     console.log("unbind BOY")
     channel.unbind(...args);
   })
-})
 
+})
 
 
 onBeforeUnmount(() => {
-  let data = {
-    user_id: localStorage.getItem('userId'),
-    room_ref: props.roomRef
-  }
-
-  axios.post(`http://localhost:8080/leave/room`, data)
-      .then((response)  => console.log(response))
-      .catch((response) => console.log(response))
+  window.removeEventListener('unload', () => leaveRoom())
 })
+
 
 // const mapMutations = () => {
 //   const store = useStore()

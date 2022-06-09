@@ -261,9 +261,6 @@ bind("jump", handleJump)
 
 onBeforeUnmount(() => {
 
-  prepareMessage('Left the party!', true, false)
-  sendMessage('Left the party!',"new/message")
-
   if(player.value){
     player.value.dispose()
   }

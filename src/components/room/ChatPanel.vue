@@ -58,11 +58,7 @@ onMounted(() => {
     message: JSON.stringify(joinedMessage)
   }
 
-  fetch("http://localhost:8080/new/message", {
-    method: "POST",
-    body: JSON.stringify(data),
-  })
-      .then(response => response.json())
+  axios.post("http://localhost:8080/new/message", data)
       .then((response) => console.log("response :" + response))
       .catch((error) => console.log("error :" + error));
 
