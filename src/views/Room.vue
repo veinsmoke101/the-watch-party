@@ -43,6 +43,7 @@ const setRoomRef = (ref) => store.commit('setRoomRef', ref)
 const setRoomId = (id) => store.commit('setRoomId', id)
 const addMessage = (message) => store.commit('addMessage', message)
 const addUser = (user) => store.commit('addUser', user)
+const removeUser = (user) => store.commit('removeUser', user)
 const setRoomUsersCount = (count) => store.commit('setRoomUsersCount', count)
 const setCurrentUsers = (currentUsers) => store.commit('setCurrentUsers', currentUsers)
 
@@ -157,6 +158,10 @@ onMounted(() => {
 
   channel.bind('newUser', (data) => {
     addUser(JSON.parse(data))
+  })
+
+  channel.bind('userLeft', (data) => {
+    removeUser(data)
   })
 
   provide("bind", (...args) => {

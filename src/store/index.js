@@ -91,6 +91,9 @@ export default createStore({
     },
     addUser: (state, user) => {
       state.currentUsers.push(user)
+    },
+    removeUser: (state, id) => {
+      state.currentUsers = state.currentUsers.filter(user => user.id.toString() !== id)
     }
   },
   actions: {
