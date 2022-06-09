@@ -43,6 +43,7 @@ const setRoomRef = (ref) => store.commit('setRoomRef', ref)
 const setRoomId = (id) => store.commit('setRoomId', id)
 const addMessage = (message) => store.commit('addMessage', message)
 const setRoomUsersCount = (count) => store.commit('setRoomUsersCount', count)
+const setCurrentUsers = (currentUsers) => store.commit('setCurrentUsers', currentUsers)
 
 const isLoading = ref(true)
 
@@ -149,6 +150,9 @@ onMounted(() => {
     setRoomUsersCount(data)
   })
 
+  channel.bind('roomUsers', (data) => {
+    setCurrentUsers(JSON.parse(data))
+  })
 
   provide("bind", (...args) => {
     console.log("bind BOY");

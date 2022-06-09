@@ -37,6 +37,7 @@ export default createStore({
     currentTime: state => state.currentTime,
     socketId: state => state.socketId,
     roomUsersCount: state => state.roomUsersCount,
+    currentUsers: state => state.currentUsers
   },
 
   mutations: {
@@ -84,7 +85,10 @@ export default createStore({
     },
     setRoomUsersCount: (state, roomUsersCount) => {
       state.roomUsersCount = roomUsersCount
-    }
+    },
+    setCurrentUsers: (state, currentUsers) => {
+      state.currentUsers = currentUsers
+    },
 
   },
   actions: {

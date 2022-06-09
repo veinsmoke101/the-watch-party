@@ -3,10 +3,16 @@ import { ref} from "vue";
 import { useStore } from "vuex";
 
 import Modal from "../layouts/Modal.vue"
+import {computed} from "vue";
 
 
 
 const store = useStore()
+
+const src = "/src/assets/images/"
+const currentUsers = computed(() => store.getters.currentUsers)
+const setRoomUsersCount = (count) => store.commit('setRoomUsersCount', count)
+
 
 const isDeleteOpen = ref(false)
 
@@ -22,21 +28,9 @@ defineEmits(["close"])
     <div class="Modal__contentWrapper bg-white dark:bg-gray-900">
       <div class="userModal divide-y divide-gray-200 dark:divide-gray-600">
         <h3 class="userModal__title dark:text-white">13 users watching</h3>
-        <div class="userModal__userInfo">
-          <img class="profile" src="../../assets/images/profile-image.svg" alt="user-profile">
-          <p class="userModal__username text-black dark:text-white">Taha Lechgar</p>
-          <img @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
-        </div>
-
-        <div class="userModal__userInfo">
-          <img class="profile" src="../../assets/images/profile-image.svg" alt="user-profile">
-          <p class="userModal__username text-black dark:text-white">Taha Lechgar</p>
-          <img @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
-        </div>
-
-        <div class="userModal__userInfo">
-          <img class="profile" src="../../assets/images/profile-image.svg" alt="user-profile">
-          <p class="userModal__username text-black dark:text-white">Taha Lechgar</p>
+        <div v-for="user in currentUsers" :key="user.id" class="userModal__userInfo">
+          <img class="profile" :src="src+user.image" alt="user-profile">
+          <p class="userModal__username text-black dark:text-white">{{ user.username }}</p>
           <img @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
         </div>
 
@@ -47,7 +41,6 @@ defineEmits(["close"])
             <button @click="isDeleteOpen = false" class="button button--cancel">Cancel</button>
           </div>
         </div>
-
         <button @click="$emit('close')"  class="userModal__button bg-red-700">close</button>
       </div>
     </div>

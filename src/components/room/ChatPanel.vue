@@ -40,10 +40,6 @@ const handleEmojiClick = (detail) => {
 const reRender    = ref(0)
 const messageBody = ref('')
 
-
-
-
-
 onMounted(() => {
   let joinedMessage = {
     id: localStorage.getItem('userId'),
