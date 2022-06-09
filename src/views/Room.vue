@@ -155,9 +155,9 @@ onMounted(() => {
     setRoomUsersCount(data)
   })
 
-  // channel.bind('roomUsers', (data) => {
-  //   setCurrentUsers(JSON.parse(data))
-  // })
+  channel.bind('newUser', (data) => {
+    addUser(JSON.parse(data))
+  })
 
   provide("bind", (...args) => {
     console.log("bind BOY");
