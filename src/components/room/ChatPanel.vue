@@ -7,10 +7,11 @@ import Message from "../Message.vue"
 // utilities
 import { VuemojiPicker } from 'vuemoji-picker'
 import insertText from 'https://cdn.jsdelivr.net/npm/insert-text-at-cursor@0.3.0/index.js'
-import {ref, computed, onMounted, onUpdated} from "vue";
+import {ref, computed, onMounted, onUpdated, inject} from "vue";
 import { useStore } from "vuex";
 import { getCurrentTime } from "../../js/getCurrentTime";
 import axios from "axios";
+import router from "../../router";
 
 
 const store = useStore()
@@ -39,6 +40,14 @@ const handleEmojiClick = (detail) => {
 
 const reRender    = ref(0)
 const messageBody = ref('')
+
+
+
+const leaveRoom = inject("leaveRoom")
+
+const leaveParty = () => {
+  leaveRoom()
+}
 
 onMounted(() => {
   let joinedMessage = {
@@ -128,7 +137,7 @@ const handleMessageSubmit = (event) => {
         <div class="menuWrapper">
           <img src="@/assets/icons/arrow-head.svg" alt="arrow">
           <div @click="isUsersOpen = true" class="element">manage users</div>
-          <div class="element">leave the party</div>
+          <div @click="leaveParty" class="element">leave the party</div>
         </div>
       </div>
     </div>

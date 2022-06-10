@@ -77,7 +77,10 @@ const leaveRoom = () => {
   axios.post("http://localhost:8080/new/message", messageData)
       .then((response) => console.log("response :" + response))
       .catch((error) => console.log("error :" + error));
+  router.push('/main')
 }
+
+provide("leaveRoom", leaveRoom)
 
 window.onunload = leaveRoom
 
