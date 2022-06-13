@@ -143,6 +143,9 @@ export default createStore({
             }
             commit('setRoomId', response.data.roomData.id)
             commit('setHostId', response.data.roomData.author)
+            if(response.data.roomData.author.toString() === payload.id.toString()){
+              commit('setHost', true)
+            }
             // add message to vuex store
             let messages = response.data.roomMessages
             messages.slice().reverse().forEach(el => {

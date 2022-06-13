@@ -34,15 +34,16 @@ defineEmits(["close"])
             {{ user.username }} {{user.id === hostId ? " (host)" : ""}}
           </p>
           <img v-if="host" @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
-        </div>
-
-        <div v-if="isDeleteOpen" class="userModal__deleteConfirm shadow-2xl bg-slate-200 dark:bg-gray-700">
-          <p class="text-black dark:text-white">You sure want to kick this user from the party ??</p>
-          <div class="buttons">
-            <button @click="isDeleteOpen = false" class="button button--confirm">Delete</button>
-            <button @click="isDeleteOpen = false" class="button button--cancel">Cancel</button>
+          <div v-if="isDeleteOpen" class="userModal__deleteConfirm shadow-2xl bg-slate-200 dark:bg-gray-700">
+            <p class="text-black dark:text-white">You sure want to kick this user from the party ??</p>
+            <div class="buttons">
+              <button @click="isDeleteOpen = false" class="button button--confirm">Delete</button>
+              <button @click="isDeleteOpen = false" class="button button--cancel">Cancel</button>
+            </div>
           </div>
         </div>
+
+
         <button @click="$emit('close')"  class="userModal__button bg-red-700">close</button>
       </div>
     </div>

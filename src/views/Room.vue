@@ -8,7 +8,7 @@ import { ContentLoader } from "vue-content-loader"
 
 // utilities
 import {useStore} from "vuex";
-import {computed, onBeforeUnmount, onMounted, provide, ref} from "vue"
+import {computed, onBeforeUnmount, onMounted, provide} from "vue"
 import Pusher from "pusher-js"
 import router from "../router";
 import axios from 'axios'
@@ -140,6 +140,13 @@ onMounted( () => {
 
   channel.bind('newUser', (data) => {
     addUser(JSON.parse(data))
+  })
+
+  channel.bind('kickUser', (id) => {
+    if(localStorage.getItem('userId') !== id) return
+    leaveRoom()
+    setRoomError('Sorry! You have been kicked from the party.')
+    router.push('/main')
   })
 
   channel.bind('userLeft', (data) => {
