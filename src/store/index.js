@@ -4,7 +4,6 @@ export default createStore({
   state: {
     sender: null,
     dark: false,
-    logged: false,
     margin: true,
     roomId : null,
     roomRef : null,
@@ -13,6 +12,7 @@ export default createStore({
     messages: [],
     currentUsers: [],
     roomUsersCount: 0,
+    roomError: "",
 
     // video events
     seeked : true,
@@ -37,7 +37,8 @@ export default createStore({
     currentTime: state => state.currentTime,
     socketId: state => state.socketId,
     roomUsersCount: state => state.roomUsersCount,
-    currentUsers: state => state.currentUsers
+    currentUsers: state => state.currentUsers,
+    roomError: state => state.roomError
   },
 
   mutations: {
@@ -88,6 +89,9 @@ export default createStore({
     },
     setCurrentUsers: (state, currentUsers) => {
       state.currentUsers = currentUsers
+    },
+    setRoomError: (state, roomError) => {
+      state.roomError = roomError
     },
     addUser: (state, user) => {
       state.currentUsers.push(user)

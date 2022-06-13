@@ -45,9 +45,11 @@ const messageBody = ref('')
 
 const leaveRoom = inject("leaveRoom")
 
-const leaveParty = () => {
-  leaveRoom()
+const leaveParty = async () => {
+  await leaveRoom()
+  router.push({ name: 'Main' })
 }
+
 
 onMounted(() => {
   let joinedMessage = {

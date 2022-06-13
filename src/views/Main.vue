@@ -1,17 +1,22 @@
 <script setup>
  import Footer from "../components/Footer.vue"
  import {useStore} from "vuex";
- import {computed, onMounted} from "vue"
+ import {computed, onMounted, ref} from "vue"
  import illustrationLight from "../assets/images/new-room.svg"
  import illustrationDark from "../assets/images/new-room-dark.svg"
  import router from "../router";
+ import axios from "axios";
 
  const store = useStore()
+
+ const roomId = ref("")
+ const roomError = computed(() => store.getters.roomError)
 
  const illustration = computed( () => store.getters.dark ? illustrationDark : illustrationLight )
  const setRoomId = (roomId) => store.commit('setRoomId', roomId)
  const setRoomRef = (roomRef) => store.commit('setRoomRef', roomRef)
  const setLogged = (bool) => store.commit('setLogged', bool)
+ const setRoomError = (roomError) => store.commit('setRoomError', roomError)
 
 
  onMounted(() => {
@@ -20,23 +25,39 @@
 
  const handleNewRoom = () => {
 
-  let data = new FormData()
-   data.append('title', 'beautiful room')
-   data.append('author', "1")
+   let data = {
+     title  : 'another beautiful room',
+     author : localStorage.getItem('userId')
+   }
 
-   fetch("http://localhost:8080/new/room", {
-     method: "post",
-     body: data,
+   axios.post("http://localhost:8080/new/room",data, {withCredentials: true})
+   .then((response) => {
+     let res = response.data.data
+     console.log(res.id)
+     setRoomId(res.id)
+     setRoomRef(res.unique_reference)
+     router.push('/room/' + res.unique_reference)
+   }).catch((response) => {
+     let res = response?.response?.data
+     console.log(res?.message)
+     if(res?.message !== "user not authorized"){
+       localStorage.removeItem('userId')
+       router.push('/login')
+     }
+
    })
-       .then(response => response.json())
-       .then((response) => {
-         if(response.status === "success")
-             setRoomId(response.data.id)
-             setRoomRef(response.data.unique_reference)
-             router.push('/room/' + response.data.unique_reference)
-           }
-       )
-       .catch((error) => console.log("error :" + error))
+
+
+ }
+
+ const handleJoinRoom = (e) => {
+   e.preventDefault()
+   if(roomError.value === ""){
+     setRoomError("Enter a room ID")
+     return
+   }
+   router.push('/room/' + roomId.value)
+
  }
 
 
@@ -60,7 +81,12 @@
         <p class="newRoom__small text-black dark:text-white">
           or join an existing room
         </p>
-        <input class="newRoom__input" placeholder="Room ID"/>
+        <form @submit="handleJoinRoom" action="">
+          <input class="newRoom__input" v-model="roomId" placeholder="Room ID"/>
+        </form>
+        <div class="font-bold text-red-600">{{roomError}}</div>
+
+
       </div>
       <div class="newRoom__illustration">
         <img :src="illustration" alt="illustration">
@@ -75,6 +101,9 @@
 <style lang="scss" scoped>
 @use "../sass/base";
 
+form{
+  width: 80%;
+}
 .newRoom {
   width: 100%;
   height: 91vh;
@@ -126,7 +155,7 @@
   &__input {
 
     padding: 1rem 2rem ;
-    width: 80%;
+    width: 100%;
     color: black;
     background-color: base.$white;
     border-radius: 5px;

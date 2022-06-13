@@ -77,7 +77,7 @@ const handleSubmit = (e) => {
       email: email.value,
       password: password.value
     }
-    axios.post('http://localhost:8080/login', data)
+    axios.post('http://localhost:8080/login',  data, { withCredentials: true})
         .then((response) => {
           let data = response.data
           console.log(data)

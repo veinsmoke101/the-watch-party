@@ -34,6 +34,7 @@ const setVidUrl = (url) => store.commit('setVidUrl', url)
 const setSender = (sender) => store.commit('setSender', sender)
 const setLogged = (bool) => store.commit('setLogged', bool)
 const setSocketId = (bool) => store.commit('setSocketId', bool)
+const setRoomError = (error) => store.commit('setRoomError', error)
 
 
 
@@ -50,42 +51,46 @@ const setCurrentUsers = (currentUsers) => store.commit('setCurrentUsers', curren
 const isLoading = ref(true)
 
 const leaveRoom = () => {
-  let data = {
-    user_id: localStorage.getItem('userId'),
-    room_ref: props.roomRef
+   
+ const leaveRoomRequest = () => {
+   let data = {
+     user_id: localStorage.getItem('userId'),
+     room_ref: props.roomRef
+   }
+
+   return axios.post(`http://localhost:8080/leave/room`, data)
+ }
+
+  // message to send other users
+  const sendMessageRequest = () => {
+    let leftMessage = {
+      id: localStorage.getItem('userId'),
+      src: localStorage.getItem('profileImage'),
+      author: localStorage.getItem('username'),
+      added_at: getCurrentTime(),
+      body: 'Left the party!'
+    }
+    let messageData = {
+      roomRef: store.getters.roomRef,
+      message: JSON.stringify(leftMessage)
+    }
+    return axios.post("http://localhost:8080/new/message", messageData)
   }
 
-  axios.post(`http://localhost:8080/leave/room`, data)
-      .then((response)  => console.log(response))
-      .catch((response) => console.log(response))
 
-  let leftMessage = {
-    id: localStorage.getItem('userId'),
-    src: localStorage.getItem('profileImage'),
-    author: localStorage.getItem('username'),
-    added_at: getCurrentTime(),
-    body: 'Left the party!'
-  }
+  axios.all([leaveRoomRequest(), sendMessageRequest()])
+      .then(function (results) {
+        const acct = results[0];
+        const perm = results[1];
+        console.log(acct, perm)
+      })
 
-  //message to send other users
-  let messageData = {
-    roomRef: store.getters.roomRef,
-    message: JSON.stringify(leftMessage)
-  }
-
-  // addMessage(data)
-  axios.post("http://localhost:8080/new/message", messageData)
-      .then((response) => console.log("response :" + response))
-      .catch((error) => console.log("error :" + error));
-  router.push('/main')
 }
 
 provide("leaveRoom", leaveRoom)
 
-window.onunload = leaveRoom
-
-
 onMounted(() => {
+  window.onpagehide = leaveRoom
   setLogged(true)
   setSender(localStorage.getItem('userId'))
   let data = {
@@ -115,6 +120,7 @@ onMounted(() => {
     })
     .catch((error) => {
       console.log("error :" + error)
+      setRoomError('Invalid Room')
       router.push('/main')
     })
 
@@ -126,7 +132,7 @@ onMounted(() => {
   // ---------------------- pusher setup ---------------------------------
   // ---------------------- pusher setup ---------------------------------
 
-  // Pusher.logToConsole = true;
+  Pusher.logToConsole = true;
 
 
   let pusher = new Pusher("ee67aad443c2735b4c8f", {
@@ -140,8 +146,6 @@ onMounted(() => {
   pusher.connection.bind('connected', () => {
     setSocketId(pusher.connection.socket_id)
   })
-
-  pusher.connection.bind("disconnected", () => leaveRoom());
 
   channel.bind('videoUrl', (data) => {
     setReRenderVideo(store.getters.reRenderVideo + 1)
@@ -164,6 +168,7 @@ onMounted(() => {
   })
 
   channel.bind('userLeft', (data) => {
+    console.log("i'm userLeft id : " + data);
     removeUser(data)
   })
 
@@ -181,7 +186,7 @@ onMounted(() => {
 
 
 onBeforeUnmount(() => {
-  window.removeEventListener('unload', () => leaveRoom())
+  window.removeEventListener('pagehide', () => leaveRoom())
 })
 
 
