@@ -46,9 +46,9 @@ const addMessage = (message) => store.commit('addMessage', message)
 const addUser = (user) => store.commit('addUser', user)
 const removeUser = (user) => store.commit('removeUser', user)
 const setRoomUsersCount = (count) => store.commit('setRoomUsersCount', count)
-const setCurrentUsers = (currentUsers) => store.commit('setCurrentUsers', currentUsers)
+const joinRoom = (payload) => store.dispatch('joinRoom', payload)
 
-const isLoading = ref(true)
+const isLoading = computed(() => store.getters.isLoading)
 
 const leaveRoom = () => {
    
@@ -89,42 +89,17 @@ const leaveRoom = () => {
 
 provide("leaveRoom", leaveRoom)
 
-onMounted(() => {
+onMounted( () => {
   window.onpagehide = leaveRoom
   setLogged(true)
   setSender(localStorage.getItem('userId'))
-  let data = {
-    id: localStorage.getItem('userId')
-  }
 
   // request to join a room
-  axios.get(`http://localhost:8080/room/${props.roomRef}/${data.id}`)
-    .then((response) => {
-      console.log(response.data.roomData.id)
-      isLoading.value = false
-      if (response.data.status === 'error') {
-        router.push('/main')
-      }
-      setRoomId(response.data.roomData.id)
-      setRoomRef(response.data.roomData.unique_reference)
-      // add message to vuex store
-      let messages = response.data.roomMessages
-      messages.slice().reverse().forEach(el => {
-        let message = JSON.parse(JSON.parse(el).message)
-        addMessage(message)
-      })
-
-      // add  current users to vuex store
-      let users = response.data.roomUsers
-      setCurrentUsers(users)
-    })
-    .catch((error) => {
-      console.log("error :" + error)
-      setRoomError('Invalid Room')
-      router.push('/main')
-    })
-
-
+  let payload = {
+    roomRef: props.roomRef,
+    id: localStorage.getItem('userId')
+  }
+  joinRoom(payload)
   setRoomRef(props.roomRef)
 
   // ---------------------- pusher setup ---------------------------------
@@ -183,7 +158,6 @@ onMounted(() => {
   })
 
 })
-
 
 onBeforeUnmount(() => {
   window.removeEventListener('pagehide', () => leaveRoom())

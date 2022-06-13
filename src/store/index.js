@@ -1,4 +1,6 @@
 import { createStore } from 'vuex'
+import axios from "axios";
+import router from "../router";
 
 export default createStore({
   state: {
@@ -13,6 +15,7 @@ export default createStore({
     currentUsers: [],
     roomUsersCount: 0,
     roomError: "",
+    isLoading: true,
 
     // video events
     seeked : true,
@@ -38,7 +41,8 @@ export default createStore({
     socketId: state => state.socketId,
     roomUsersCount: state => state.roomUsersCount,
     currentUsers: state => state.currentUsers,
-    roomError: state => state.roomError
+    roomError: state => state.roomError,
+    isLoading: state => state.isLoading,
   },
 
   mutations: {
@@ -74,6 +78,9 @@ export default createStore({
     },
     setIssuer: (state, issuer) => {
       state.issuer = issuer
+    },
+    setIsLoading: (state, isLoading) => {
+      state.isLoading = isLoading
     },
     setIssuedByMe: (state, issuedByMe) => {
       state.issuedByMe = issuedByMe
@@ -115,8 +122,35 @@ export default createStore({
           .then((response) => console.log("response :" + response))
           .catch((error) => console.log("error :" + error));
 
-    }
+    },
+    joinRoom: ({commit}, payload) => {
+      axios.get(`http://localhost:8080/room/${payload.roomRef}/${payload.id}`)
+          .then((response) => {
+            console.log(response.data.roomData.id)
+            commit('setIsLoading', false)
+            if (response.data.status === 'error') {
+              router.push('/main')
+            }
+            commit('setRoomId', response.data.roomData.id)
+            // add message to vuex store
+            let messages = response.data.roomMessages
+            messages.slice().reverse().forEach(el => {
+              let message = JSON.parse(JSON.parse(el).message)
+              commit('addMessage', message)
+            })
+            // add  current users to vuex store
+            let users = response.data.roomUsers
+            commit('setCurrentUsers', users)
+          })
+          .catch((error) => {
+            console.log("error :" + error)
+            commit('setRoomError', "Invalid Room")
+            router.push('/main')
+          })
+    },
   },
+
+
   modules: {
   }
 })
