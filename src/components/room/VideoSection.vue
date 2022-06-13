@@ -77,27 +77,27 @@ const vidUrl = computed(() => store.getters.vidUrl)
    position: relative;
    @include base.flexRow(center, space-between);
 
-img {
-  width: 50px;
-  cursor: pointer;
-}
+  img {
+    width: 50px;
+    cursor: pointer;
+  }
 }
 
 &__chat {
-   background-color: rgba(123, 44, 191, 0.2);
-  max-height: 100%;
-  height: 100%;
-  overflow-y: scroll;
-   margin: 1rem 0 0.2rem 0;
-   width: 90%;
-  max-width: 400px;
-   border-top-left-radius: 10px;
-   border-top-right-radius: 10px;
-   position: relative;
-   @include base.flexColumn(center, flex-start);
-  @include base.tablet{
-    max-width: 100%;
-  }
+    background-color: rgba(123, 44, 191, 0.2);
+    max-height: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    margin: 1rem 0 0.2rem 0;
+    width: 90%;
+    max-width: 400px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    position: relative;
+    @include base.flexColumn(center, flex-start);
+    @include base.tablet{
+      max-width: 100%;
+    }
  }
 
 &__message {
@@ -112,8 +112,8 @@ img {
   img {
     margin-right: 0.5rem;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
   }
 
 }
@@ -127,13 +127,14 @@ img {
    @include base.flexRow(center, center);
 
 p {
+  font-size: 0.8rem;
   font-weight: bold;
   margin-right: 1rem;
 }
 }
 
 &__messageBody {
-   font-size: 0.8rem;
+   font-size: 0.7rem;
  }
 
 
@@ -145,24 +146,21 @@ p {
    @include base.flexRow(center, flex-start);
 
 
-img {
-  margin-left: auto;
-  position: absolute;
-  right: 10px;
-  width: 25px;
-  cursor: pointer;
-}
+    img {
+      margin-left: auto;
+      position: absolute;
+      right: 10px;
+      width: 25px;
+      cursor: pointer;
+    }
 
 
 }
 
 .emojiWrapper {
   position: absolute;
-  top: -13px;
-//right: 100px;
+  bottom: 35px;
   width: 100%;
-
-
 }
 
 
@@ -173,7 +171,7 @@ img {
    border-top-left-radius: 10px;
    border-top-right-radius: 10px;
    font-size: 0.8rem;
-  outline: none;
+    outline: none;
  }
 
 

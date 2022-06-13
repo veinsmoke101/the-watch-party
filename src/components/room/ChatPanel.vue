@@ -112,10 +112,6 @@ const handleMessageSubmit = (event) => {
       .then((response) => console.log("response :" + response))
       .catch((error) => console.log("error :" + error));
 
-
-
-
-
   // box.value.scrollTop = box.value.scrollHeight ;
   // messageInput.value.scrollIntoView({behavior: "smooth"})
 
@@ -155,13 +151,12 @@ const handleMessageSubmit = (event) => {
           :added_at = "message.added_at"
           :body = "message.body"
       />
-
-      <div  class="videoRoom__sendMessage">
-        <form action="" @submit="handleMessageSubmit" style="width: 100%">
-          <input v-model="messageBody" ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">
-        </form>
-        <img @click="isEmojiOpen = !isEmojiOpen" src="@/assets/icons/emoji.svg" alt="emoji">
-      </div>
+    </div>
+    <div  class="videoRoom__sendMessage">
+      <form action="" @submit="handleMessageSubmit" style="width: 100%">
+        <input v-model="messageBody" ref="messageInput" type="text" class="videoRoom__messageInput" placeholder="Type a message ">
+      </form>
+      <img @click="isEmojiOpen = !isEmojiOpen" src="@/assets/icons/emoji.svg" alt="emoji">
       <div class="emojiWrapper">
         <VuemojiPicker
             v-if="isEmojiOpen"
@@ -172,18 +167,27 @@ const handleMessageSubmit = (event) => {
 
 
   </div>
-
 </template>
 
 
 
 <style lang="scss">
+@use '../../sass/base';
+
 
 emoji-picker.dark {
   --background: rgb(15 23 42);
+  --emoji-size: 1rem;
 }
-
+//.emojiWrapper{
+//  position: relative;
+//  bottom: 0;
+//  width: 100%;
+//}
 emoji-picker {
   width: 100%;
+  @include base.tablet(){
+    height: 350px;
+  }
 }
 </style>
