@@ -52,12 +52,11 @@
 
  const handleJoinRoom = (e) => {
    e.preventDefault()
-   if(roomError.value === ""){
+   if(roomId.value === ""){
      setRoomError("Enter a room ID")
      return
    }
    router.push('/room/' + roomId.value)
-
  }
 
 

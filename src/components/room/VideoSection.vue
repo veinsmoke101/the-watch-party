@@ -56,10 +56,12 @@ const vidUrl = computed(() => store.getters.vidUrl)
 
 &__chatPanel {
    width: 100%;
+  max-width: 400px;
    @include base.flexColumn(center, center);
   height: 100%;
   @include base.tablet{
     width: 100%;
+    max-width: 100%;
     height: 300px;
     max-height: 300px;
   }
@@ -88,27 +90,32 @@ img {
   overflow-y: scroll;
    margin: 1rem 0 0.2rem 0;
    width: 90%;
+  max-width: 400px;
    border-top-left-radius: 10px;
    border-top-right-radius: 10px;
    position: relative;
    @include base.flexColumn(center, flex-start);
-  //@include base.tablet{
-  //  max-height: 600px;
-  //}
+  @include base.tablet{
+    max-width: 100%;
+  }
  }
 
 &__message {
-   width: 90%;
-   height: 50px;
-   margin: 0.5rem 0;
-   @include base.flexRow(center, flex-start);
+    width: 90%;
+    max-width: 90%;
+    word-break: break-all;
+    text-align: start;
+    height: auto;
+    margin: 0.5rem 0;
+    @include base.flexRow(flex-start, flex-start);
 
-img {
-  margin-right: 0.5rem;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-}
+  img {
+    margin-right: 0.5rem;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+  }
+
 }
 
 &__messageInfo {
