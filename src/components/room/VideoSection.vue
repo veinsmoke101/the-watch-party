@@ -127,14 +127,13 @@ const vidUrl = computed(() => store.getters.vidUrl)
    @include base.flexRow(center, center);
 
 p {
-  font-size: 0.8rem;
   font-weight: bold;
   margin-right: 1rem;
 }
 }
 
 &__messageBody {
-   font-size: 0.7rem;
+   font-size: 0.8rem;
  }
 
 

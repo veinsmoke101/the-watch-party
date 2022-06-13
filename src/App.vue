@@ -39,10 +39,7 @@ onMounted(() => {
   text-align: center;
 }
 html{
-  font-size: 16px;
-  @include base.tablet{
-    font-size: 14px;
-  }
+  font-size: 14px;
 
   @include base.phone{
     font-size: 12px;

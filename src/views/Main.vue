@@ -17,6 +17,7 @@
  const setRoomRef = (roomRef) => store.commit('setRoomRef', roomRef)
  const setLogged = (bool) => store.commit('setLogged', bool)
  const setRoomError = (roomError) => store.commit('setRoomError', roomError)
+ const setHost = (bool) => store.commit('setHost', bool)
 
 
  onMounted(() => {
@@ -36,6 +37,7 @@
      console.log(res.id)
      setRoomId(res.id)
      setRoomRef(res.unique_reference)
+     setHost(true)
      router.push('/room/' + res.unique_reference)
    }).catch((response) => {
      let res = response?.response?.data

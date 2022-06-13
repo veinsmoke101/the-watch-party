@@ -11,6 +11,7 @@ const store = useStore()
 
 const src = "/src/assets/images/"
 const currentUsers = computed(() => store.getters.currentUsers)
+const host = computed(() => store.getters.host)
 const setRoomUsersCount = (count) => store.commit('setRoomUsersCount', count)
 
 
@@ -31,7 +32,7 @@ defineEmits(["close"])
         <div v-for="user in currentUsers" :key="user.id" class="userModal__userInfo">
           <img class="profile" :src="src+user.image" alt="user-profile">
           <p class="userModal__username text-black dark:text-white">{{ user.username }}</p>
-          <img @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
+          <img v-if="host === true" @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
         </div>
 
         <div v-if="isDeleteOpen" class="userModal__deleteConfirm shadow-2xl bg-slate-200 dark:bg-gray-700">

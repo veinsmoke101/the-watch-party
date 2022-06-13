@@ -6,6 +6,7 @@ export default createStore({
   state: {
     sender: null,
     dark: false,
+    host: false,
     margin: true,
     roomId : null,
     roomRef : null,
@@ -28,6 +29,7 @@ export default createStore({
     sender: state => state.sender,
     dark: state => state.dark,
     logged: state => state.logged,
+    host: state => state.host,
     margin: state => state.margin,
     roomId: state => state.roomId,
     roomRef: state => state.roomRef,
@@ -54,6 +56,9 @@ export default createStore({
     },
     setLogged: (state, bool) => {
       state.logged = bool
+    },
+    setHost: (state, bool) => {
+      state.host = bool
     },
     setMargin: (state, bool) => {
       state.margin = bool
