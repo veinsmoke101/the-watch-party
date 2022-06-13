@@ -7,6 +7,7 @@ export default createStore({
     sender: null,
     dark: false,
     host: false,
+    hostId: null,
     margin: true,
     roomId : null,
     roomRef : null,
@@ -30,6 +31,7 @@ export default createStore({
     dark: state => state.dark,
     logged: state => state.logged,
     host: state => state.host,
+    hostId: state => state.hostId,
     margin: state => state.margin,
     roomId: state => state.roomId,
     roomRef: state => state.roomRef,
@@ -59,6 +61,9 @@ export default createStore({
     },
     setHost: (state, bool) => {
       state.host = bool
+    },
+    setHostId: (state, id) => {
+      state.hostId = id
     },
     setMargin: (state, bool) => {
       state.margin = bool
@@ -137,6 +142,7 @@ export default createStore({
               router.push('/main')
             }
             commit('setRoomId', response.data.roomData.id)
+            commit('setHostId', response.data.roomData.author)
             // add message to vuex store
             let messages = response.data.roomMessages
             messages.slice().reverse().forEach(el => {
