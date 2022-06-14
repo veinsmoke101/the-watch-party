@@ -4,7 +4,7 @@
     <p class="userModal__username text-black dark:text-white">
       {{ user.username }} {{user.id === hostId ? " (host)" : ""}}
     </p>
-    <img v-if="host" @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
+    <img v-if="host && user.id.toString() !== userId" @click="isDeleteOpen = true" class="manage" src="../../assets/icons/delete.svg" alt="manage">
     <div v-if="isDeleteOpen" class="userModal__deleteConfirm shadow-2xl bg-slate-200 dark:bg-gray-700">
       <p class="text-black dark:text-white">You sure want to kick this user from the party ??</p>
       <div class="buttons">
@@ -34,6 +34,7 @@ const hostId = computed(() => store.getters.hostId)
 
 const src = "/src/assets/images/"
 const isDeleteOpen = ref(false)
+const userId = ref(localStorage.getItem('userId'))
 
 let data = {
   roomRef: roomRef.value,
