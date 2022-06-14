@@ -106,6 +106,9 @@
 
 form{
   width: 80%;
+  @include base.tablet{
+    width: 100%;
+  }
 }
 .newRoom {
   width: 100%;
@@ -164,9 +167,7 @@ form{
     border-radius: 5px;
     border: 2px solid #c4c4c4;
     outline: none;
-    @include base.tablet{
-      width: 100%;
-    }
+
   }
 
   &__illustration {

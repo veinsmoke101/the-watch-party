@@ -143,7 +143,7 @@ onMounted( () => {
   })
 
   channel.bind('kickUser', (id) => {
-    if(localStorage.getItem('userId') !== id) return
+    if(localStorage.getItem('userId') !== id.toString()) return
     leaveRoom()
     setRoomError('Sorry! You have been kicked from the party.')
     router.push('/main')
