@@ -8,9 +8,9 @@
         <img class="contact__icon" src="@/assets/icons/contact.svg" alt="contact_icon"/>
         <div class="contact__formContainer">
           <form action="" class="contact__form">
-            <input type="text" class="contact__input" placeholder="Your name"/>
-            <input type="text" class="contact__input" placeholder="Your email"/>
-            <textarea rows="4" type="text" class="contact__input contact__input--textarea" placeholder="Write your message here ..."/>
+            <input type="text" class="contact__input dark:bg-gray-800 dark:text-white border border-gray-300 dark:border-gray-400" placeholder="Your name"/>
+            <input type="text" class="contact__input dark:bg-gray-800 dark:text-white border border-gray-300 dark:border-gray-400 dark:border-gray-200" placeholder="Your email"/>
+            <textarea rows="4" type="text" class="contact__input contact__input--textarea dark:bg-gray-800 dark:text-white border border-gray-300 dark:border-gray-400 dark:border-gray-200" placeholder="Write your message here ..."/>
             <input type="submit" class="contact__input contact__input--submit" value="Send message"/>
           </form>
         </div>
@@ -30,7 +30,7 @@
 
 <script setup>
 
-import { onMounted} from "vue";
+import {onMounted} from "vue";
 import {useStore} from "vuex";
 
 const store = useStore()
@@ -48,27 +48,38 @@ onMounted(() => {
 @use "../sass/base";
 
 .contact{
-  margin-top: 50px;
+  //margin-top: 50px;
   width: 100%;
   height:90vh;
-  min-height:90vh;
+  min-height:100vh;
   @include base.flexColumn(center, space-around);
+  @include base.tablet{
+    height: auto;
+  }
+
   &__backgroundUp{
     height: 75%;
     width: 100%;
     background-color: rgba(122, 44, 191, 0.2);
+    @include base.tablet{
+      height: 100%;
+    }
   }
 
   &__heading {
     font-size: 3rem;
     font-weight: bold;
     color: base.$main;
-    margin: 20px 0;
+    margin-top: 5% ;
   }
 
   &__icon {
     width: 300px;
     height: 300px;
+    @include base.tablet{
+      width: 200px;
+      height: 200px;
+    }
   }
 
   &__container {
@@ -79,7 +90,10 @@ onMounted(() => {
   &__formSection {
     height: auto;
     width: 100%;
-    @include base.flexRow(center, space-evenly)
+    @include base.flexRow(center, space-evenly);
+    @include base.tablet{
+      flex-direction: column;
+    }
   }
 
   &__formContainer {
@@ -87,7 +101,10 @@ onMounted(() => {
     z-index: 1;
     height: 100%;
     width: 30%;
-    @include base.flexRow(center, center)
+    @include base.flexRow(center, center);
+    @include base.tablet{
+      width: 80%;
+    }
   }
 
   &__form {
@@ -97,11 +114,11 @@ onMounted(() => {
 
   &__input {
     width: 100%;
-    border: 2px solid #c1c1c1;
+    //border: 2px solid ;
     border-radius: 20px;
     margin: 1rem 0;
     padding: 0.7rem;
-    background-color: base.$white;
+
     outline: none;
     &:focus{
       border-color: base.$main;
@@ -111,12 +128,21 @@ onMounted(() => {
       background-color: base.$main;
       color: base.$white;
     }
+    &--textarea {
+      resize:none;
+    }
   }
 
   &__backgroundDown{
+
+
     width: 100%;
     height: 30%;
     position: relative;
+
+    @include base.tablet{
+      display: none;
+    }
 
     .custom-shape-divider-top-1650680876 {
       fill:rgba(122, 44, 191, 0.2);
