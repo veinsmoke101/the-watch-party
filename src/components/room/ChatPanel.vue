@@ -57,7 +57,8 @@ onMounted(() => {
     src: localStorage.getItem('profileImage'),
     author: localStorage.getItem('username'),
     added_at: getCurrentTime(),
-    body: 'Joined the party!'
+    body: 'Joined the party!',
+    premium: localStorage.getItem('premium')
   }
 
   let data = {
@@ -82,6 +83,8 @@ onMounted(() => {
       .catch(response => console.log(response))
 })
 
+
+
 onUpdated( () => {
   box.value.scrollTop = box.value.scrollHeight;
 })
@@ -97,7 +100,9 @@ const handleMessageSubmit = (event) => {
     src: localStorage.getItem('profileImage'),
     author: localStorage.getItem('username'),
     added_at: getCurrentTime(),
-    body: messageBody.value
+    body: messageBody.value,
+    premium: localStorage.getItem('premium')
+
   }
   messageBody.value = ''
 
@@ -150,6 +155,7 @@ const handleMessageSubmit = (event) => {
           :author = "message.author"
           :added_at = "message.added_at"
           :body = "message.body"
+          :premium="!!message.premium"
       />
     </div>
     <div  class="videoRoom__sendMessage">

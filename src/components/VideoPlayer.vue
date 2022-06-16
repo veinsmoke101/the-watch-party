@@ -71,7 +71,9 @@ const prepareMessage = (message, addMsgLocally, returnValue = true) => {
     src: localStorage.getItem('profileImage'),
     author: localStorage.getItem('username'),
     added_at: getCurrentTime(),
-    body: message
+    body: message,
+    premium: localStorage.getItem('premium')
+
   }
 
   if(addMsgLocally) addMessage(newMessage)
@@ -109,8 +111,8 @@ onMounted(() => {
         videojs.log("ready")
       })
 
-  let button = player.value.controlBar.addChild('button', {}, 1)
-  button.addClass("seekIcon")
+  // let button = player.value.controlBar.addChild('button', {}, 1)
+  // button.addClass("seekIcon")
 
 
 
@@ -181,42 +183,6 @@ onMounted(() => {
 })
 
 const bind = inject("bind")
-
-
-// let handlePause = (data) => {
-//   if(player.value.paused()) return
-//
-//   setIssuer(true)
-//   let parsedData = JSON.parse(data)
-//   let message = JSON.parse(parsedData.message)
-//   addMessage(message)
-//   player.value.pause()
-// }
-//
-// let handlePlay = (data) => {
-//   if(!player.value.paused()) return
-//
-//   setIssuer(true)
-//   let parsedData = JSON.parse(data)
-//   let message = JSON.parse(parsedData.message)
-//   addMessage(message)
-//   player.value.play()
-// }
-//
-// let handleJump = (data) => {
-//   let parsedData = JSON.parse(data)
-//   let message = JSON.parse(parsedData.message)
-//   addMessage(message)
-//
-//   // identify the sender so he can't receive the event
-//   setSender(message.id)
-//
-//   if(sender.value !== localStorage.getItem('userId')){
-//     console.log( 'im receiving : ' + parsedData.time)
-//     player.value.currentTime(parsedData.time)
-//   }
-// }
-
 
 let handlePause = (data) => {
   if(player.value.paused()) return
@@ -381,20 +347,5 @@ onBeforeUnmount(() => {
   display: none;
 }
 
-/*.video-js div:nth-child(1){*/
-/*  align-items: center;*/
-/*  display: flex;*/
-/*  height: 100%;*/
-/*  justify-content: center;*/
-/*  min-height: 48vh;*/
-/*  position: relative;*/
-/*}*/
-/*.video-js div:nth-child(1) iframe {*/
-/*  height: 100%;*/
-/*  left: 0;*/
-/*  position: absolute;*/
-/*  top: 0;*/
-/*  width: 100%;*/
-/*}*/
 
 </style>

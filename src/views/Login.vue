@@ -91,6 +91,7 @@ const handleSubmit = (e) => {
           localStorage.setItem('username', userData.username)
           localStorage.setItem('email', userData.email)
           localStorage.setItem('profileImage', userData.image)
+          localStorage.setItem('premium', userData.premium)
           router.push('/main')
         })
         .catch((response) => {
