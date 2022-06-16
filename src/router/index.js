@@ -47,6 +47,7 @@ const routes = [
     }
 ]
 
+
 const router = createRouter({
     history: createWebHistory(),
     routes
@@ -56,7 +57,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
     let isAuthenticated = (localStorage.getItem('userId') !== null)
-    if ( !isAuthenticated && to.name !== 'Login' && to.name !== 'Register' ) {
+    if ( !isAuthenticated && to.name !== 'Login' && to.name !== 'Register' && to.name !== 'Contact' ) {
         return { name: 'Login' }
     }else if(isAuthenticated && (to.name === 'Login' || to.name === 'Register')){
         return { name: 'Main' }

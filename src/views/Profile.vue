@@ -19,7 +19,7 @@
 
         <div class="pt-12 pb-8">
           <button class="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full">
-            Get In Touch
+            Edit profile
           </button>
         </div>
 
@@ -69,6 +69,8 @@ const setMargin = (bool) => store.commit('setMargin', bool)
 
 onMounted(() => {
   setMargin(false)
+  setLogged(true)
+
 })
 
 </script>
