@@ -143,6 +143,7 @@ export default createStore({
             }
             commit('setRoomId', response.data.roomData.id)
             commit('setHostId', response.data.roomData.author)
+            commit('setVidUrl', response.data.videoUrl)
             if(response.data.roomData.author.toString() === payload.id.toString()){
               commit('setHost', true)
             }
