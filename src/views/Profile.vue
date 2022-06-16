@@ -83,8 +83,9 @@ onMounted(() => {
 }
 
 .profile-desktop{
-  border-radius: 50px;
   width: 500px;
+  height: 296px;
+  border-radius: 0 5px 5px 0;
 
 }
 </style>

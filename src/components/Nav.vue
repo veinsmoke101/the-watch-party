@@ -24,6 +24,8 @@ onMounted(() => {
     if (window.innerWidth >= 480){
       isActive.value = false;
     }}
+
+
 })
 
 
@@ -45,12 +47,18 @@ const handleNavToggle = () => {
         </li>
 
         <li v-if="logged" class="nav__item relative text-black dark:text-white mx-9 flex align-center flex-row">{{ username }}
-          <svg @click="dropdown=!dropdown" xmlns="http://www.w3.org/2000/svg" width="33" height="18" viewBox="0 0 33 18" class="user-more mt-1 mx-2 fill-gray-800 dark:fill-white">
+          <svg v-if="!isActive" @click="dropdown=!dropdown" xmlns="http://www.w3.org/2000/svg" width="33" height="18" viewBox="0 0 33 18" class="user-more mt-1 mx-2 fill-gray-800 dark:fill-white">
             <path d="M15.2315 16.5261L0.945369 3.2364C0.542145 2.8613 0.338867 2.4149 0.338867 1.9003C0.338867 1.3857 0.542145 0.939301 0.945369 0.5642C1.34859 0.1891 1.82846 0 2.38165 0L30.9572 0C31.5104 0 31.9903 0.1891 32.3935 0.5642C32.7967 0.939301 33 1.3857 33 1.9003C33 2.4149 32.7967 2.8582 32.3935 3.2364L18.1074 16.5261C17.7042 16.9012 17.2243 17.0903 16.6711 17.0903C16.1179 17.0903 15.638 16.9043 15.2315 16.5261Z" />
           </svg>
           <ul v-if="dropdown" class="py-1 divide-y bg-white border dark:bg-gray-800  border-gray-200 nav__dropdown">
             <li>
               <router-link to="/profile" href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profile</router-link>
+            </li>
+            <li>
+              <router-link to="/main" href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Main</router-link>
+            </li>
+            <li>
+              <router-link to="/contact" href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Contact</router-link>
             </li>
             <li>
               <router-link to="" href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Logout</router-link>
@@ -59,6 +67,9 @@ const handleNavToggle = () => {
           </ul>
         </li>
 
+        <li v-if="logged && isActive" class="nav__item "><router-link class="text-black dark:text-white" to="/main">Main</router-link></li>
+        <li v-if="logged && isActive" class="nav__item "><router-link class="text-black dark:text-white" to="/register">Contact</router-link></li>
+        <li v-if="logged && isActive"  class="nav__item "><router-link class="text-black dark:text-white" to="">Logout</router-link></li>
 
         <li v-if="!logged" class="nav__item "><router-link class="text-black dark:text-white" to="/contact">Contact</router-link></li>
         <li v-if="!logged" class="nav__item "><router-link class="text-black dark:text-white" to="/register">Sign up</router-link></li>
@@ -117,10 +128,11 @@ const handleNavToggle = () => {
       justify-content: center;
       position: absolute;
       z-index: -1;
-      height: 25vh;
+      height: auto;
       width: 100%;
       top: 0;
       left: 0;
+      margin: 50px 0;
       .nav__item {
         margin:1rem 0;
       }
@@ -180,6 +192,7 @@ const handleNavToggle = () => {
     }
 
   }
+
 }
 
 
