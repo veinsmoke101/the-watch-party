@@ -155,7 +155,7 @@ const handleMessageSubmit = (event) => {
           :author = "message.author"
           :added_at = "message.added_at"
           :body = "message.body"
-          :premium="!!message.premium"
+          :premium="(message.premium === '1')"
       />
     </div>
     <div  class="videoRoom__sendMessage">

@@ -56,7 +56,6 @@ let localSeeked = true
 
 const addMessage = (message) => store.commit('addMessage', message)
 const setSeeked = (seek) => store.commit('setSeeked', seek)
-const setIssuer = (issuer) => store.commit('setIssuer', issuer)
 const setIssuedByMe = (issuer) => store.commit('setIssuedByMe', issuer)
 const setCurrentTime = (issuer) => store.commit('setCurrentTime', issuer)
 
@@ -73,7 +72,6 @@ const prepareMessage = (message, addMsgLocally, returnValue = true) => {
     added_at: getCurrentTime(),
     body: message,
     premium: localStorage.getItem('premium')
-
   }
 
   if(addMsgLocally) addMessage(newMessage)
