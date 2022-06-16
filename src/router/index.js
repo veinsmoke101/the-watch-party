@@ -5,6 +5,7 @@ import Room from "../views/Room.vue"
 import Login from "../views/Login.vue"
 import Register from "../views/Register.vue";
 import Contact from "../views/Contact.vue";
+import Profile from "../views/Profile.vue";
 
 
 const routes = [
@@ -38,6 +39,11 @@ const routes = [
         path: '/contact',
         name: 'Contact',
         component: Contact
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: Profile
     }
 ]
 
