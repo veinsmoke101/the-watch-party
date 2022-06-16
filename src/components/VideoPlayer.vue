@@ -377,6 +377,9 @@ onBeforeUnmount(() => {
 .video-js .vjs-load-progress {
   background: rgba(255, 255, 255, 0.2);
 }
+.vjs-modal-dialog-content{
+  display: none;
+}
 
 /*.video-js div:nth-child(1){*/
 /*  align-items: center;*/

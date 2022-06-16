@@ -66,6 +66,7 @@ const user = ref({
 })
 
 const setMargin = (bool) => store.commit('setMargin', bool)
+const setLogged = (bool) => store.commit('setLogged', bool)
 
 onMounted(() => {
   setMargin(false)

@@ -43,6 +43,7 @@ const handleNavToggle = () => {
         </li>
 
         <li v-if="logged" class="nav__item text-black dark:text-white mx-9 ">{{ username }}</li>
+        <li v-if="logged" class="nav__item text-black dark:text-white mx-9 "><img src="" alt=""></li>
         <li v-if="!logged" class="nav__item "><router-link class="text-black dark:text-white" to="/contact">Contact</router-link></li>
         <li v-if="!logged" class="nav__item "><router-link class="text-black dark:text-white" to="/register">Sign up</router-link></li>
         <li v-if="!logged"  class="nav__item "><router-link class="nav__item--button " to="/login">Login</router-link></li>
