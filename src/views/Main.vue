@@ -55,10 +55,7 @@
        localStorage.removeItem('premium')
        router.push('/login')
      }
-
    })
-
-
  }
 
  const handleJoinRoom = (e) => {
@@ -67,7 +64,7 @@
      setRoomError("Enter a room ID")
      return
    }
-   router.push('/room/' + roomId.value)
+   router.push({ path: `/room/${roomId.value}` })
  }
 
 

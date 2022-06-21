@@ -161,8 +161,8 @@ export default createStore({
             commit('setCurrentUsers', users)
           })
           .catch((error) => {
-            console.log("error :" + error)
-            commit('setRoomError', "Invalid Room")
+            console.log()
+            commit('setRoomError', error.response.data.message)
             router.push('/main')
           })
     }

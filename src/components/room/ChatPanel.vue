@@ -46,7 +46,7 @@ const messageBody = ref('')
 const leaveRoom = inject("leaveRoom")
 
 const leaveParty = async () => {
-  await leaveRoom()
+  await leaveRoom(true)
   router.push({ name: 'Main' })
 }
 

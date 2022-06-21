@@ -50,13 +50,14 @@ const joinRoom = (payload) => store.dispatch('joinRoom', payload)
 
 const isLoading = computed(() => store.getters.isLoading)
 
-const leaveRoom = () => {
+const leaveRoom = (kick = false) => {
    
  const leaveRoomRequest = () => {
    let data = {
      user_id: localStorage.getItem('userId'),
-     room_ref: props.roomRef
+     room_ref: props.roomRef,
    }
+   if(kick === true) data.kick = 'true'
 
    return axios.post(`http://localhost:8080/leave/room`, data)
  }
@@ -151,8 +152,8 @@ onMounted( () => {
     router.push('/main')
   })
 
-  channel.bind('killRoom', () => {
-
+  channel.bind('killRoom', (id) => {
+    if(localStorage.getItem('userId') === id.toString()) return
     setRoomError('Oops! looks like this room has been ended.')
     router.push('/main')
   })
