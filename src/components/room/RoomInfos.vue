@@ -8,6 +8,8 @@
         </form>
 
       </div>
+
+      <p class="text-red-600">{{error}}</p>
 <!--      <div class="newRoom__upload text-gray-500 dark:text-white">-->
 <!--        <img :src="uploadIcon" alt="upload">-->
 <!--        Upload a video-->
@@ -90,30 +92,32 @@ const store = useStore()
 const isLinkOpen = ref(false)
 const isIdOpen = ref(false)
 const id = computed(() => store.getters.roomRef)
+const hostId = computed(() => store.getters.hostId)
 const link = computed(() =>`http://localhost:3000/room/${store.getters.roomRef}`)
 
-const uploadIcon = computed(() => store.getters.dark ? uploadDark : uploadLight)
+// const uploadIcon = computed(() => store.getters.dark ? uploadDark : uploadLight)
 let search = ref(null)
+let error = ref('')
 
 
 const handleSearch = () => {
 
-  let data = {
-    roomRef: store.getters.roomRef,
-    videoUrl: search.value
+  if(hostId.value.toString() !== localStorage.getItem('userId')) {
+    error.value = "You don't have permission for that request!"
+    setTimeout(() => error.value = '', 3000)
+    return
   }
 
-  axios.post("http://localhost:8080/new/vid",data)
+  let data = {
+    roomRef: store.getters.roomRef,
+    videoUrl: search.value,
+    userId: localStorage.getItem('userId')
+  }
+
+  axios.post("http://localhost:8080/new/vid", data, {withCredentials: true})
       .then((response) => console.log("response :" + response))
       .catch((error) => console.log("error :" + error));
 
-  // fetch("http://localhost:8080/new/vid", {
-  //   method: "post",
-  //   body: JSON.stringify(data),
-  // })
-  //     .then(response => response.json())
-  //     .then((response) => console.log("response :" + response))
-  //     .catch((error) => console.log("error :" + error));
 
 }
 

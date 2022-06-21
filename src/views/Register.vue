@@ -110,7 +110,7 @@ const handleSubmit = (e) => {
           localStorage.setItem('username', userData.username)
           localStorage.setItem('email', userData.email)
           localStorage.setItem('profileImage', userData.image)
-          router.push('/main')
+          router.go(-1)
         })
         .catch((response) => {
           error.value = 'something went wrong!'

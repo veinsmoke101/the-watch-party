@@ -68,7 +68,9 @@ const leaveRoom = () => {
       src: localStorage.getItem('profileImage'),
       author: localStorage.getItem('username'),
       added_at: getCurrentTime(),
-      body: 'Left the party!'
+      body: 'Left the party!',
+      premium: localStorage.getItem('premium')
+
     }
     let messageData = {
       roomRef: store.getters.roomRef,

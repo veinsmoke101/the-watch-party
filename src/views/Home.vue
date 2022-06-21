@@ -31,7 +31,8 @@ const setLogged = (bool) => store.commit('setLogged', bool)
 
 
 onMounted(() => {
-  setLogged(false)
+  let logged = !!(localStorage.getItem('userId'))
+  setLogged(logged)
 })
 
 

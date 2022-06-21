@@ -19,10 +19,13 @@
  const setRoomError = (roomError) => store.commit('setRoomError', roomError)
  const setHost = (bool) => store.commit('setHost', bool)
  const setHostId = (bool) => store.commit('setHostId', bool)
+ const setMargin = (bool) => store.commit('setMargin', bool)
 
 
  onMounted(() => {
    setLogged(true)
+   setMargin(true)
+
  })
 
  const handleNewRoom = () => {
@@ -46,6 +49,10 @@
      console.log(res?.message)
      if(res?.message !== "user not authorized"){
        localStorage.removeItem('userId')
+       localStorage.removeItem('username')
+       localStorage.removeItem('profileImage')
+       localStorage.removeItem('email')
+       localStorage.removeItem('premium')
        router.push('/login')
      }
 

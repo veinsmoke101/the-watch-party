@@ -3,7 +3,7 @@
   
   <div class="contact__backgroundUp">
     <div class="contact__container">
-      <div class="contact__heading">WHAT’S ON YOUR MIND</div>
+      <div class="contact__heading text-purple-800 dark:text-white">WHAT’S ON YOUR MIND</div>
       <div class="contact__formSection">
         <img class="contact__icon" src="@/assets/icons/contact.svg" alt="contact_icon"/>
         <div class="contact__formContainer">
@@ -72,7 +72,6 @@ onMounted(() => {
   &__heading {
     font-size: 3rem;
     font-weight: bold;
-    color: base.$main;
     margin-top: 5% ;
   }
 

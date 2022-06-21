@@ -86,13 +86,12 @@ const handleSubmit = (e) => {
             return
           }
           let userData = data.data
-          localStorage.setItem('jwt', data.jwt)
           localStorage.setItem('userId', userData.id)
           localStorage.setItem('username', userData.username)
           localStorage.setItem('email', userData.email)
           localStorage.setItem('profileImage', userData.image)
           localStorage.setItem('premium', userData.premium)
-          router.push('/main')
+          router.go(-1)
         })
         .catch((response) => {
           error.value = 'something went wrong!'

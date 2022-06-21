@@ -4,9 +4,11 @@ import {computed, onMounted, ref} from 'vue'
 import { useStore } from "vuex";
 import lightLogo from '../assets/icons/the-watch-party-logo-light.png'
 import darkLogo from '../assets/icons/the-watch-party-logo-dark.png'
+import router from "../router";
 
 // vuex states
 const store = useStore()
+
 
 // states
 const logo = computed(() => store.getters.dark ? darkLogo : lightLogo)
@@ -31,6 +33,17 @@ onMounted(() => {
 
 const handleNavToggle = () => {
   isActive.value = !isActive.value
+}
+
+const handleLogout = () => {
+
+  localStorage.removeItem('userId')
+  localStorage.removeItem('username')
+  localStorage.removeItem('profileImage')
+  localStorage.removeItem('email')
+
+  router.push('/login')
+
 }
 </script>
 
@@ -60,8 +73,8 @@ const handleNavToggle = () => {
             <li>
               <router-link to="/contact" href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Contact</router-link>
             </li>
-            <li>
-              <router-link to="" href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Logout</router-link>
+            <li >
+              <router-link to="" href="#" @click="handleLogout"  class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Logout</router-link>
             </li>
 
           </ul>
@@ -69,7 +82,7 @@ const handleNavToggle = () => {
 
         <li v-if="logged && isActive" class="nav__item "><router-link class="text-black dark:text-white" to="/main">Main</router-link></li>
         <li v-if="logged && isActive" class="nav__item "><router-link class="text-black dark:text-white" to="/register">Contact</router-link></li>
-        <li v-if="logged && isActive"  class="nav__item "><router-link class="text-black dark:text-white" to="">Logout</router-link></li>
+        <li v-if="logged && isActive" @click="handleLogout" class="nav__item "><router-link class="text-black dark:text-white" to="">Logout</router-link></li>
 
         <li v-if="!logged" class="nav__item "><router-link class="text-black dark:text-white" to="/contact">Contact</router-link></li>
         <li v-if="!logged" class="nav__item "><router-link class="text-black dark:text-white" to="/register">Sign up</router-link></li>

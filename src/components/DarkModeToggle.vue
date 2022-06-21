@@ -10,7 +10,7 @@ const setDark = (mode) => store.commit('setDark', mode)
 const toggleDarkMode = () => {
   setDark(!dark.value);
   console.log(!dark)
-  localStorage.theme = dark ? "dark" : "light";
+  localStorage.theme = dark.value ? "dark" : "light";
 }
 
 onMounted(() => {
