@@ -134,7 +134,7 @@ export default createStore({
 
     },
     joinRoom: ({commit}, payload) => {
-      axios.get(`http://localhost:8080/room/${payload.roomRef}/${payload.id}`)
+      axios.get(`http://localhost:8080/room/${payload.roomRef}/${payload.id}`, {withCredentials: true})
           .then((response) => {
             console.log(response.data.roomData.id)
             commit('setIsLoading', false)
