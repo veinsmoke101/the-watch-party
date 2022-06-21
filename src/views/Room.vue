@@ -151,6 +151,12 @@ onMounted( () => {
     router.push('/main')
   })
 
+  channel.bind('killRoom', () => {
+
+    setRoomError('Oops! looks like this room has been ended.')
+    router.push('/main')
+  })
+
   channel.bind('userLeft', (data) => {
     console.log("i'm userLeft id : " + data);
     removeUser(data)

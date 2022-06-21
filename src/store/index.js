@@ -115,6 +115,9 @@ export default createStore({
     },
     removeUser: (state, id) => {
       state.currentUsers = state.currentUsers.filter(user => user.id.toString() !== id)
+    },
+    removeAllUser: (state) => {
+      state.currentUsers = []
     }
   },
   actions: {
@@ -162,7 +165,7 @@ export default createStore({
             commit('setRoomError', "Invalid Room")
             router.push('/main')
           })
-    },
+    }
   },
 
 
