@@ -18,7 +18,7 @@
         <p class="dark:text-white pt-8 text-sm">Totally optional short description about yourself, what you do and so on.</p>
 
         <div class="pt-12 pb-8">
-          <button @click="profileFormToggle = true" class="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full">
+          <button @click="openEditForm" class="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full">
             Edit profile
           </button>
         </div>
@@ -52,12 +52,12 @@
   <form v-if="profileFormToggle" class="profile-edit absolute bg-white dark:bg-gray-800 p-12 h-96 shadow-2xl min-w-fit max-w-sm">
     <div class="md:flex md:items-center mb-12">
       <div class="md:w-1/3">
-        <label class="block text-gray-500 dark:text-gray-50 font-bold md:text-left mb-1 md:mb-0 pr-4" for="inline-full-name">
+        <label  class="block text-gray-500 dark:text-gray-50 font-bold md:text-left mb-1 md:mb-0 pr-4" for="inline-full-name">
           Full Name
         </label>
       </div>
       <div class="md:w-2/3">
-        <input class="bg-gray-200 appearance-none border-2 border-gray-200 dark:border-gray-700 rounded w-full py-2 px-4 text-gray-700 dark:text-gray-100 dark:bg-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Jane Doe">
+        <input v-model="newUsername" class="bg-gray-200 appearance-none border-2 border-gray-200 dark:border-gray-700 rounded w-full py-2 px-4 text-gray-700 dark:text-gray-100 dark:bg-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" >
       </div>
     </div>
     <div class="md:flex md:items-center mb-12">
@@ -67,16 +67,16 @@
         </label>
       </div>
       <div class="md:w-2/3">
-        <input class="bg-gray-200 appearance-none border-2 border-gray-200 dark:border-gray-700 rounded w-full py-2 px-4 text-gray-700 dark:text-gray-100 dark:bg-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="file">
+        <input  class="bg-gray-200 appearance-none border-2 border-gray-200 dark:border-gray-700 rounded w-full py-2 px-4 text-gray-700 dark:text-gray-100 dark:bg-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="file">
       </div>
     </div>
     <div class="md:flex md:items-center">
       <div class="md:w-1/3"></div>
       <div class="md:w-2/3 flex flex-row justify-start">
-        <button class="shadow mr-6 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white w-36 font-bold py-2  rounded" type="button">
+        <button @click="saveChanges" class="shadow mr-6 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white w-36 font-bold py-2  rounded" type="button">
           Save changes
         </button>
-        <button @click="profileFormToggle = false" class="shadow bg-red-600 hover:bg-red-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 w-36 rounded" type="button">
+        <button @click="cancelChanges" class="shadow bg-red-600 hover:bg-red-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 w-36 rounded" type="button">
           Cancel
         </button>
       </div>
@@ -100,6 +100,22 @@ const user = ref({
 })
 
 const profileFormToggle = ref(false)
+const newUsername = ref('')
+
+const saveChanges = () => {
+
+}
+
+const cancelChanges = () => {
+  newUsername.value = ''
+  profileFormToggle.value = false
+}
+
+const openEditForm = () => {
+  newUsername.value = localStorage.getItem('username')
+  profileFormToggle.value = true
+}
+
 
 const setMargin = (bool) => store.commit('setMargin', bool)
 const setLogged = (bool) => store.commit('setLogged', bool)
