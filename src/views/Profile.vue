@@ -49,7 +49,7 @@
 
   </div>
 
-  <form v-if="profileFormToggle" class="profile-edit absolute bg-white dark:bg-gray-800 p-12 h-96 shadow-2xl min-w-fit max-w-sm">
+  <form @submit.prevent="saveChanges" v-if="profileFormToggle" class="profile-edit absolute bg-white dark:bg-gray-800 p-12 h-96 shadow-2xl min-w-fit max-w-sm">
     <div class="md:flex md:items-center mb-12">
       <div class="md:w-1/3">
         <label  class="block text-gray-500 dark:text-gray-50 font-bold md:text-left mb-1 md:mb-0 pr-4" for="inline-full-name">
@@ -88,6 +88,7 @@
 
 import {onMounted, ref} from "vue";
 import {useStore} from "vuex";
+import axios from "axios";
 
 
 const store = useStore()
@@ -103,7 +104,7 @@ const profileFormToggle = ref(false)
 const newUsername = ref('')
 
 const saveChanges = () => {
-
+  
 }
 
 const cancelChanges = () => {
@@ -116,13 +117,18 @@ const openEditForm = () => {
   profileFormToggle.value = true
 }
 
+const cloudinaryData = ref(null)
+
 
 const setMargin = (bool) => store.commit('setMargin', bool)
 const setLogged = (bool) => store.commit('setLogged', bool)
 
-onMounted(() => {
+onMounted(async () => {
   setMargin(false)
   setLogged(true)
+
+  const response = await axios.post("http://localhost:8080/cloudinary/signature")
+  cloudinaryData.value = await response.data
 
 })
 

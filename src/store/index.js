@@ -24,7 +24,12 @@ export default createStore({
     issuer : false,
     issuedByMe: true,
     currentTime: 0,
-    socketId: null
+    socketId: null,
+
+    // Cloudinary
+    cloudName: 'veinsmoke',
+    preset: 'thewatchparty'
+
   },
   getters: {
     sender: state => state.sender,
@@ -47,6 +52,8 @@ export default createStore({
     currentUsers: state => state.currentUsers,
     roomError: state => state.roomError,
     isLoading: state => state.isLoading,
+    cloudName: state => state.cloudName,
+    preset: state => state.preset
   },
 
   mutations: {
