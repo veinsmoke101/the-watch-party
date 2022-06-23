@@ -152,29 +152,32 @@ const updateProfile = async () => {
       username: newUsername.value,
       description: newDescription.value
     }
+    let imageData = {}
 
-    // prepare cloudinary data
-    let cloudinaryData = {
-      timestamp: cloudinaryResponse.value.timestamp,
-      signature: cloudinaryResponse.value.signature,
-      api_key: cloudinaryConfig.apiKey,
-      file: image.value,
-      folder: cloudinaryConfig.folder,
-    };
+    if(image.value){
 
-    // prepare uploads
-    const formData = toFormData(cloudinaryData);
-    const url = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`;
+      // prepare cloudinary data
+      let cloudinaryData = {
+        timestamp: cloudinaryResponse.value.timestamp,
+        signature: cloudinaryResponse.value.signature,
+        api_key: cloudinaryConfig.apiKey,
+        file: image.value,
+        folder: cloudinaryConfig.folder,
+      };
 
-    const response = await axios.post(url, formData)
-    const imageData = await response.data
+      // prepare uploads
+      const formData = toFormData(cloudinaryData);
+      const url = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`;
 
-    console.log(imageData.public_id)
+      const response = await axios.post(url, formData)
+      imageData = await response.data
+
+    }
 
 
     await axios.post('http://localhost:8080/profile/update', {
       ...newProfileData,
-      image: imageData.public_id,
+      image: imageData.public_id ?? '',
       userId: localStorage.getItem('userId')
     });
 
@@ -183,7 +186,7 @@ const updateProfile = async () => {
     localStorage.setItem('description', newProfileData.description);
     setUsername(newProfileData.username)
     setDescription(newProfileData.description)
-    setProfileImage(getCloudinaryImgUrl(imageData.public_id))
+    if(image.value) setProfileImage(getCloudinaryImgUrl(imageData.public_id))
 
 
   }catch (e) {
