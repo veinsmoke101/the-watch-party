@@ -73,7 +73,7 @@
     <div class="md:flex md:items-center">
       <div class="md:w-1/3"></div>
       <div class="md:w-2/3 flex flex-row justify-start">
-        <button class="shadow mr-6 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white w-36 font-bold py-2  rounded" type="button">
+        <button @click="updateProfile" class="shadow mr-6 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white w-36 font-bold py-2  rounded" type="button">
           Save changes
         </button>
         <button @click="cancelChanges" class="shadow bg-red-600 hover:bg-red-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 w-36 rounded" type="button">
@@ -104,6 +104,7 @@ const user = ref({
 
 const profileFormToggle = ref(false)
 const newUsername = ref('')
+const newDescription = ref('')
 
 
 
@@ -132,6 +133,12 @@ const saveChanges = (event) => {
 
 const updateProfile = async () => {
   try{
+
+    let newProfileData = {
+      username: newUsername.value,
+      description: newDescription.value
+    }
+
     // prepare cloudinary data
     let cloudinaryData = {
       timestamp: cloudinaryResponse.value.timestamp,
@@ -148,6 +155,11 @@ const updateProfile = async () => {
     const imageData = await axios
         .post(url, formData)
         .then((res) => console.log(res.data))
+
+    await axios.post('http://localhost:8080/profile/update', {
+      ...newProfileData,
+      images: imageData.public_id,
+    });
 
   }catch (e) {
     console.log(e)
