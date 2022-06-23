@@ -32,7 +32,7 @@
     <!--Img Col-->
     <div class="w-full lg:w-2/5">
       <!-- Big profile image for side bar (desktop) -->
-      <img alt="profile-image" :src="src" class="profile-desktop rounded-none lg:rounded-lg shadow-2xl hidden lg:block">
+      <img alt="profile-image" :src="user.profileImage" class="profile-desktop rounded-none lg:rounded-lg shadow-2xl hidden lg:block">
       <!-- Image from: http://unsplash.com/photos/MP0IUfwrn0A -->
 
     </div>
@@ -90,16 +90,15 @@ import {onMounted, ref} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
 import {cloudinaryConfig} from "../js/constants";
-import {toFormData} from "../js/helpers";
+import {toFormData, getCloudinaryImgUrl} from "../js/helpers";
 
 
 const store = useStore()
 
-const src = "/src/assets/images/"+localStorage.getItem('profileImage')
 
 const user = ref({
   username: localStorage.getItem('username'),
-  profileImage: src
+  profileImage: localStorage.getItem('profileImage')
 })
 
 const profileFormToggle = ref(false)
@@ -152,14 +151,21 @@ const updateProfile = async () => {
     const formData = toFormData(cloudinaryData);
     const url = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`;
 
-    const imageData = await axios
-        .post(url, formData)
-        .then((res) => console.log(res.data))
+    const response = await axios.post(url, formData)
+    const imageData = await response.data
+
+    console.log(imageData.public_id)
+
 
     await axios.post('http://localhost:8080/profile/update', {
       ...newProfileData,
-      images: imageData.public_id,
+      image: imageData.public_id,
+      userId: localStorage.getItem('userId')
     });
+
+    localStorage.setItem('profileImage', getCloudinaryImgUrl(imageData.public_id));
+    localStorage.setItem('username', newProfileData.username);
+    localStorage.setItem('description', newProfileData.description);
 
   }catch (e) {
     console.log(e)
