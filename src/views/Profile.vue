@@ -49,7 +49,7 @@
 
   </div>
 
-  <form @submit.prevent="saveChanges" v-if="profileFormToggle" class="profile-edit absolute bg-white dark:bg-gray-800 p-12 h-96 shadow-2xl min-w-fit max-w-sm">
+  <form @submit.prevent="updateProfile" v-if="profileFormToggle" class="profile-edit absolute bg-white dark:bg-gray-800 p-12 h-96 shadow-2xl min-w-fit max-w-sm">
     <div class="md:flex md:items-center mb-12">
       <div class="md:w-1/3">
         <label  class="block text-gray-500 dark:text-gray-50 font-bold md:text-left mb-1 md:mb-0 pr-4" for="inline-full-name">
@@ -67,13 +67,13 @@
         </label>
       </div>
       <div class="md:w-2/3">
-        <input  class="bg-gray-200 appearance-none border-2 border-gray-200 dark:border-gray-700 rounded w-full py-2 px-4 text-gray-700 dark:text-gray-100 dark:bg-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="file">
+        <input @change="saveChanges" class="bg-gray-200 appearance-none border-2 border-gray-200 dark:border-gray-700 rounded w-full py-2 px-4 text-gray-700 dark:text-gray-100 dark:bg-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="file">
       </div>
     </div>
     <div class="md:flex md:items-center">
       <div class="md:w-1/3"></div>
       <div class="md:w-2/3 flex flex-row justify-start">
-        <button @click="saveChanges" class="shadow mr-6 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white w-36 font-bold py-2  rounded" type="button">
+        <button class="shadow mr-6 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white w-36 font-bold py-2  rounded" type="button">
           Save changes
         </button>
         <button @click="cancelChanges" class="shadow bg-red-600 hover:bg-red-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 w-36 rounded" type="button">
@@ -89,6 +89,8 @@
 import {onMounted, ref} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
+import {cloudinaryConfig} from "../js/constants";
+import {toFormData} from "../js/helpers";
 
 
 const store = useStore()
@@ -103,8 +105,53 @@ const user = ref({
 const profileFormToggle = ref(false)
 const newUsername = ref('')
 
-const saveChanges = () => {
-  
+
+
+
+
+const setMargin = (bool) => store.commit('setMargin', bool)
+const setLogged = (bool) => store.commit('setLogged', bool)
+
+const cloudinaryResponse = ref(null)
+
+
+onMounted(async () => {
+  setMargin(false)
+  setLogged(true)
+
+  const response = await axios.post("http://localhost:8080/cloudinary/signature")
+  cloudinaryResponse.value = await response.data
+
+})
+
+const image = ref(null)
+
+const saveChanges = (event) => {
+  image.value = event.target.files[0]
+}
+
+const updateProfile = async () => {
+  try{
+    // prepare cloudinary data
+    let cloudinaryData = {
+      timestamp: cloudinaryResponse.value.timestamp,
+      signature: cloudinaryResponse.value.signature,
+      api_key: cloudinaryConfig.apiKey,
+      file: image.value,
+      folder: cloudinaryConfig.folder,
+    };
+
+    // prepare uploads
+    const formData = toFormData(cloudinaryData);
+    const url = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`;
+
+    const imageData = await axios
+        .post(url, formData)
+        .then((res) => console.log(res.data))
+
+  }catch (e) {
+    console.log(e)
+  }
 }
 
 const cancelChanges = () => {
@@ -116,21 +163,6 @@ const openEditForm = () => {
   newUsername.value = localStorage.getItem('username')
   profileFormToggle.value = true
 }
-
-const cloudinaryData = ref(null)
-
-
-const setMargin = (bool) => store.commit('setMargin', bool)
-const setLogged = (bool) => store.commit('setLogged', bool)
-
-onMounted(async () => {
-  setMargin(false)
-  setLogged(true)
-
-  const response = await axios.post("http://localhost:8080/cloudinary/signature")
-  cloudinaryData.value = await response.data
-
-})
 
 </script>
 
