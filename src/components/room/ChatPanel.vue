@@ -19,6 +19,7 @@ const dark = computed(() => store.getters.dark)
 const messages = computed(() => store.getters.messages)
 const roomUsersCount = computed(() => store.getters.roomUsersCount)
 const roomRef = computed(() => store.getters.roomRef)
+const profileImage = computed(() => store.getters.profileImage)
 const addMessage = (message) => store.commit('addMessage', message)
 
 const setRoomUsersCount = (count) => store.commit('setRoomUsersCount', count)
@@ -54,7 +55,7 @@ const leaveParty = async () => {
 onMounted(() => {
   let joinedMessage = {
     id: localStorage.getItem('userId'),
-    src: localStorage.getItem('profileImage'),
+    src: profileImage.value,
     author: localStorage.getItem('username'),
     added_at: getCurrentTime(),
     body: 'Joined the party!',
@@ -97,7 +98,7 @@ const handleMessageSubmit = (event) => {
 
   let newMessage = {
     id: localStorage.getItem('userId'),
-    src: localStorage.getItem('profileImage'),
+    src: profileImage.value,
     author: localStorage.getItem('username'),
     added_at: getCurrentTime(),
     body: messageBody.value,

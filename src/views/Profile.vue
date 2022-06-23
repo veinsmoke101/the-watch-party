@@ -11,11 +11,11 @@
 
       <div class="p-4 md:p-12 text-center lg:text-left">
         <!-- Image for mobile view-->
-        <div class="block lg:hidden rounded-full shadow-xl mx-auto -mt-16 h-32 w-32 bg-cover bg-center" :style="{backgroundImage: `url('${user.profileImage}')`}"></div>
+        <div class="block lg:hidden rounded-full shadow-xl mx-auto -mt-16 h-32 w-32 bg-cover bg-center" :style="{backgroundImage: `url('${profileImage}')`}"></div>
 
-        <h1 class="text-3xl font-bold dark:text-white pt-8 lg:pt-0">{{user.username}}</h1>
+        <h1 class="text-3xl font-bold dark:text-white pt-8 lg:pt-0">{{username}}</h1>
         <div class="dark:text-white mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-purple-500 opacity-25"></div>
-        <p class="dark:text-white pt-8 text-sm">Totally optional short description about yourself, what you do and so on.</p>
+        <p class="dark:text-white pt-8 text-sm">{{description}}</p>
 
         <div class="pt-12 pb-8">
           <button @click="openEditForm" class="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full">
@@ -32,7 +32,7 @@
     <!--Img Col-->
     <div class="w-full lg:w-2/5">
       <!-- Big profile image for side bar (desktop) -->
-      <img alt="profile-image" :src="user.profileImage" class="profile-desktop rounded-none lg:rounded-lg shadow-2xl hidden lg:block">
+      <img alt="profile-image" :src="profileImage" class="profile-desktop rounded-none lg:rounded-lg shadow-2xl hidden lg:block">
       <!-- Image from: http://unsplash.com/photos/MP0IUfwrn0A -->
 
     </div>
@@ -62,6 +62,16 @@
     </div>
     <div class="md:flex md:items-center mb-12">
       <div class="md:w-1/3">
+        <label  class="block text-gray-500 dark:text-gray-50 font-bold md:text-left mb-1 md:mb-0 pr-4" for="inline-description">
+          Description
+        </label>
+      </div>
+      <div class="md:w-2/3">
+        <input v-model="newDescription" class="bg-gray-200 appearance-none border-2 border-gray-200 dark:border-gray-700 rounded w-full py-2 px-4 text-gray-700 dark:text-gray-100 dark:bg-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-description" type="text" >
+      </div>
+    </div>
+    <div class="md:flex md:items-center mb-12">
+      <div class="md:w-1/3">
         <label class="block text-gray-500 dark:text-gray-50 font-bold md:text-left mb-1 md:mb-0 pr-4" for="inline-password">
           Profile
         </label>
@@ -86,7 +96,7 @@
 
 <script setup>
 
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
 import {cloudinaryConfig} from "../js/constants";
@@ -107,10 +117,15 @@ const newDescription = ref('')
 
 
 
-
+const profileImage = computed(() => store.getters.profileImage)
+const username = computed(() => store.getters.username)
+const description = computed(() => store.getters.description)
 
 const setMargin = (bool) => store.commit('setMargin', bool)
 const setLogged = (bool) => store.commit('setLogged', bool)
+const setUsername = (username) => store.commit('setUsername', username)
+const setProfileImage = (profileImage) => store.commit('setProfileImage', profileImage)
+const setDescription = (description) => store.commit('setDescription', description)
 
 const cloudinaryResponse = ref(null)
 
@@ -166,6 +181,10 @@ const updateProfile = async () => {
     localStorage.setItem('profileImage', getCloudinaryImgUrl(imageData.public_id));
     localStorage.setItem('username', newProfileData.username);
     localStorage.setItem('description', newProfileData.description);
+    setUsername(newProfileData.username)
+    setDescription(newProfileData.description)
+    setProfileImage(getCloudinaryImgUrl(imageData.public_id))
+
 
   }catch (e) {
     console.log(e)

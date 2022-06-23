@@ -7,8 +7,14 @@ const store  = useStore()
 const dark = computed( () => store.getters.dark)
 const margin = computed( () => store.getters.margin ? '50px' : '0')
 
-onMounted(() => {
+const setProfileImage = (data) => store.commit('setProfileImage', data)
+const setDescription = (data) => store.commit('setDescription', data)
+const setUsername = (data) => store.commit('setUsername', data)
 
+onMounted(() => {
+  setDescription(localStorage.getItem('description') ?? '')
+  setUsername(localStorage.getItem('username') ?? '')
+  setProfileImage(localStorage.getItem('profileImage') ?? '')
 })
 
 

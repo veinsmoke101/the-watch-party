@@ -19,6 +19,11 @@ export default createStore({
     roomError: "",
     isLoading: true,
 
+    // profile data
+    username: '',
+    profileImage: '',
+    description: '',
+
     // video events
     seeked : true,
     issuer : false,
@@ -53,7 +58,10 @@ export default createStore({
     roomError: state => state.roomError,
     isLoading: state => state.isLoading,
     cloudName: state => state.cloudName,
-    preset: state => state.preset
+    preset: state => state.preset,
+    username: state => state.username,
+    profileImage: state => state.profileImage,
+    description: state => state.description,
   },
 
   mutations: {
@@ -107,6 +115,15 @@ export default createStore({
     },
     setSocketId: (state, socketId) => {
       state.socketId = socketId
+    },
+    setUsername: (state, username) => {
+      state.username = username
+    },
+    setProfileImage: (state, profileImage) => {
+      state.profileImage = profileImage
+    },
+    setDescription: (state, description) => {
+      state.description = description
     },
     setRoomUsersCount: (state, roomUsersCount) => {
       state.roomUsersCount = roomUsersCount

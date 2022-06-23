@@ -14,7 +14,7 @@ const store = useStore()
 const logo = computed(() => store.getters.dark ? darkLogo : lightLogo)
 const logged = computed(() => store.getters.logged )
 
-const username = ref(localStorage.getItem('username'))
+const username = computed(() => store.getters.username)
 const isActive = ref(false)
 
 const dropdown = ref(false)

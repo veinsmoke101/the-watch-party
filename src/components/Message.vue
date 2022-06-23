@@ -1,6 +1,6 @@
 <template>
   <div class="videoRoom__message">
-    <img :src="imgSrc" alt="message-sender">
+    <img :src="src" alt="message-sender">
     <div class="videoRoom__messageInfo">
       <div class="videoRoom__sender">
         <p class="flex flex-row text-black dark:text-white">
