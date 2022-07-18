@@ -56,7 +56,7 @@ onMounted(() => {
     </div>
   </main>
   <section class="room-page bg-gradient-to-b from-purple-700 via-purple-500 to-blue-gray-900 dark:from-purple-700 dark:to-blue-gray-900">
-    <img src="../assets/images/TWP.PNG" alt="">
+    <img src="../assets/images/TWP.png" alt="">
   </section>
 
   <section class="howToWatch">
